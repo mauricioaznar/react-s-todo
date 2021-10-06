@@ -1,7 +1,15 @@
 schema: http://localhost:3000/graphql
 generates:
-  ./src/types.d.ts:
+  ./src/schema.ts:
+    documents: 'src/**/**.gql'
     plugins:
       - typescript
+      - typescript-react-apollo
       - typescript-operations
-      - typescript-resolvers
+    config:
+      withHOC: false
+      withComponent: false
+      withHooks: true
+
+
+

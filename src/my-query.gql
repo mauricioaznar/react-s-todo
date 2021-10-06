@@ -1,0 +1,9 @@
+    query GetCats {
+        cats {
+            breed
+            characteristics {
+                color
+                coat
+            }
+        }
+    }
