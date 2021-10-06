@@ -1,15 +1,4 @@
 {
   "name": "Hasura Tutorial GraphQL Schema",
-  "schemaPath": "./schema.graphql",
-  "extensions": {
-    "endpoints": {
-      "Default GraphQL Endpoint": {
-        "url": "https://hasura.io/learn/graphql",
-        "headers": {
-          "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik9FWTJSVGM1UlVOR05qSXhSRUV5TURJNFFUWXdNekZETWtReU1EQXdSVUV4UVVRM05EazFNQSJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiXSwieC1oYXN1cmEtdXNlci1pZCI6ImF1dGgwfDYxNWQyMDVhMzVjNzg5MDA2OTc1N2FkNiJ9LCJuaWNrbmFtZSI6Im1hdXJpY2lvYXpuYXI5NCIsIm5hbWUiOiJtYXVyaWNpb2F6bmFyOTRAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyL2RhZjRhODQ5YTMzNTM3N2RjYmQwYzUwNDM3MjZhMzE2P3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGbWEucG5nIiwidXBkYXRlZF9hdCI6IjIwMjEtMTAtMDZUMDQ6MDQ6NDMuMjI3WiIsImlzcyI6Imh0dHBzOi8vZ3JhcGhxbC10dXRvcmlhbHMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYxNWQyMDVhMzVjNzg5MDA2OTc1N2FkNiIsImF1ZCI6IlAzOHFuRm8xbEZBUUpyemt1bi0td0V6cWxqVk5HY1dXIiwiaWF0IjoxNjMzNDkzMDg1LCJleHAiOjE2MzM1MjkwODUsImF0X2hhc2giOiItdnhvQmFCSW5aN0R4OXg5ckRqZGVBIiwibm9uY2UiOiJPeWJUMjllUWNVWFJmenloYU04cFFfeTZFSFZCbENiSiJ9.qchyQR6iiuie4BwzlIRr-TB1Gh9TiuwQ3GL9cKtor2x2nDOPZ6fXW3oze8nUFPOkIdd8c2L7fw-v0HdXWD6go_VpYdNjExK7mU_JuYYWlXB5Z-vLTSxtikwkXU2thFNoaY3Sy42rAt0LwF14pg3Kj1VJS-v9HGgMpwCs5-ssf4KLTPp42GwjFk_L09xgYAYrBL8sH8iACPZ1Yr3UXqHLMTOnrDI0NRfa5p_aymEdlnVzpxOuoLo_i6xsr_yLYRunl3lzuFyutCNno7JOsN1iFfDCIx7o1tcQd85b8fSHH4x-SpfJZ2NmeoGS7_XQeyhXYEhFm_MpDdUMSnP8H42Bcg"
-        },
-        "introspect": false
-      }
-    }
-  }
+  "schemaPath": "./schema.graphql"
 }
