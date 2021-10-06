@@ -3,13 +3,15 @@
   "version": "5.0.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.4.13",
-    "graphql": "^15.6.0",
+    "@apollo/client": "^3.4.16",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/material": "latest",
+    "@types/graphql": "^14.5.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "apollo": "^2.33.6",
+    "graphql": "^14.7.0",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
@@ -19,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "browserslist": {
     "production": [
@@ -32,5 +35,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/typescript": "2.2.2",
+    "@graphql-codegen/typescript-operations": "^2.1.6",
+    "@graphql-codegen/typescript-resolvers": "^2.3.0"
   }
 }
