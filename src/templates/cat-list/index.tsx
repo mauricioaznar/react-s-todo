@@ -1,15 +1,32 @@
 import * as React from 'react'
 import {Box} from "@mui/material";
-import {useGetCatsLazyQuery} from "../../schema";
+import {useGetCatsQuery} from "../../schema";
 
 export default function CatList () {
-    const [a , b] = useGetCatsLazyQuery()
+    const { data, loading } = useGetCatsQuery()
 
-    console.log(a, b)
+    if (loading) {
+        return <h1>Loading</h1>;
+    }
+
 
     return <Box>
         <h2>
             Title
         </h2>
+        <ul>
+            {
+                data?.cats.map(cat => {
+                    return <li
+                        key={cat.breed}
+                    >
+                        {
+                            cat.breed
+                        }
+
+                    </li>
+                })
+            }
+        </ul>
     </Box>
 }

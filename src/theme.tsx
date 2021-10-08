@@ -1,6 +1,5 @@
-import * as React from 'react'
 import { createTheme } from '@mui/material/styles';
-import {lightBlue, red} from '@mui/material/colors';
+import {red} from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
