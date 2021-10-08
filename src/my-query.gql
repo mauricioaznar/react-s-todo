@@ -1,9 +1,19 @@
     query GetCats {
         cats {
+            _id
             breed
             characteristics {
                 color
                 coat
+                lifespan
+                size
             }
         }
     }
+
+    mutation DeleteCat($id: String!) {
+        deleteCat(_id: $id) {
+            breed
+        }
+    }
+

@@ -73,10 +73,13 @@ export type CharacteristicsInput = {
 export const GetCatsDocument = gql`
     query GetCats {
   cats {
+    _id
     breed
     characteristics {
       color
       coat
+      lifespan
+      size
     }
   }
 }
@@ -108,7 +111,47 @@ export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export const DeleteCatDocument = gql`
+    mutation DeleteCat($id: String!) {
+  deleteCat(_id: $id) {
+    breed
+  }
+}
+    `;
+export type DeleteCatMutationFn = Apollo.MutationFunction<DeleteCatMutation, DeleteCatMutationVariables>;
+
+/**
+ * __useDeleteCatMutation__
+ *
+ * To run a mutation, you first call `useDeleteCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCatMutation, { data, loading, error }] = useDeleteCatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCatMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCatMutation, DeleteCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCatMutation, DeleteCatMutationVariables>(DeleteCatDocument, options);
+      }
+export type DeleteCatMutationHookResult = ReturnType<typeof useDeleteCatMutation>;
+export type DeleteCatMutationResult = Apollo.MutationResult<DeleteCatMutation>;
+export type DeleteCatMutationOptions = Apollo.BaseMutationOptions<DeleteCatMutation, DeleteCatMutationVariables>;
 export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string } }> };
+export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
+
+export type DeleteCatMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteCatMutation = { __typename?: 'Mutation', deleteCat: { __typename?: 'Cat', breed: string } };
