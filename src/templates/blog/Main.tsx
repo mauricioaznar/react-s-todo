@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import Markdown from './Markdown';
 
 interface MainProps {
-    posts: ReadonlyArray<string>;
+    posts: string[];
     title: string;
 }
 

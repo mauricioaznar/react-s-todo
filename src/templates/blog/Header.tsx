@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 interface HeaderProps {
-    sections: ReadonlyArray<{
+    sections: {
         title: string;
         url: string;
-    }>;
+    }[];
     title: string;
 }
 

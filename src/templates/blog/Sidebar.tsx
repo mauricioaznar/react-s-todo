@@ -6,15 +6,15 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 interface SidebarProps {
-    archives: ReadonlyArray<{
+    archives: {
         url: string;
         title: string;
-    }>;
+    }[];
     description: string;
-    social: ReadonlyArray<{
+    social: {
         icon: React.ElementType;
         name: string;
-    }>;
+    }[];
     title: string;
 }
 

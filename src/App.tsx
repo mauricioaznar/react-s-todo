@@ -17,6 +17,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import PhotoAlbumIcon from '@mui/icons-material/PhotoAlbum';
+import PetsIcon from '@mui/icons-material/Pets';
 
 // templates
 import Dashboard from "./templates/dashboard";
@@ -28,6 +29,8 @@ import Pricing from "./templates/pricing";
 import Checkout from "./templates/checkout";
 import Blog from "./templates/blog";
 import Album from "./templates/album";
+import CatList from "./templates/cat-list";
+
 
 const links = [
     {icon: <DashboardIcon/>, name: 'Dashboard', path: '/', component: Dashboard, exact: true},
@@ -39,6 +42,7 @@ const links = [
     {icon: <AddShoppingCartIcon/>, name: 'Checkout', path: '/checkout', component: Checkout},
     {icon: <TextSnippetIcon/>, name: 'Blog', path: '/blog', component: Blog},
     {icon: <PhotoAlbumIcon/>, name: 'Album', path: '/album', component: Album},
+    {icon: <PetsIcon />, name: 'CatList', path: '/catList', component: CatList},
 ];
 
 export default function App() {
@@ -52,7 +56,7 @@ export default function App() {
         <Box>
             <SpeedDial
                 ariaLabel="SpeedDial basic example"
-                sx={{position: 'absolute', bottom: 16, right: 16}}
+                sx={{position: 'fixed', bottom: 16, right: 16}}
                 direction={'left'}
                 icon={<SpeedDialIcon/>}
                 onClose={handleClose}
