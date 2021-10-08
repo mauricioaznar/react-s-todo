@@ -144,6 +144,73 @@ export function useDeleteCatMutation(baseOptions?: Apollo.MutationHookOptions<De
 export type DeleteCatMutationHookResult = ReturnType<typeof useDeleteCatMutation>;
 export type DeleteCatMutationResult = Apollo.MutationResult<DeleteCatMutation>;
 export type DeleteCatMutationOptions = Apollo.BaseMutationOptions<DeleteCatMutation, DeleteCatMutationVariables>;
+export const UpdateCatDocument = gql`
+    mutation UpdateCat($id: String!, $catInput: CatInput!) {
+  updateCat(_id: $id, catInput: $catInput) {
+    breed
+  }
+}
+    `;
+export type UpdateCatMutationFn = Apollo.MutationFunction<UpdateCatMutation, UpdateCatMutationVariables>;
+
+/**
+ * __useUpdateCatMutation__
+ *
+ * To run a mutation, you first call `useUpdateCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCatMutation, { data, loading, error }] = useUpdateCatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      catInput: // value for 'catInput'
+ *   },
+ * });
+ */
+export function useUpdateCatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCatMutation, UpdateCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCatMutation, UpdateCatMutationVariables>(UpdateCatDocument, options);
+      }
+export type UpdateCatMutationHookResult = ReturnType<typeof useUpdateCatMutation>;
+export type UpdateCatMutationResult = Apollo.MutationResult<UpdateCatMutation>;
+export type UpdateCatMutationOptions = Apollo.BaseMutationOptions<UpdateCatMutation, UpdateCatMutationVariables>;
+export const CreateCatDocument = gql`
+    mutation CreateCat($catInput: CatInput!) {
+  createCat(catInput: $catInput) {
+    breed
+  }
+}
+    `;
+export type CreateCatMutationFn = Apollo.MutationFunction<CreateCatMutation, CreateCatMutationVariables>;
+
+/**
+ * __useCreateCatMutation__
+ *
+ * To run a mutation, you first call `useCreateCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCatMutation, { data, loading, error }] = useCreateCatMutation({
+ *   variables: {
+ *      catInput: // value for 'catInput'
+ *   },
+ * });
+ */
+export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<CreateCatMutation, CreateCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCatMutation, CreateCatMutationVariables>(CreateCatDocument, options);
+      }
+export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
+export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
+export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
 export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -155,3 +222,18 @@ export type DeleteCatMutationVariables = Exact<{
 
 
 export type DeleteCatMutation = { __typename?: 'Mutation', deleteCat: { __typename?: 'Cat', breed: string } };
+
+export type UpdateCatMutationVariables = Exact<{
+  id: Scalars['String'];
+  catInput: CatInput;
+}>;
+
+
+export type UpdateCatMutation = { __typename?: 'Mutation', updateCat: { __typename?: 'Cat', breed: string } };
+
+export type CreateCatMutationVariables = Exact<{
+  catInput: CatInput;
+}>;
+
+
+export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };

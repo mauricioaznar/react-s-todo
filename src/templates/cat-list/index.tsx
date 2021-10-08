@@ -1,5 +1,7 @@
 import * as React from 'react'
-import {IconButton} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add"
+import {useHistory} from 'react-router-dom'
+import {Fab, IconButton} from "@mui/material";
 import {GetCatsQuery, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +14,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 export default function CatList () {
+    const history = useHistory()
     const { data, loading } = useGetCatsQuery()
     const [deleteCatMutation, { data: mutationData, loading: mutationLoading, error }] = useDeleteCatMutation({
         variables: {
@@ -21,13 +24,13 @@ export default function CatList () {
 
 
 
+
     if (loading) {
         return <h1>Loading</h1>;
     }
 
 
     async function onDelete(cat: GetCatsQuery["cats"][number]) {
-
         await deleteCatMutation({
                 variables: {
                     id: cat._id
@@ -35,9 +38,25 @@ export default function CatList () {
             })
     }
 
+    function handleCreateClick() {
+        history.push('/catForm')
+    }
+
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Grid container alignItems={'center'}>
+                <Grid item xs>
+                    <h2>
+                        Cats
+                    </h2>
+                </Grid>
+                <Grid item>
+                    <Fab color="primary" aria-label="add" onClick={handleCreateClick}>
+                        <AddIcon />
+                    </Fab>
+                </Grid>
+            </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>

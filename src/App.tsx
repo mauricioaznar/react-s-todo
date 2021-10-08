@@ -9,40 +9,16 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import {useTheme} from '@mui/material/styles';
 
 // icons
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonIcon from '@mui/icons-material/Person';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import PhotoAlbumIcon from '@mui/icons-material/PhotoAlbum';
 import PetsIcon from '@mui/icons-material/Pets';
+import InputIcon from '@mui/icons-material/Input';
 
 // templates
-import Dashboard from "./templates/dashboard";
-import StickyFooter from "./templates/sticky-footer";
-import SignUp from "./templates/sign-up";
-import SignIn from "./templates/sign-in";
-import SignInSide from "./templates/sign-in-side";
-import Pricing from "./templates/pricing";
-import Checkout from "./templates/checkout";
-import Blog from "./templates/blog";
-import Album from "./templates/album";
 import CatList from "./templates/cat-list";
-
+import CatForm from "./templates/cat-list/CatForm";
 
 const links = [
-    {icon: <DashboardIcon/>, name: 'Dashboard', path: '/', component: Dashboard, exact: true},
-    {icon: <FormatUnderlinedIcon/>, name: 'Sticky footer', path: '/stickyFooter', component: StickyFooter},
-    {icon: <PersonAddIcon/>, name: 'Sign up', path: '/signUp', component: SignUp},
-    {icon: <PersonIcon/>, name: 'Sign in', path: '/signIn', component: SignIn},
-    {icon: <PersonAddIcon/>, name: 'Sign in side', path: '/signInSide', component: SignInSide},
-    {icon: <AttachMoneyIcon/>, name: 'Pricing', path: '/pricing', component: Pricing},
-    {icon: <AddShoppingCartIcon/>, name: 'Checkout', path: '/checkout', component: Checkout},
-    {icon: <TextSnippetIcon/>, name: 'Blog', path: '/blog', component: Blog},
-    {icon: <PhotoAlbumIcon/>, name: 'Album', path: '/album', component: Album},
-    {icon: <PetsIcon />, name: 'CatList', path: '/catList', component: CatList},
+    {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
+    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
 ];
 
 export default function App() {
@@ -54,6 +30,7 @@ export default function App() {
 
     return (
         <Box>
+
             <SpeedDial
                 ariaLabel="SpeedDial basic example"
                 sx={{position: 'fixed', bottom: 16, right: 16}}

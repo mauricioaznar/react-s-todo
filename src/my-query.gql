@@ -17,3 +17,15 @@
         }
     }
 
+    mutation UpdateCat($id: String!, $catInput: CatInput!) {
+        updateCat(_id: $id, catInput: $catInput) {
+            breed
+        }
+    }
+
+    mutation CreateCat($catInput: CatInput!) {
+        createCat(catInput: $catInput) {
+            breed
+        }
+    }
+
