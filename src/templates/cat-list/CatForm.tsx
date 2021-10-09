@@ -29,24 +29,12 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-const defaultOptions = {
-    catInput: {
-        breed: '',
-        characteristics: {
-            coat: '',
-            lifespan: '',
-            size: '',
-            color: ''
-        }
-    }
-}
-
 export default function SignIn() {
 
     const history = useHistory()
 
     // @ts-ignore
-    const cat = history.location.state.cat as GetCatsQuery["cats"][number] || undefined
+    const cat = history.location.state?.cat as GetCatsQuery["cats"][number] || undefined
 
     const [coat, setCoat] = useState(cat !== undefined ? cat.characteristics.coat : '')
     const [breed, setBreed] = useState(cat !== undefined ? cat.breed : '')
@@ -54,17 +42,8 @@ export default function SignIn() {
     const [size, setSize] = useState(cat !== undefined ? cat.characteristics.size : '')
     const [color, setColor] = useState(cat !== undefined ? cat.characteristics.color : '')
 
-    const [createCatMutation] = useCreateCatMutation({
-        variables: {
-            ...defaultOptions
-        }
-    });
-    const [updateCatMutation] = useUpdateCatMutation({
-        variables: {
-            id: '',
-            ...defaultOptions
-        }
-    });
+    const [createCatMutation] = useCreateCatMutation();
+    const [updateCatMutation] = useUpdateCatMutation();
 
     // eslint-disable-next-line no-undef
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

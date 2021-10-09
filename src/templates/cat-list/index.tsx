@@ -24,11 +24,7 @@ import Grid from "@mui/material/Grid";
 export default function CatList () {
     const history = useHistory()
     const { data, loading } = useGetCatsQuery()
-    const [deleteCatMutation, { data: mutationData, loading: mutationLoading, error }] = useDeleteCatMutation({
-        variables: {
-            id: ''
-        },
-    })
+    const [deleteCatMutation] = useDeleteCatMutation()
 
 
 
