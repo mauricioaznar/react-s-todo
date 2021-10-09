@@ -237,3 +237,14 @@ export type CreateCatMutationVariables = Exact<{
 
 
 export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };
+
+export const namedOperations = {
+  Query: {
+    GetCats: 'GetCats'
+  },
+  Mutation: {
+    DeleteCat: 'DeleteCat',
+    UpdateCat: 'UpdateCat',
+    CreateCat: 'CreateCat'
+  }
+}

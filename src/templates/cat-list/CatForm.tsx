@@ -10,7 +10,6 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {GetCatsQuery, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
-import sleep from "../../services/sleep";
 import {useState} from "react";
 
 const theme = createTheme();
@@ -76,7 +75,6 @@ export default function SignIn() {
 
 
         if (errors) {
-            await sleep(2000)
             history.push('/')
         }
     };

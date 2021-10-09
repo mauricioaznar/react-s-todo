@@ -6,6 +6,7 @@ generates:
       - typescript
       - typescript-react-apollo
       - typescript-operations
+      - named-operations-object
     config:
       withHOC: false
       withComponent: false
