@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Route, Switch, useLocation} from 'react-router-dom';
+import {Route, Switch } from 'react-router-dom';
 
 // components
 import Box from '@mui/material/Box';
@@ -12,7 +12,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 import MuiDrawer from '@mui/material/Drawer';
 
@@ -25,11 +25,12 @@ import {
     CssBaseline,
     Divider,
     Grid,
-    IconButton, Link,
+    IconButton,
+    Link,
     List,
     Paper,
     Toolbar,
-    Typography, useTheme
+    Typography
 } from "@mui/material";
 import {ListItemLink} from "./components/ListItemLink";
 
