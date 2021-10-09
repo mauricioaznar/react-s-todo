@@ -11,9 +11,21 @@ import {
     ApolloProvider,
 } from "@apollo/client";
 
+const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' : 'https://s-todo-server.mauaznar.com'
+
 const client = new ApolloClient({
-    uri: 'http://localhost:3005/graphql',
+    uri: `${apiUrl}/graphql`,
     cache: new InMemoryCache(),
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'ignore',
+        },
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all',
+        },
+    }
 });
 
 
