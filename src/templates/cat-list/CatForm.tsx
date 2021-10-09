@@ -9,9 +9,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {GetCatsQuery, useCreateCatMutation} from "../../schema";
+import {GetCatsQuery, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
 import sleep from "../../services/sleep";
+import {useState} from "react";
 
 function Copyright(props: any) {
     return (
@@ -28,6 +29,18 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
+const defaultOptions = {
+    catInput: {
+        breed: '',
+        characteristics: {
+            coat: '',
+            lifespan: '',
+            size: '',
+            color: ''
+        }
+    }
+}
+
 export default function SignIn() {
 
     const history = useHistory()
@@ -35,42 +48,69 @@ export default function SignIn() {
     // @ts-ignore
     const cat = history.location.state.cat as GetCatsQuery["cats"][number] || undefined
 
-
-    console.log(cat)
+    const [coat, setCoat] = useState(cat !== undefined ? cat.characteristics.coat : '')
+    const [breed, setBreed] = useState(cat !== undefined ? cat.breed : '')
+    const [lifespan, setLifespan] = useState(cat !== undefined ? cat.characteristics.lifespan : '')
+    const [size, setSize] = useState(cat !== undefined ? cat.characteristics.size : '')
+    const [color, setColor] = useState(cat !== undefined ? cat.characteristics.color : '')
 
     const [createCatMutation] = useCreateCatMutation({
         variables: {
-            catInput: {
-                breed: '',
-                characteristics: {
-                    coat: '',
-                    lifespan: '',
-                    size: '',
-                    color: ''
-                }
-            } // value for 'catInput'
-        },
+            ...defaultOptions
+        }
+    });
+    const [updateCatMutation] = useUpdateCatMutation({
+        variables: {
+            id: '',
+            ...defaultOptions
+        }
     });
 
     // eslint-disable-next-line no-undef
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // eslint-disable-next-line no-undef
-        const formData = new FormData(event.currentTarget);
-        const {errors} = await createCatMutation({
-            variables: {
-                catInput: {
-                    breed: formData.get('breed')?.toString() || '',
-                    characteristics: {
-                        coat: formData.get('coat')?.toString() || '',
-                        lifespan: formData.get('lifespan')?.toString() || '',
-                        size: formData.get('size')?.toString() || '',
-                        color: formData.get('color')?.toString() || ''
-                    }
+
+        const options = {
+            catInput: {
+                breed: breed,
+                characteristics: {
+                    coat: coat,
+                    lifespan: lifespan,
+                    size: size,
+                    color: color
                 }
             }
-        })
-        if (!errors || errors.length === 0) {
+        }
+
+        let errors
+
+        if (cat) {
+            const res = await updateCatMutation(
+                {
+                    variables: {
+                        id: cat._id,
+                        ...options
+                    }
+                }
+            )
+            errors = !res.errors || res.errors.length === 0
+        } else {
+            const res = await createCatMutation({
+                variables: {
+                    ...options
+                }
+            })
+            errors = !res.errors || res.errors.length === 0
+        }
+
+
+
+
+
+
+
+        if (errors) {
             await sleep(2000)
             history.push('/')
         }
@@ -103,6 +143,8 @@ export default function SignIn() {
                             label="Color"
                             name="color"
                             autoFocus
+                            value={color}
+                            onChange={(e) => { setColor(e.target.value) }}
                         />
                         <TextField
                             margin="normal"
@@ -112,6 +154,8 @@ export default function SignIn() {
                             label="Breed"
                             type="breed"
                             id="breed"
+                            value={breed}
+                            onChange={(e) => { setBreed(e.target.value)} }
                         />
                         <TextField
                             margin="normal"
@@ -121,6 +165,8 @@ export default function SignIn() {
                             label="Coat"
                             type="coat"
                             id="coat"
+                            value={coat}
+                            onChange={(e) => { setCoat(e.target.value) }}
                         />
                         <TextField
                             margin="normal"
@@ -130,6 +176,8 @@ export default function SignIn() {
                             label="Lifespan"
                             type="lifespan"
                             id="lifespan"
+                            value={lifespan}
+                            onChange={(e) => { setLifespan(e.target.value) }}
                         />
                         <TextField
                             margin="normal"
@@ -139,6 +187,8 @@ export default function SignIn() {
                             label="Size"
                             type="size"
                             id="size"
+                            value={size}
+                            onChange={(e) => { setSize(e.target.value) }}
                         />
                         <Button
                             type="submit"
