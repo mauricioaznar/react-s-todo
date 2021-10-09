@@ -1,5 +1,12 @@
 import * as React from 'react'
+
+// icons
+import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+// components
 import {useHistory} from 'react-router-dom'
 import {Fab, IconButton} from "@mui/material";
 import {GetCatsQuery, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
@@ -12,6 +19,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+
 
 export default function CatList () {
     const history = useHistory()
@@ -42,6 +50,9 @@ export default function CatList () {
         history.push('/catForm')
     }
 
+    function handleEditClick(cat: GetCatsQuery["cats"][number]) {
+        history.push('/catForm', { cat })
+    }
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -94,8 +105,16 @@ export default function CatList () {
                                             </TableCell>
                                             <TableCell>
                                                 <IconButton
+                                                    size={'small'}
+                                                    onClick={ () => {
+                                                        handleEditClick(cat)
+                                                    } }>
+                                                    <CreateIcon fontSize={'small'}/>
+                                                </IconButton>
+                                                <IconButton
+                                                    size={'small'}
                                                     onClick={ () => { onDelete(cat) } }>
-
+                                                    <DeleteIcon fontSize={'small'}/>
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>

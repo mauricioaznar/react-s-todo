@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useCreateCatMutation} from "../../schema";
+import {GetCatsQuery, useCreateCatMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
 import sleep from "../../services/sleep";
 
@@ -31,6 +31,13 @@ const theme = createTheme();
 export default function SignIn() {
 
     const history = useHistory()
+
+    // @ts-ignore
+    const cat = history.location.state.cat as GetCatsQuery["cats"][number] || undefined
+
+
+    console.log(cat)
+
     const [createCatMutation] = useCreateCatMutation({
         variables: {
             catInput: {
