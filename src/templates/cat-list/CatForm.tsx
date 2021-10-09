@@ -14,19 +14,6 @@ import {useHistory} from "react-router-dom";
 import sleep from "../../services/sleep";
 import {useState} from "react";
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
 const theme = createTheme();
 
 export default function SignIn() {
@@ -179,7 +166,6 @@ export default function SignIn() {
                         </Button>
                     </Box>
                 </Box>
-                <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
         </ThemeProvider>
     );
