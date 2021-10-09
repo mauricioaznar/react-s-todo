@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import InputIcon from '@mui/icons-material/Input';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import CopyrightIcon from '@mui/icons-material/Copyright';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -27,7 +28,7 @@ import {
     Grid,
     IconButton,
     Link,
-    List,
+    List, ListItem, ListItemIcon, ListItemText,
     Paper,
     Toolbar,
     Typography
@@ -38,21 +39,6 @@ const links = [
     {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
     {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
 ];
-
-
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const drawerWidth: number = 240;
 
@@ -175,6 +161,20 @@ export default function App() {
 
                 </List>
                 <Divider />
+                <List style={{ marginTop: `auto` }} >
+                    <ListItem dense>
+                        <ListItemIcon>
+                            <CopyrightIcon />
+                        </ListItemIcon>
+                        <ListItemText>
+                            <Link color="inherit" href="https://www.mauaznar.com/">
+                                Mau Aznar
+                            </Link>{'   '}
+                            {new Date().getFullYear()}
+                            {'.'}
+                        </ListItemText>
+                    </ListItem>
+                </List>
             </Drawer>
             <Box
                 component="main"
@@ -213,7 +213,6 @@ export default function App() {
                             </Paper>
                         </Grid>
                     </Grid>
-                    <Copyright sx={{ pt: 4 }} />
                 </Container>
             </Box>
         </Box>
