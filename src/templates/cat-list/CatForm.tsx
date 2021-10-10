@@ -8,9 +8,10 @@ import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {GetCatsQuery, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
+import {GetCatsQuery, useCreateCatMutation, useUpdateCatMutation } from "../../schema";
 import {useHistory} from "react-router-dom";
 import {useState} from "react";
+
 
 const theme = createTheme();
 
@@ -28,8 +29,22 @@ export default function SignIn() {
     const [size, setSize] = useState(cat !== undefined ? cat.characteristics.size : '')
     const [color, setColor] = useState(cat !== undefined ? cat.characteristics.color : '')
 
-    const [createCatMutation] = useCreateCatMutation();
-    const [updateCatMutation] = useUpdateCatMutation();
+    const [createCatMutation] = useCreateCatMutation({
+        update(cache) {
+            cache.evict({
+                id: "ROOT_QUERY",
+                fieldName: "cats"
+            })
+        },
+    });
+    const [updateCatMutation] = useUpdateCatMutation({
+        update(cache) {
+            cache.evict({
+                id: "ROOT_QUERY",
+                fieldName: "cats"
+            })
+        },
+    });
 
     // eslint-disable-next-line no-undef
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

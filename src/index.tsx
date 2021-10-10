@@ -13,19 +13,20 @@ import {
 
 const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' : 'https://s-todo-server.mauaznar.com'
 
+// const defaultOptions = {
+//     watchQuery: {
+//         fetchPolicy: 'no-cache',
+//         errorPolicy: 'ignore',
+//     },
+//     query: {
+//         fetchPolicy: 'no-cache',
+//         errorPolicy: 'all',
+//     },
+// }
+
 const client = new ApolloClient({
     uri: `${apiUrl}/graphql`,
     cache: new InMemoryCache(),
-    defaultOptions: {
-        watchQuery: {
-            fetchPolicy: 'no-cache',
-            errorPolicy: 'ignore',
-        },
-        query: {
-            fetchPolicy: 'no-cache',
-            errorPolicy: 'all',
-        },
-    }
 });
 
 
