@@ -23,7 +23,6 @@ import CatForm from "./templates/cat-list/CatForm";
 import {
     Badge,
     Container,
-    CssBaseline,
     Divider,
     Grid,
     IconButton,
@@ -98,7 +97,6 @@ export default function App() {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
             <AppBar position="absolute" open={open}>
                 <Toolbar
                     sx={{
@@ -189,15 +187,17 @@ export default function App() {
                 }}
             >
                 <Toolbar />
-                <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                     <Grid container spacing={3} justifyContent={'center'}>
                         {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
+                        <Grid item xs>
                             <Paper
                                 sx={{
                                     p: 2,
                                     display: 'flex',
                                     flexDirection: 'column',
+                                    justifyContent: 'start',
+                                    minHeight: '50vh'
                                 }}
                             >
                                 <Switch>

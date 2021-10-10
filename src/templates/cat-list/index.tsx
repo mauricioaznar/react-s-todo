@@ -22,9 +22,9 @@ import Grid from "@mui/material/Grid";
 import {useState} from "react";
 
 
-export default function CatList () {
+export default function CatList() {
     const history = useHistory()
-    const { data, loading } = useGetCatsQuery()
+    const {data, loading} = useGetCatsQuery()
 
 
     if (loading) {
@@ -32,15 +32,13 @@ export default function CatList () {
     }
 
 
-
     function handleCreateClick() {
         history.push('/catForm')
     }
 
 
-
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
             <Grid container alignItems={'center'}>
                 <Grid item xs>
                     <h2>
@@ -48,37 +46,35 @@ export default function CatList () {
                     </h2>
                 </Grid>
                 <Grid item>
-                    <Fab color="primary" aria-label="add" onClick={handleCreateClick}>
-                        <AddIcon />
+                    <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
+                        <AddIcon/>
                     </Fab>
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <TableContainer component={Paper}>
-                            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Breed</TableCell>
-                                        <TableCell>Color</TableCell>
-                                        <TableCell>Coat</TableCell>
-                                        <TableCell>Lifespan</TableCell>
-                                        <TableCell>Size</TableCell>
-                                        <TableCell>Actions</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {data?.cats.map((cat) => (
-                                        <CatRow
-                                            key={cat.breed}
-                                            cat={cat}
-                                        />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
+                    <TableContainer component={Paper}>
+                        <Table sx={{minWidth: 650}} size="small" aria-label="a dense table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Breed</TableCell>
+                                    <TableCell>Color</TableCell>
+                                    <TableCell>Coat</TableCell>
+                                    <TableCell>Lifespan</TableCell>
+                                    <TableCell>Size</TableCell>
+                                    <TableCell>Actions</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {data?.cats.map((cat) => (
+                                    <CatRow
+                                        key={cat.breed}
+                                        cat={cat}
+                                    />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Grid>
             </Grid>
         </Container>
@@ -86,7 +82,7 @@ export default function CatList () {
 }
 
 
-function CatRow ({cat}: { cat: GetCatsQuery["cats"][number]} ) {
+function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
     const [isDisabled, setDisabled] = useState(false)
 
     const [deleteCatMutation] = useDeleteCatMutation({
@@ -96,9 +92,8 @@ function CatRow ({cat}: { cat: GetCatsQuery["cats"][number]} ) {
     const history = useHistory()
 
     function handleEditClick(cat: GetCatsQuery["cats"][number]) {
-        history.push('/catForm', { cat })
+        history.push('/catForm', {cat})
     }
-
 
 
     async function onDelete(cat: GetCatsQuery["cats"][number]) {
@@ -113,7 +108,7 @@ function CatRow ({cat}: { cat: GetCatsQuery["cats"][number]} ) {
     return (
         <TableRow
             key={cat.breed}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             <TableCell>
                 {cat.breed}
@@ -132,15 +127,17 @@ function CatRow ({cat}: { cat: GetCatsQuery["cats"][number]} ) {
             <TableCell>
                 <IconButton
                     size={'small'}
-                    onClick={ () => {
+                    onClick={() => {
                         handleEditClick(cat)
-                    } }>
+                    }}>
                     <CreateIcon fontSize={'small'}/>
                 </IconButton>
                 <IconButton
                     disabled={isDisabled}
                     size={'small'}
-                    onClick={ () => { onDelete(cat) } }>
+                    onClick={() => {
+                        onDelete(cat)
+                    }}>
                     <DeleteIcon fontSize={'small'}/>
                 </IconButton>
             </TableCell>

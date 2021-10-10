@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -17,6 +17,7 @@ const theme = createTheme();
 export default function SignIn() {
 
     const history = useHistory()
+    const [isDisabled, setIsDisabled] = useState(false)
 
     // @ts-ignore
     const cat = history.location.state?.cat as GetCatsQuery["cats"][number] || undefined
@@ -33,7 +34,7 @@ export default function SignIn() {
     // eslint-disable-next-line no-undef
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // eslint-disable-next-line no-undef
+        setIsDisabled(true)
 
         const options = {
             catInput: {
@@ -85,14 +86,13 @@ export default function SignIn() {
                 <CssBaseline/>
                 <Box
                     sx={{
-                        marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
                     <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
+                        <PetsIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign in
@@ -154,6 +154,7 @@ export default function SignIn() {
                             onChange={(e) => { setSize(e.target.value) }}
                         />
                         <Button
+                            disabled={isDisabled}
                             type="submit"
                             fullWidth
                             variant="contained"
