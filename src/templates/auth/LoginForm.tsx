@@ -8,9 +8,11 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 import {useLoginMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
+import {Grid, Snackbar} from "@mui/material";
+import {ApolloError} from "@apollo/client";
 
 
 const theme = createTheme();
@@ -19,9 +21,11 @@ export default function LogInForm() {
 
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
+    const [message, setMessage] = useState('')
 
-    const [username, setUsername] = useState( 'john')
-    const [password, setPassword] = useState( 'changeme')
+    const [username, setUsername] = useState('john')
+    const [password, setPassword] = useState('changeme')
 
     const [loginMutation] = useLoginMutation()
 
@@ -30,84 +34,109 @@ export default function LogInForm() {
         event.preventDefault();
         setIsDisabled(true)
 
-        const options = {
-            userInput: {
-                username: username,
-                password: password
-            }
-        }
-
-        const res = await loginMutation(
-            {
-                variables: {
-                    ...options
+        try {
+            const options = {
+                userInput: {
+                    username: username,
+                    password: password
                 }
             }
-        )
 
-        console.log(res)
+            const res = await loginMutation(
+                {
+                    variables: {
+                        ...options
+                    }
+                }
+            )
 
-        const errors = !(!res.errors || res.errors.length === 0)
-
-        if (!errors) {
             const accessToken = res.data?.login?.accessToken
-            console.log(accessToken)
             setIsDisabled(false)
-            // history.push('/')
+
+        } catch (e: unknown) {
+            if (e instanceof ApolloError) {
+                setIsOpen(true)
+                setMessage(e.message)
+            }
         }
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <PetsIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="color"
-                            label="User name"
-                            name="username"
-                            autoFocus
-                            value={username}
-                            onChange={(e) => { setUsername(e.target.value) }}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => { setPassword(e.target.value)} }
-                        />
-                        <Button
-                            disabled={isDisabled}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Submit
-                        </Button>
+        <Grid
+            container
+            spacing={0}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            style={{minHeight: '100vh'}}
+        >
+
+            <Grid item xs>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                            <PetsIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign in
+                        </Typography>
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="color"
+                                label="User name"
+                                name="username"
+                                autoFocus
+                                value={username}
+                                onChange={(e) => {
+                                    setUsername(e.target.value)
+                                }}
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                            <Button
+                                disabled={isDisabled}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+                            >
+                                Submit
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
+                    <Snackbar
+                        open={isOpen}
+                        autoHideDuration={6000}
+                        onClose={() => {
+                            setIsDisabled(false)
+                            setIsOpen(false)
+                        }}
+                        message={message}
+                    />
+                </Container>
+            </Grid>
+
+        </Grid>
+
     );
 }

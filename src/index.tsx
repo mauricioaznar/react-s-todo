@@ -1,15 +1,11 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './App';
+import {ThemeProvider} from '@mui/material/styles';
+import {BrowserRouter as Router} from 'react-router-dom';
 import theme from './theme';
-import {
-    ApolloClient,
-    InMemoryCache,
-    ApolloProvider,
-} from "@apollo/client";
+import {ApolloClient, ApolloProvider, InMemoryCache,} from "@apollo/client";
+import Main from "./Main";
 
 const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' : 'https://s-todo-server.mauaznar.com'
 
@@ -36,7 +32,7 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             <Router>
                 <CssBaseline />
-                <App />
+                <Main />
             </Router>
         </ThemeProvider>
     </ApolloProvider>,
