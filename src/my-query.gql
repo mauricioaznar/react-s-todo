@@ -11,6 +11,12 @@
         }
     }
 
+    mutation Login($userInput: userInput!) {
+        login(userInput: $userInput) {
+            accessToken
+        }
+    }
+
     mutation DeleteCat($id: String!) {
         deleteCat(_id: $id) {
             breed

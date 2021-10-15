@@ -26,7 +26,6 @@ export default function CatList() {
     const history = useHistory()
     const {data, loading} = useGetCatsQuery()
 
-
     if (loading) {
         return <h1>Loading</h1>;
     }

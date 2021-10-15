@@ -15,7 +15,7 @@ import {useState} from "react";
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function CatForm() {
 
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)

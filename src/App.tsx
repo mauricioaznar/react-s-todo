@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 // icons
 import PetsIcon from '@mui/icons-material/Pets';
 import InputIcon from '@mui/icons-material/Input';
+import LoginIcon from '@mui/icons-material/Login';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,7 +19,7 @@ import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 
 // templates
-import CatList from "./templates/cat-list";
+import CatList from "./templates/cat-list/CatList";
 import CatForm from "./templates/cat-list/CatForm";
 import {
     Badge,
@@ -33,10 +34,12 @@ import {
     Typography
 } from "@mui/material";
 import {ListItemLink} from "./components/ListItemLink";
+import LogInForm from "./templates/auth/LoginForm";
 
 const links = [
     {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
     {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
+    {icon: <LoginIcon />, name: 'LogInForm', path: '/logInForm', component:  LogInForm},
 ];
 
 const drawerWidth: number = 240;

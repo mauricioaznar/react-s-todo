@@ -38,6 +38,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCat: Cat;
   deleteCat: Cat;
+  login: AccessToken;
   updateCat: Cat;
 };
 
@@ -49,6 +50,11 @@ export type MutationCreateCatArgs = {
 
 export type MutationDeleteCatArgs = {
   _id: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  userInput: UserInput;
 };
 
 
@@ -67,6 +73,16 @@ export type CharacteristicsInput = {
   color: Scalars['String'];
   lifespan: Scalars['String'];
   size: Scalars['String'];
+};
+
+export type UserInput = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type AccessToken = {
+  __typename?: 'AccessToken';
+  accessToken: Scalars['String'];
 };
 
 
@@ -111,6 +127,39 @@ export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($userInput: userInput!) {
+  login(userInput: $userInput) {
+    accessToken
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      userInput: // value for 'userInput'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const DeleteCatDocument = gql`
     mutation DeleteCat($id: String!) {
   deleteCat(_id: $id) {
@@ -216,6 +265,13 @@ export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
 
+export type LoginMutationVariables = Exact<{
+  userInput: UserInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AccessToken', accessToken: string } };
+
 export type DeleteCatMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -243,6 +299,7 @@ export const namedOperations = {
     GetCats: 'GetCats'
   },
   Mutation: {
+    Login: 'Login',
     DeleteCat: 'DeleteCat',
     UpdateCat: 'UpdateCat',
     CreateCat: 'CreateCat'
