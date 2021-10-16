@@ -1,15 +1,13 @@
 import * as React from 'react'
 
 // icons
-import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
-import DeleteIcon from '@mui/icons-material/Delete';
 
 
 // components
 import {useHistory} from 'react-router-dom'
-import {Fab, IconButton} from "@mui/material";
-import {GetUsersQuery, namedOperations, useGetUsersQuery} from "../../schema";
+import {Fab} from "@mui/material";
+import {GetUsersQuery, useGetUsersQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,7 +17,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import {useState} from "react";
 
 
 export default function UserList() {
@@ -77,18 +74,18 @@ export default function UserList() {
 
 
 function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
-    const [isDisabled, setDisabled] = useState(false)
-
-    const history = useHistory()
-
-    function handleEditClick(User: GetUsersQuery["users"][number]) {
-        // history.push('/UserForm', {User})
-    }
-
-
-    async function onDelete(User: GetUsersQuery["users"][number]) {
-        setDisabled(true)
-    }
+    // const [isDisabled, setDisabled] = useState(false)
+    //
+    // const history = useHistory()
+    //
+    // function handleEditClick(User: GetUsersQuery["users"][number]) {
+    //     // history.push('/UserForm', {User})
+    // }
+    //
+    //
+    // async function onDelete(User: GetUsersQuery["users"][number]) {
+    //     setDisabled(true)
+    // }
 
     return (
         <TableRow
