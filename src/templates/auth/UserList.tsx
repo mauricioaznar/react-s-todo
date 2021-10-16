@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import {useHistory} from 'react-router-dom'
 import {Fab, IconButton} from "@mui/material";
-import {GetCatsQuery, namedOperations, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
+import {GetUsersQuery, namedOperations, useGetUsersQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,9 +22,9 @@ import Grid from "@mui/material/Grid";
 import {useState} from "react";
 
 
-export default function CatList() {
+export default function UserList() {
     const history = useHistory()
-    const {data, loading} = useGetCatsQuery()
+    const {data, loading} = useGetUsersQuery()
 
     if (loading) {
         return <h1>Loading</h1>;
@@ -32,7 +32,7 @@ export default function CatList() {
 
 
     function handleCreateClick() {
-        history.push('/catForm')
+        history.push('/signInForm')
     }
 
 
@@ -41,7 +41,7 @@ export default function CatList() {
             <Grid container alignItems={'center'}>
                 <Grid item xs>
                     <h2>
-                        Cats
+                        Users
                     </h2>
                 </Grid>
                 <Grid item>
@@ -56,19 +56,14 @@ export default function CatList() {
                         <Table sx={{minWidth: 650}}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Breed</TableCell>
-                                    <TableCell>Color</TableCell>
-                                    <TableCell>Coat</TableCell>
-                                    <TableCell>Lifespan</TableCell>
-                                    <TableCell>Size</TableCell>
-                                    <TableCell>Actions</TableCell>
+                                    <TableCell>Username</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data?.cats.map((cat) => (
-                                    <CatRow
-                                        key={cat.breed}
-                                        cat={cat}
+                                {data?.users.map((user) => (
+                                    <UserRow
+                                        key={user.username}
+                                        user={user}
                                     />
                                 ))}
                             </TableBody>
@@ -81,64 +76,27 @@ export default function CatList() {
 }
 
 
-function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
+function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
     const [isDisabled, setDisabled] = useState(false)
-
-    const [deleteCatMutation] = useDeleteCatMutation({
-        refetchQueries: [namedOperations.Query.GetCats]
-    })
 
     const history = useHistory()
 
-    function handleEditClick(cat: GetCatsQuery["cats"][number]) {
-        history.push('/catForm', {cat})
+    function handleEditClick(User: GetUsersQuery["users"][number]) {
+        // history.push('/UserForm', {User})
     }
 
 
-    async function onDelete(cat: GetCatsQuery["cats"][number]) {
+    async function onDelete(User: GetUsersQuery["users"][number]) {
         setDisabled(true)
-        await deleteCatMutation({
-            variables: {
-                id: cat._id
-            }
-        })
     }
 
     return (
         <TableRow
-            key={cat.breed}
+            key={user.username}
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             <TableCell>
-                {cat.breed}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.color}
-            </TableCell>
-            <TableCell>{cat.characteristics.coat}</TableCell>
-            <TableCell>
-
-                {cat.characteristics.lifespan}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.size}
-            </TableCell>
-            <TableCell>
-                <IconButton
-                    size={'small'}
-                    onClick={() => {
-                        handleEditClick(cat)
-                    }}>
-                    <CreateIcon fontSize={'small'}/>
-                </IconButton>
-                <IconButton
-                    disabled={isDisabled}
-                    size={'small'}
-                    onClick={() => {
-                        onDelete(cat)
-                    }}>
-                    <DeleteIcon fontSize={'small'}/>
-                </IconButton>
+                {user.username}
             </TableCell>
         </TableRow>
     );

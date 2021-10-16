@@ -11,7 +11,9 @@ import InputIcon from '@mui/icons-material/Input';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CopyrightIcon from '@mui/icons-material/Copyright';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import MenuIcon from '@mui/icons-material/Menu';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import {styled} from '@mui/material/styles';
 
@@ -36,10 +38,14 @@ import {
 } from "@mui/material";
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
+import SignInForm from "./auth/SignInForm";
+import UserList from "./auth/UserList";
 
 const links = [
     {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
-    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm }
+    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
+    {icon: <PersonAddIcon />, name: 'SignInForm', path: '/signInForm', component: SignInForm },
+    {icon: <PeopleAltIcon />, name: 'UserList', path: '/userList', component: UserList },
 ];
 
 const drawerWidth: number = 240;

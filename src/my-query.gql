@@ -17,9 +17,23 @@
         }
     }
 
+    query GetUsers {
+        users {
+            _id
+            username
+        }
+    }
+
     mutation Login($userInput: userInput!) {
         login(userInput: $userInput) {
             accessToken
+        }
+    }
+
+    mutation SignIn($userInput: userInput!) {
+        createUser(userInput: $userInput) {
+            username
+            _id
         }
     }
 

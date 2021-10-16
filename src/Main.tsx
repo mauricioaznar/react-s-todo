@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import App from "./templates/App";
 import {useTypedSelector} from "./hooks/useTypedSelector";
 import LogInForm from "./templates/auth/LoginForm";
-import {useCurrentUserQuery} from "./schema";
+import {useCurrentUserLazyQuery, useCurrentUserQuery} from "./schema";
 import {useActions} from "./hooks/useActions";
 
 const Main = () => {
@@ -13,13 +13,17 @@ const Main = () => {
     const {login} = useActions()
 
 
-    const {data, loading} = useCurrentUserQuery()
+    const [getCurrentUser, { loading, data }] = useCurrentUserLazyQuery();
 
     useEffect(() => {
         if (data?.currentUser.username) {
             login(window.localStorage.getItem('token')!)
         }
     }, [data])
+
+    useEffect(() => {
+        getCurrentUser()
+    }, [accessToken])
 
     return (
         <>
