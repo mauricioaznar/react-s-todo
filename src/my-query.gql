@@ -11,6 +11,12 @@
         }
     }
 
+    query CurrentUser {
+        currentUser {
+            username
+        }
+    }
+
     mutation Login($userInput: userInput!) {
         login(userInput: $userInput) {
             accessToken

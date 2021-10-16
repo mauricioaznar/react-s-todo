@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 // components
 import Box from '@mui/material/Box';
@@ -8,38 +8,38 @@ import Box from '@mui/material/Box';
 // icons
 import PetsIcon from '@mui/icons-material/Pets';
 import InputIcon from '@mui/icons-material/Input';
-import LoginIcon from '@mui/icons-material/Login';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import LogoutIcon from '@mui/icons-material/Logout';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { styled } from '@mui/material/styles';
+import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import {styled} from '@mui/material/styles';
 
 import MuiDrawer from '@mui/material/Drawer';
 
 // templates
-import CatList from "./templates/cat-list/CatList";
-import CatForm from "./templates/cat-list/CatForm";
+import CatList from "./cat-list/CatList";
+import CatForm from "./cat-list/CatForm";
 import {
-    Badge,
     Container,
     Divider,
     Grid,
     IconButton,
     Link,
-    List, ListItem, ListItemIcon, ListItemText,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
     Paper,
     Toolbar,
     Typography
 } from "@mui/material";
-import {ListItemLink} from "./components/ListItemLink";
-import LogInForm from "./templates/auth/LoginForm";
+import {ListItemLink} from "../components/ListItemLink";
+import {useActions} from "../hooks/useActions";
 
 const links = [
     {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
-    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
-    {icon: <LoginIcon />, name: 'LogInForm', path: '/logInForm', component:  LogInForm},
+    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm }
 ];
 
 const drawerWidth: number = 240;
@@ -95,6 +95,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function App() {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {setOpen(!open);};
+    const {logout} = useActions()
 
 
 
@@ -127,13 +128,12 @@ export default function App() {
                     >
                         Dashboard
                     </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
+                    <IconButton color="inherit" onClick={() => { logout() }}>
+                        <LogoutIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>
+
             <Drawer variant="permanent" open={open}>
                 <Toolbar
                     sx={{

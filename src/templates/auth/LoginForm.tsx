@@ -8,26 +8,27 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme} from '@mui/material/styles';
 import {useLoginMutation} from "../../schema";
-import {useHistory} from "react-router-dom";
-import {Grid, Snackbar} from "@mui/material";
+import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
+import {useActions} from "../../hooks/useActions";
+import MauSnackbar from "../../components/MauSnackbar";
 
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export default function LogInForm() {
 
-    const history = useHistory()
+    // const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
-    const [isOpen, setIsOpen] = useState(false)
     const [message, setMessage] = useState('')
 
     const [username, setUsername] = useState('john')
     const [password, setPassword] = useState('changeme')
 
     const [loginMutation] = useLoginMutation()
+
+    const {login} = useActions()
 
     // eslint-disable-next-line no-undef
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,11 +52,14 @@ export default function LogInForm() {
             )
 
             const accessToken = res.data?.login?.accessToken
-            setIsDisabled(false)
 
+            if (accessToken) {
+                login(accessToken)
+            }
+
+            setIsDisabled(false)
         } catch (e: unknown) {
             if (e instanceof ApolloError) {
-                setIsOpen(true)
                 setMessage(e.message)
             }
         }
@@ -124,12 +128,10 @@ export default function LogInForm() {
                             </Button>
                         </Box>
                     </Box>
-                    <Snackbar
-                        open={isOpen}
-                        autoHideDuration={6000}
+                    <MauSnackbar
                         onClose={() => {
                             setIsDisabled(false)
-                            setIsOpen(false)
+                            setMessage('')
                         }}
                         message={message}
                     />

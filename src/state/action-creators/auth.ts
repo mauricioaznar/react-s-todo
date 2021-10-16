@@ -1,0 +1,23 @@
+import {ActionType} from "../action-types";
+import {Action} from "../actions";
+import {Dispatch} from "redux";
+
+
+export const login = (accessToken: string) => {
+    return async (dispatch: Dispatch<Action>) => {
+        window.localStorage.setItem('token', accessToken)
+        dispatch({
+            type: ActionType.LOGIN,
+            payload: accessToken
+        })
+    }
+}
+
+export const logout = () => {
+    return async (dispatch: Dispatch<Action>) => {
+        window.localStorage.removeItem('token')
+        dispatch({
+            type: ActionType.LOGOUT
+        })
+    }
+}

@@ -17,6 +17,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
+  currentUser: User;
 };
 
 export type Cat = {
@@ -32,6 +33,12 @@ export type Characteristics = {
   color: Scalars['String'];
   lifespan: Scalars['String'];
   size: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Mutation = {
@@ -127,6 +134,40 @@ export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  currentUser {
+    username
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($userInput: userInput!) {
   login(userInput: $userInput) {
@@ -265,6 +306,11 @@ export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string } };
+
 export type LoginMutationVariables = Exact<{
   userInput: UserInput;
 }>;
@@ -296,7 +342,8 @@ export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typena
 
 export const namedOperations = {
   Query: {
-    GetCats: 'GetCats'
+    GetCats: 'GetCats',
+    CurrentUser: 'CurrentUser'
   },
   Mutation: {
     Login: 'Login',

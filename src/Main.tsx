@@ -1,17 +1,36 @@
-import React from 'react';
-import App from "./App";
+import React, {useEffect} from 'react';
+import App from "./templates/App";
+import {useTypedSelector} from "./hooks/useTypedSelector";
 import LogInForm from "./templates/auth/LoginForm";
+import {useCurrentUserQuery} from "./schema";
+import {useActions} from "./hooks/useActions";
 
 const Main = () => {
-    const isAuthorized = false
+    const {accessToken} = useTypedSelector(
+        (state) => state.auth
+    )
+
+    const {login} = useActions()
+
+
+    const {data, loading} = useCurrentUserQuery()
+
+    useEffect(() => {
+        if (data?.currentUser.username) {
+            login(window.localStorage.getItem('token')!)
+        }
+    }, [data])
 
     return (
         <>
+
             {
-                isAuthorized ? <App/> : <LogInForm/>
+                loading ? 'Loading' :
+                accessToken ? <App/> : <LogInForm/>
             }
         </>
     );
 };
 
 export default Main;
+
