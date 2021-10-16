@@ -26,7 +26,14 @@ export default function SignInForm() {
     const [username, setUsername] = useState('john')
     const [password, setPassword] = useState('changeme')
 
-    const [signinMutation] = useSignInMutation()
+    const [signinMutation] = useSignInMutation({
+        update(cache) {
+            cache.evict({
+                id: "ROOT_QUERY",
+                fieldName: "users"
+            })
+        },
+    })
 
 
     // eslint-disable-next-line no-undef

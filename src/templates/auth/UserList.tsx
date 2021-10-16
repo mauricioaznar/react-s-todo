@@ -1,10 +1,6 @@
 import * as React from 'react'
 
-// icons
 import AddIcon from "@mui/icons-material/Add"
-
-
-// components
 import {useHistory} from 'react-router-dom'
 import {Fab} from "@mui/material";
 import {GetUsersQuery, useGetUsersQuery} from "../../schema";
