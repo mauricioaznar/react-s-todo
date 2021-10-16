@@ -8,9 +8,10 @@ import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {GetCatsQuery, useCreateCatMutation, useUpdateCatMutation } from "../../schema";
+import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
 import {useState} from "react";
+import {nameof} from "../../helpers/nameof";
 
 
 const theme = createTheme();
@@ -33,7 +34,7 @@ export default function CatForm() {
         update(cache) {
             cache.evict({
                 id: "ROOT_QUERY",
-                fieldName: "cats"
+                fieldName: nameof<Query>('cats')
             })
         },
     });
@@ -41,7 +42,7 @@ export default function CatForm() {
         update(cache) {
             cache.evict({
                 id: "ROOT_QUERY",
-                fieldName: "cats"
+                fieldName: nameof<Query>('cats')
             })
         },
     });

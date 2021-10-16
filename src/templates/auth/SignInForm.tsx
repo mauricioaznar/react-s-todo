@@ -8,11 +8,14 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {useSignInMutation} from "../../schema";
+import {Query, useSignInMutation} from "../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
 import {useHistory} from "react-router-dom";
+import {nameof} from "../../helpers/nameof";
+
+
 
 
 // const theme = createTheme();
@@ -30,7 +33,7 @@ export default function SignInForm() {
         update(cache) {
             cache.evict({
                 id: "ROOT_QUERY",
-                fieldName: "users"
+                fieldName: nameof<Query>('users')
             })
         },
     })
