@@ -18,6 +18,7 @@ export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
   currentUser: User;
+  todos: Array<Todo>;
   users: Array<User>;
 };
 
@@ -42,18 +43,32 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type Todo = {
+  __typename?: 'Todo';
+  _id: Scalars['String'];
+  description: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCat: Cat;
+  createTodo: Todo;
   createUser: User;
   deleteCat: Cat;
+  deleteTodo: Todo;
   login: AccessToken;
   updateCat: Cat;
+  updateTodo: Todo;
 };
 
 
 export type MutationCreateCatArgs = {
   catInput: CatInput;
+};
+
+
+export type MutationCreateTodoArgs = {
+  todoInput: TodoInput;
 };
 
 
@@ -63,6 +78,11 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteCatArgs = {
+  _id: Scalars['String'];
+};
+
+
+export type MutationDeleteTodoArgs = {
   _id: Scalars['String'];
 };
 
@@ -77,6 +97,12 @@ export type MutationUpdateCatArgs = {
   catInput: CatInput;
 };
 
+
+export type MutationUpdateTodoArgs = {
+  _id: Scalars['String'];
+  todoInput: TodoInput;
+};
+
 export type CatInput = {
   breed: Scalars['String'];
   characteristics: CharacteristicsInput;
@@ -87,6 +113,10 @@ export type CharacteristicsInput = {
   color: Scalars['String'];
   lifespan: Scalars['String'];
   size: Scalars['String'];
+};
+
+export type TodoInput = {
+  description: Scalars['String'];
 };
 
 export type UserInput = {
@@ -141,6 +171,41 @@ export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export const GetTodosDocument = gql`
+    query GetTodos {
+  todos {
+    _id
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetTodosQuery__
+ *
+ * To run a query within a React component, call `useGetTodosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTodosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTodosQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTodosQuery(baseOptions?: Apollo.QueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
+      }
+export function useGetTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
+        }
+export type GetTodosQueryHookResult = ReturnType<typeof useGetTodosQuery>;
+export type GetTodosLazyQueryHookResult = ReturnType<typeof useGetTodosLazyQuery>;
+export type GetTodosQueryResult = Apollo.QueryResult<GetTodosQuery, GetTodosQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -377,10 +442,115 @@ export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
 export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
 export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
+export const DeleteTodoDocument = gql`
+    mutation DeleteTodo($id: String!) {
+  deleteTodo(_id: $id) {
+    description
+  }
+}
+    `;
+export type DeleteTodoMutationFn = Apollo.MutationFunction<DeleteTodoMutation, DeleteTodoMutationVariables>;
+
+/**
+ * __useDeleteTodoMutation__
+ *
+ * To run a mutation, you first call `useDeleteTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTodoMutation, { data, loading, error }] = useDeleteTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTodoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTodoMutation, DeleteTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTodoMutation, DeleteTodoMutationVariables>(DeleteTodoDocument, options);
+      }
+export type DeleteTodoMutationHookResult = ReturnType<typeof useDeleteTodoMutation>;
+export type DeleteTodoMutationResult = Apollo.MutationResult<DeleteTodoMutation>;
+export type DeleteTodoMutationOptions = Apollo.BaseMutationOptions<DeleteTodoMutation, DeleteTodoMutationVariables>;
+export const UpdateTodoDocument = gql`
+    mutation UpdateTodo($id: String!, $todoInput: TodoInput!) {
+  updateTodo(_id: $id, todoInput: $todoInput) {
+    description
+  }
+}
+    `;
+export type UpdateTodoMutationFn = Apollo.MutationFunction<UpdateTodoMutation, UpdateTodoMutationVariables>;
+
+/**
+ * __useUpdateTodoMutation__
+ *
+ * To run a mutation, you first call `useUpdateTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTodoMutation, { data, loading, error }] = useUpdateTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      todoInput: // value for 'todoInput'
+ *   },
+ * });
+ */
+export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTodoMutation, UpdateTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTodoMutation, UpdateTodoMutationVariables>(UpdateTodoDocument, options);
+      }
+export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
+export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
+export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
+export const CreateTodoDocument = gql`
+    mutation CreateTodo($todoInput: TodoInput!) {
+  createTodo(todoInput: $todoInput) {
+    description
+  }
+}
+    `;
+export type CreateTodoMutationFn = Apollo.MutationFunction<CreateTodoMutation, CreateTodoMutationVariables>;
+
+/**
+ * __useCreateTodoMutation__
+ *
+ * To run a mutation, you first call `useCreateTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTodoMutation, { data, loading, error }] = useCreateTodoMutation({
+ *   variables: {
+ *      todoInput: // value for 'todoInput'
+ *   },
+ * });
+ */
+export function useCreateTodoMutation(baseOptions?: Apollo.MutationHookOptions<CreateTodoMutation, CreateTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTodoMutation, CreateTodoMutationVariables>(CreateTodoDocument, options);
+      }
+export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutation>;
+export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
+export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
 export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
+
+export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -428,9 +598,32 @@ export type CreateCatMutationVariables = Exact<{
 
 export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };
 
+export type DeleteTodoMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteTodoMutation = { __typename?: 'Mutation', deleteTodo: { __typename?: 'Todo', description: string } };
+
+export type UpdateTodoMutationVariables = Exact<{
+  id: Scalars['String'];
+  todoInput: TodoInput;
+}>;
+
+
+export type UpdateTodoMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', description: string } };
+
+export type CreateTodoMutationVariables = Exact<{
+  todoInput: TodoInput;
+}>;
+
+
+export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', description: string } };
+
 export const namedOperations = {
   Query: {
     GetCats: 'GetCats',
+    GetTodos: 'GetTodos',
     CurrentUser: 'CurrentUser',
     GetUsers: 'GetUsers'
   },
@@ -439,6 +632,9 @@ export const namedOperations = {
     SignIn: 'SignIn',
     DeleteCat: 'DeleteCat',
     UpdateCat: 'UpdateCat',
-    CreateCat: 'CreateCat'
+    CreateCat: 'CreateCat',
+    DeleteTodo: 'DeleteTodo',
+    UpdateTodo: 'UpdateTodo',
+    CreateTodo: 'CreateTodo'
   }
 }

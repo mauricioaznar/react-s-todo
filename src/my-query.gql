@@ -11,6 +11,13 @@
         }
     }
 
+    query GetTodos {
+        todos {
+            _id
+            description
+        }
+    }
+
     query CurrentUser {
         currentUser {
             username
@@ -52,6 +59,24 @@
     mutation CreateCat($catInput: CatInput!) {
         createCat(catInput: $catInput) {
             breed
+        }
+    }
+
+    mutation DeleteTodo($id: String!) {
+        deleteTodo(_id: $id) {
+            description
+        }
+    }
+
+    mutation UpdateTodo($id: String!, $todoInput: TodoInput!) {
+        updateTodo(_id: $id, todoInput: $todoInput) {
+            description
+        }
+    }
+
+    mutation CreateTodo($todoInput: TodoInput!) {
+        createTodo(todoInput: $todoInput) {
+            description
         }
     }
 

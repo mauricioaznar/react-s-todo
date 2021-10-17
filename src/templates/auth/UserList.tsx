@@ -55,7 +55,7 @@ export default function UserList() {
                             <TableBody>
                                 {data?.users.map((user) => (
                                     <UserRow
-                                        key={user.username}
+                                        key={user._id}
                                         user={user}
                                     />
                                 ))}
@@ -85,7 +85,6 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
 
     return (
         <TableRow
-            key={user.username}
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             <TableCell>

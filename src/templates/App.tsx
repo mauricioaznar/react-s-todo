@@ -12,6 +12,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
@@ -20,8 +22,8 @@ import {styled} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 
 // templates
-import CatList from "./cat-list/CatList";
-import CatForm from "./cat-list/CatForm";
+import CatList from "./cat/CatList";
+import CatForm from "./cat/CatForm";
 import {
     Container,
     Divider,
@@ -40,12 +42,16 @@ import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
 import SignInForm from "./auth/SignInForm";
 import UserList from "./auth/UserList";
+import TodoForm from "./todo/TodoForm";
+import TodoList from "./todo/TodoList";
 
 const links = [
     {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
     {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
     {icon: <PersonAddIcon />, name: 'SignInForm', path: '/signInForm', component: SignInForm },
     {icon: <PeopleAltIcon />, name: 'UserList', path: '/userList', component: UserList },
+    {icon: <FormatListBulletedIcon />, name: 'TodoList', path: '/todoList', component: TodoList },
+    {icon: <PlaylistAddIcon />, name: 'TodoForm', path: '/todoForm', component: TodoForm },
 ];
 
 const drawerWidth: number = 240;

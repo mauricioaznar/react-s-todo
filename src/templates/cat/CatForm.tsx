@@ -86,11 +86,6 @@ export default function CatForm() {
         }
 
 
-
-
-
-
-
         if (errors) {
             history.push('/')
         }

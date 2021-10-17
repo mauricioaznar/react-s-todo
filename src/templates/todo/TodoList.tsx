@@ -1,4 +1,6 @@
+
 import * as React from 'react'
+import {useState} from 'react'
 
 // icons
 import CreateIcon from '@mui/icons-material/Create';
@@ -9,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import {useHistory} from 'react-router-dom'
 import {Fab, IconButton} from "@mui/material";
-import {GetCatsQuery, namedOperations, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
+import {GetTodosQuery, namedOperations, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,12 +21,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import {useState} from "react";
 
 
-export default function CatList() {
+export default function TodoList() {
     const history = useHistory()
-    const {data, loading} = useGetCatsQuery()
+    const {data, loading} = useGetTodosQuery()
 
     if (loading) {
         return <h1>Loading</h1>;
@@ -32,7 +33,7 @@ export default function CatList() {
 
 
     function handleCreateClick() {
-        history.push('/catForm')
+        history.push('/todoForm')
     }
 
 
@@ -41,7 +42,7 @@ export default function CatList() {
             <Grid container alignItems={'center'}>
                 <Grid item xs>
                     <h2>
-                        Cats
+                        Todos
                     </h2>
                 </Grid>
                 <Grid item>
@@ -56,19 +57,15 @@ export default function CatList() {
                         <Table sx={{minWidth: 650}}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Breed</TableCell>
-                                    <TableCell>Color</TableCell>
-                                    <TableCell>Coat</TableCell>
-                                    <TableCell>Lifespan</TableCell>
-                                    <TableCell>Size</TableCell>
+                                    <TableCell>Description</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data?.cats.map((cat) => (
-                                    <CatRow
-                                        key={cat.breed}
-                                        cat={cat}
+                                {data?.todos.map((todo) => (
+                                    <TodoRow
+                                        key={todo._id}
+                                        todo={todo}
                                     />
                                 ))}
                             </TableBody>
@@ -81,53 +78,41 @@ export default function CatList() {
 }
 
 
-function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
+function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
     const [isDisabled, setDisabled] = useState(false)
 
-    const [deleteCatMutation] = useDeleteCatMutation({
-        refetchQueries: [namedOperations.Query.GetCats]
+    const [deleteTodoMutation] = useDeleteTodoMutation({
+        refetchQueries: [namedOperations.Query.GetTodos]
     })
 
     const history = useHistory()
 
-    function handleEditClick(cat: GetCatsQuery["cats"][number]) {
-        history.push('/catForm', {cat})
+    function handleEditClick(todo: GetTodosQuery["todos"][number]) {
+        history.push('/todoForm', {todo})
     }
 
 
-    async function onDelete(cat: GetCatsQuery["cats"][number]) {
+    async function onDelete(todo: GetTodosQuery["todos"][number]) {
         setDisabled(true)
-        await deleteCatMutation({
+        await deleteTodoMutation({
             variables: {
-                id: cat._id
+                id: todo._id
             }
         })
     }
 
     return (
         <TableRow
-            key={cat.breed}
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             <TableCell>
-                {cat.breed}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.color}
-            </TableCell>
-            <TableCell>{cat.characteristics.coat}</TableCell>
-            <TableCell>
-
-                {cat.characteristics.lifespan}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.size}
+                {todo.description}
             </TableCell>
             <TableCell>
                 <IconButton
                     size={'small'}
                     onClick={() => {
-                        handleEditClick(cat)
+                        handleEditClick(todo)
                     }}>
                     <CreateIcon fontSize={'small'}/>
                 </IconButton>
@@ -135,7 +120,7 @@ function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
                     disabled={isDisabled}
                     size={'small'}
                     onClick={() => {
-                        onDelete(cat)
+                        onDelete(todo)
                     }}>
                     <DeleteIcon fontSize={'small'}/>
                 </IconButton>
