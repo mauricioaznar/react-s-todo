@@ -58,6 +58,7 @@ export default function TodoList() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Description</TableCell>
+                                    <TableCell>User</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -107,6 +108,9 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
         >
             <TableCell>
                 {todo.description}
+            </TableCell>
+            <TableCell>
+                {todo.user?.username}
             </TableCell>
             <TableCell>
                 <IconButton

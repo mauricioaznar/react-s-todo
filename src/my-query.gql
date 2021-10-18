@@ -15,6 +15,9 @@
         todos {
             _id
             description
+            user {
+                username
+            }
         }
     }
 
