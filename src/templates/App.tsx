@@ -19,7 +19,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import {styled} from '@mui/material/styles';
 
-import MuiDrawer from '@mui/material/Drawer';
+import MuiDrawer from '@mui/material/SwipeableDrawer';
 
 // templates
 import CatList from "./cat/CatList";
@@ -36,7 +36,9 @@ import {
     ListItemText,
     Paper,
     Toolbar,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
@@ -63,31 +65,34 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
+    [theme.breakpoints.up('sm')]: {
+        zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
+            duration: theme.transitions.duration.leavingScreen,
         }),
-    }),
+        ...(open && {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        }),
+    },
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+const Drawer = styled(MuiDrawer )(
     ({ theme, open }) => ({
         '& .MuiDrawer-paper': {
-            position: 'relative',
+            position: 'absolute',
             whiteSpace: 'nowrap',
             width: drawerWidth,
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
             }),
+            borderRight: 0,
             boxSizing: 'border-box',
             ...(!open && {
                 overflowX: 'hidden',
@@ -95,8 +100,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
                 }),
-                width: theme.spacing(7),
+                width: 0,
                 [theme.breakpoints.up('sm')]: {
+                    position: 'relative',
                     width: theme.spacing(9),
                 },
             }),
@@ -108,6 +114,8 @@ export default function App() {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {setOpen(!open);};
     const {logout} = useActions()
+    const theme = useTheme();
+    const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
 
 
 
@@ -126,7 +134,6 @@ export default function App() {
                         onClick={toggleDrawer}
                         sx={{
                             marginRight: '36px',
-                            ...(open && { display: 'none' }),
                         }}
                     >
                         <MenuIcon />
@@ -146,7 +153,12 @@ export default function App() {
                 </Toolbar>
             </AppBar>
 
-            <Drawer variant="permanent" open={open}>
+            <Drawer
+                variant={matchesSmAndUp ? 'permanent' : undefined}
+                open={open}
+                onClose={() => { setOpen(false) }}
+                onOpen={() => { setOpen(true) }}
+            >
                 <Toolbar
                     sx={{
                         display: 'flex',
