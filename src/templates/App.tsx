@@ -16,8 +16,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import {styled} from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
 
 import MuiDrawer from '@mui/material/SwipeableDrawer';
 
@@ -36,9 +35,7 @@ import {
     ListItemText,
     Paper,
     Toolbar,
-    Typography,
-    useMediaQuery,
-    useTheme
+    Typography
 } from "@mui/material";
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
@@ -48,80 +45,31 @@ import TodoForm from "./todo/TodoForm";
 import TodoList from "./todo/TodoList";
 
 const links = [
-    {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true },
+    {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true, navbar: true },
     {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
     {icon: <PersonAddIcon />, name: 'SignInForm', path: '/signInForm', component: SignInForm },
-    {icon: <PeopleAltIcon />, name: 'UserList', path: '/userList', component: UserList },
-    {icon: <FormatListBulletedIcon />, name: 'TodoList', path: '/todoList', component: TodoList },
-    {icon: <PlaylistAddIcon />, name: 'TodoForm', path: '/todoForm', component: TodoForm },
+    {icon: <PeopleAltIcon />, name: 'UserList', path: '/userList', component: UserList, navbar: true },
+    {icon: <FormatListBulletedIcon />, name: 'TodoList', path: '/todoList', component: TodoList, navbar: true },
+    {icon: <PlaylistAddIcon />, name: 'TodoForm', path: '/todoForm', component: TodoForm,  },
 ];
 
 const drawerWidth: number = 240;
-
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-    [theme.breakpoints.up('sm')]: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        ...(open && {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        }),
-    },
-}));
-
-const Drawer = styled(MuiDrawer )(
-    ({ theme, open }) => ({
-        '& .MuiDrawer-paper': {
-            position: 'absolute',
-            whiteSpace: 'nowrap',
-            width: drawerWidth,
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            borderRight: 0,
-            boxSizing: 'border-box',
-            ...(!open && {
-                overflowX: 'hidden',
-                transition: theme.transitions.create('width', {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                width: 0,
-                [theme.breakpoints.up('sm')]: {
-                    position: 'relative',
-                    width: theme.spacing(9),
-                },
-            }),
-        },
-    }),
-);
 
 export default function App() {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {setOpen(!open);};
     const {logout} = useActions()
-    const theme = useTheme();
-    const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
+    // const theme = useTheme();
+    // const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
 
 
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <AppBar position="absolute" open={open}>
+            <MuiAppBar
+                position="fixed"
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            >
                 <Toolbar
                     sx={{
                         pr: '24px', // keep right padding when drawer closed
@@ -151,13 +99,17 @@ export default function App() {
                         <LogoutIcon />
                     </IconButton>
                 </Toolbar>
-            </AppBar>
+            </MuiAppBar>
 
-            <Drawer
-                variant={matchesSmAndUp ? 'permanent' : undefined}
+            <MuiDrawer
                 open={open}
                 onClose={() => { setOpen(false) }}
                 onOpen={() => { setOpen(true) }}
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                }}
             >
                 <Toolbar
                     sx={{
@@ -173,16 +125,21 @@ export default function App() {
                 </Toolbar>
                 <Divider />
                 <List>
-                    {links.map((link) => (
-                        <ListItemLink
-                            key={link.name}
-                            primary={link.name}
-                            icon={link.icon}
-                            to={link.path}
+                    {
+                        links
+                            .filter(link => link.navbar === true)
+                            .map((link) => {
+                                return (
+                                    <ListItemLink
+                                        key={link.name}
+                                        primary={link.name}
+                                        icon={link.icon}
+                                        to={link.path}
 
-                        />
-
-                    ))}
+                                    />
+                                )
+                            })
+                    }
 
                 </List>
                 <Divider />
@@ -200,7 +157,7 @@ export default function App() {
                         </ListItemText>
                     </ListItem>
                 </List>
-            </Drawer>
+            </MuiDrawer>
             <Box
                 component="main"
                 sx={{
