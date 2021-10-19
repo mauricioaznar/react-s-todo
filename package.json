@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.16",
+    "@date-io/moment": "^2.11.0",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "^5.0.1",
+    "@mui/lab": "^5.0.0-alpha.51",
     "@mui/material": "latest",
     "@types/graphql": "^14.5.0",
     "@types/react": "latest",

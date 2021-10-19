@@ -17,6 +17,8 @@ import {
 import {useHistory} from "react-router-dom";
 import {useState} from "react";
 import {nameof} from "../../helpers/nameof";
+import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
+import {DatePicker} from "@mui/lab";
 
 
 const theme = createTheme();
@@ -30,6 +32,8 @@ export default function TodoForm() {
     const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
 
     const [description, setDescription] = useState(todo !== undefined ? todo.description : '')
+    const [completed, setCompleted] = useState(todo !== undefined ? todo.completed : false)
+    const [due, setDue] = React.useState<Date | null>(todo !== undefined && todo.due ? new Date(todo.due) : null);
 
     const [createTodoMutation] = useCreateTodoMutation({
         update(cache) {
@@ -55,7 +59,9 @@ export default function TodoForm() {
 
         const options = {
             todoInput: {
-                description: description
+                description: description,
+                completed: completed,
+                due: due ? due.toString() : ''
             }
         }
 
@@ -115,6 +121,28 @@ export default function TodoForm() {
                             value={description}
                             onChange={(e) => { setDescription(e.target.value) }}
                         />
+                        <DatePicker
+                            label="Basic example"
+                            value={due}
+                            onChange={(newValue) => {
+                                setDue(newValue);
+                            }}
+
+                            renderInput={(params) => <TextField {...params}  fullWidth margin={'normal'} />}
+                        />
+                        <FormGroup>
+                            <FormControlLabel
+                                sx={{
+                                    justifyContent: "flex-end"
+                                }}
+                                checked={completed}
+                                onChange={() => {
+                                    setCompleted(!completed)
+                                }}
+                                control={<Checkbox />}
+                                label="Disabled"
+                            />
+                        </FormGroup>
                         <Button
                             disabled={isDisabled}
                             type="submit"

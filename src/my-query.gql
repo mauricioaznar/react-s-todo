@@ -15,6 +15,8 @@
         todos {
             _id
             description
+            completed
+            due
             user {
                 username
             }

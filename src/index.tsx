@@ -7,11 +7,13 @@ import theme from './theme';
 import {ApolloClient, ApolloProvider, createHttpLink, from, InMemoryCache,} from "@apollo/client";
 import Main from "./Main";
 import {Provider} from "react-redux";
+import DateAdapter from '@mui/lab/AdapterMoment';
 
 import {store} from "./state";
 import {onError} from "@apollo/client/link/error";
 import {logout} from "./state/action-creators";
 import {setContext} from "@apollo/client/link/context";
+import {LocalizationProvider} from "@mui/lab";
 
 const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' : 'https://s-todo-server.mauaznar.com'
 
@@ -83,14 +85,16 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <Provider store={store}>
-            <ThemeProvider theme={theme}>
-                <Router>
-                    <CssBaseline />
-                    <Main />
-                </Router>
-            </ThemeProvider>
-        </Provider>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+            <Provider store={store}>
+                <ThemeProvider theme={theme}>
+                    <Router>
+                        <CssBaseline />
+                        <Main />
+                    </Router>
+                </ThemeProvider>
+            </Provider>
+        </LocalizationProvider>
     </ApolloProvider>,
   document.querySelector('#root'),
 );

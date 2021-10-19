@@ -1,4 +1,3 @@
-
 import * as React from 'react'
 import {useState} from 'react'
 
@@ -6,11 +5,12 @@ import {useState} from 'react'
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 // components
 import {useHistory} from 'react-router-dom'
-import {Fab, IconButton} from "@mui/material";
+import {Box, Fab, IconButton} from "@mui/material";
 import {GetTodosQuery, namedOperations, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -58,6 +58,8 @@ export default function TodoList() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Description</TableCell>
+                                    <TableCell>Due</TableCell>
+                                    <TableCell>Completed</TableCell>
                                     <TableCell>User</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
@@ -108,6 +110,27 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
         >
             <TableCell>
                 {todo.description}
+            </TableCell>
+            <TableCell>
+                {todo.due}
+            </TableCell>
+            <TableCell
+                align={'center'}
+            >
+                <Box
+                    sx={{
+                        '& > :not(style)': {
+                            m: 2,
+                        },
+                    }}
+                >
+                    {
+                        todo.completed
+                        ? <CheckBoxIcon fontSize={'medium'} />
+                        : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
+                    }
+                </Box>
+
             </TableCell>
             <TableCell>
                 {todo.user?.username}
