@@ -54,7 +54,7 @@ export default function TodoList() {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 650}}>
+                        <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Description</TableCell>
@@ -136,21 +136,28 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
                 {todo.user?.username}
             </TableCell>
             <TableCell>
-                <IconButton
-                    size={'small'}
-                    onClick={() => {
-                        handleEditClick(todo)
-                    }}>
-                    <CreateIcon fontSize={'small'}/>
-                </IconButton>
-                <IconButton
-                    disabled={isDisabled}
-                    size={'small'}
-                    onClick={() => {
-                        onDelete(todo)
-                    }}>
-                    <DeleteIcon fontSize={'small'}/>
-                </IconButton>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'nowrap'
+                    }}
+                >
+                    <IconButton
+                        size={'small'}
+                        onClick={() => {
+                            handleEditClick(todo)
+                        }}>
+                        <CreateIcon fontSize={'small'}/>
+                    </IconButton>
+                    <IconButton
+                        disabled={isDisabled}
+                        size={'small'}
+                        onClick={() => {
+                            onDelete(todo)
+                        }}>
+                        <DeleteIcon fontSize={'small'}/>
+                    </IconButton>
+                </Box>
             </TableCell>
         </TableRow>
     );
