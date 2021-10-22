@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
 import {BrowserRouter as Router} from 'react-router-dom';
 import theme from './theme';
-import {ApolloClient, ApolloProvider, createHttpLink, from, InMemoryCache,} from "@apollo/client";
+import {ApolloClient, ApolloProvider, createHttpLink, from, InMemoryCache, split,} from "@apollo/client";
 import Main from "./Main";
 import {Provider} from "react-redux";
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -14,8 +14,10 @@ import {onError} from "@apollo/client/link/error";
 import {logout} from "./state/action-creators";
 import {setContext} from "@apollo/client/link/context";
 import {LocalizationProvider} from "@mui/lab";
+import {WebSocketLink} from "@apollo/client/link/ws";
+import {getMainDefinition} from "@apollo/client/utilities";
 
-const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' : 'https://s-todo-server.mauaznar.com'
+const apiUrl = process.env.NODE_ENV === 'development' ? 'localhost:3005' : 's-todo-server.mauaznar.com'
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -29,7 +31,7 @@ const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3005' 
 // }
 
 const httpLink = createHttpLink({
-    uri: `${apiUrl}/graphql`,
+    uri: `http://${apiUrl}/graphql`,
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -74,12 +76,37 @@ const logoutLink = onError(({ graphQLErrors, networkError, operation, forward })
     }
 })
 
-const client = new ApolloClient({
-    link: from([
+const wsLink = new WebSocketLink({
+        uri: `ws://${apiUrl}/graphql`,
+        options: {
+            reconnect: true,
+            connectionParams: () => ({
+                isWebSocket: true,
+                headers: {
+                    authorization: `Bearer ${window.localStorage.getItem('token')}`,
+                }
+            }),
+        },
+    });
+
+const splitLink = split(
+    ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+        );
+    },
+    wsLink,
+    from([
         authLink,
         logoutLink,
         httpLink
     ]),
+);
+
+const client = new ApolloClient({
+    link: splitLink,
     cache: new InMemoryCache(),
 });
 

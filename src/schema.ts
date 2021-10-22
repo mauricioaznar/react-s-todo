@@ -134,6 +134,11 @@ export type AccessToken = {
   accessToken: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  todoCreated: Todo;
+};
+
 
 export const GetCatsDocument = gql`
     query GetCats {
