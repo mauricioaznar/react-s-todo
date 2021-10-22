@@ -1,11 +1,9 @@
 import * as React from 'react';
+import {ComponentType, ReactElement} from 'react';
 import {Route, Switch} from 'react-router-dom';
 
-// components
+// mui
 import Box from '@mui/material/Box';
-
-
-// icons
 import PetsIcon from '@mui/icons-material/Pets';
 import InputIcon from '@mui/icons-material/Input';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -17,10 +15,10 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAppBar from '@mui/material/AppBar';
-
 import MuiDrawer from '@mui/material/SwipeableDrawer';
 
-// templates
+
+// local
 import CatList from "./cat/CatList";
 import CatForm from "./cat/CatForm";
 import {
@@ -44,31 +42,49 @@ import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
 import TodoList from "./todo/TodoList";
 
-const links = [
-    {icon: <PetsIcon />, name: 'CatList', path: '/', component: CatList, exact: true, navbar: true },
-    {icon: <InputIcon />, name: 'CatForm', path: '/catForm', component: CatForm },
-    {icon: <PersonAddIcon />, name: 'SignInForm', path: '/signInForm', component: SignInForm },
-    {icon: <PeopleAltIcon />, name: 'UserList', path: '/userList', component: UserList, navbar: true },
-    {icon: <FormatListBulletedIcon />, name: 'TodoList', path: '/todoList', component: TodoList, navbar: true },
-    {icon: <PlaylistAddIcon />, name: 'TodoForm', path: '/todoForm', component: TodoForm,  },
+interface RouterLink {
+    title: string;
+    icon: ReactElement<any, any>,
+    name: string;
+    path: string;
+    component: ComponentType<any>;
+    exact?: boolean;
+    navbar?: boolean;
+}
+
+const links: RouterLink[] = [
+    {icon: <PetsIcon/>, name: 'CatList', path: '/', component: CatList, exact: true, navbar: true, title: 'Cats'},
+    {icon: <InputIcon/>, name: 'CatForm', path: '/catForm', component: CatForm, title: 'Cat'},
+    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: SignInForm, title: 'Sign in'},
+    {icon: <PeopleAltIcon/>, name: 'UserList', path: '/userList', component: UserList, navbar: true, title: 'Users'},
+    {
+        icon: <FormatListBulletedIcon/>,
+        name: 'TodoList',
+        path: '/todoList',
+        component: TodoList,
+        navbar: true,
+        title: 'Todos'
+    },
+    {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: TodoForm, title: 'todo'},
 ];
 
 const drawerWidth: number = 240;
 
 export default function App() {
     const [open, setOpen] = React.useState(true);
-    const toggleDrawer = () => {setOpen(!open);};
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
     const {logout} = useActions()
     // const theme = useTheme();
     // const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
 
 
-
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{display: 'flex'}}>
             <MuiAppBar
                 position="fixed"
-                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}
             >
                 <Toolbar
                     sx={{
@@ -84,31 +100,37 @@ export default function App() {
                             marginRight: '36px',
                         }}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Typography
                         component="h1"
                         variant="h6"
                         color="inherit"
                         noWrap
-                        sx={{ flexGrow: 1 }}
+                        sx={{flexGrow: 1}}
                     >
                         Dashboard
                     </Typography>
-                    <IconButton color="inherit" onClick={() => { logout() }}>
-                        <LogoutIcon />
+                    <IconButton color="inherit" onClick={() => {
+                        logout()
+                    }}>
+                        <LogoutIcon/>
                     </IconButton>
                 </Toolbar>
             </MuiAppBar>
 
             <MuiDrawer
                 open={open}
-                onClose={() => { setOpen(false) }}
-                onOpen={() => { setOpen(true) }}
+                onClose={() => {
+                    setOpen(false)
+                }}
+                onOpen={() => {
+                    setOpen(true)
+                }}
                 sx={{
                     width: drawerWidth,
                     flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                    [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
                 }}
             >
                 <Toolbar
@@ -120,10 +142,10 @@ export default function App() {
                     }}
                 >
                     <IconButton onClick={toggleDrawer}>
-                        <ChevronLeftIcon />
+                        <ChevronLeftIcon/>
                     </IconButton>
                 </Toolbar>
-                <Divider />
+                <Divider/>
                 <List>
                     {
                         links
@@ -142,11 +164,11 @@ export default function App() {
                     }
 
                 </List>
-                <Divider />
-                <List style={{ marginTop: `auto` }} >
+                <Divider/>
+                <List style={{marginTop: `auto`}}>
                     <ListItem dense>
                         <ListItemIcon>
-                            <CopyrightIcon />
+                            <CopyrightIcon/>
                         </ListItemIcon>
                         <ListItemText>
                             <Link color="inherit" href="https://www.mauaznar.com/">
@@ -170,8 +192,8 @@ export default function App() {
                     overflow: 'auto',
                 }}
             >
-                <Toolbar />
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Toolbar/>
+                <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                     <Grid container spacing={3} justifyContent={'center'}>
                         {/* Chart */}
                         <Grid item xs>
