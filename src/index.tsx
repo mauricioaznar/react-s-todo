@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
 import {BrowserRouter as Router} from 'react-router-dom';
 import theme from './theme';
-import {ApolloClient, ApolloProvider, createHttpLink, from, InMemoryCache, split,} from "@apollo/client";
+import {ApolloClient, ApolloLink, ApolloProvider, createHttpLink, from, InMemoryCache, split,} from "@apollo/client";
 import Main from "./Main";
 import {Provider} from "react-redux";
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -82,12 +82,20 @@ const wsLink = new WebSocketLink({
         uri: `${webSocketProtocol}://${apiUrl}/graphql`,
         options: {
             reconnect: true,
-            connectionParams: () => ({
-                isWebSocket: true,
-                authorization: `Bearer ${window.localStorage.getItem('token')}`,
-            }),
-        },
-    });
+            lazy: true,
+            inactivityTimeout: 1000,
+            connectionParams: () => {
+                return {
+                    isWebSocket: true,
+                    authorization: `Bearer ${window.localStorage.getItem('token')}`,
+                }
+            },
+        }
+});
+
+const linkMiddleware = new ApolloLink((operation, forward) => {
+    return forward(operation);
+})
 
 const splitLink = split(
     ({ query }) => {
@@ -97,7 +105,7 @@ const splitLink = split(
             definition.operation === 'subscription'
         );
     },
-    wsLink,
+    wsLink.concat(linkMiddleware),
     from([
         authLink,
         logoutLink,
