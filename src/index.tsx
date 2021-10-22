@@ -17,7 +17,7 @@ import {LocalizationProvider} from "@mui/lab";
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 
-const apiUrl = process.env.NODE_ENV === 'development' ? 'localhost:3005' : 's-todo-server.mauaznar.com'
+const apiUrl = process.env.NODE_ENV === 'development' ? 's-todo-server.mauaznar.com' : 's-todo-server.mauaznar.com'
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -31,7 +31,7 @@ const apiUrl = process.env.NODE_ENV === 'development' ? 'localhost:3005' : 's-to
 // }
 
 const httpLink = createHttpLink({
-    uri: `http://${apiUrl}/graphql`,
+    uri: `https://${apiUrl}/graphql`,
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -77,7 +77,7 @@ const logoutLink = onError(({ graphQLErrors, networkError, operation, forward })
 })
 
 const wsLink = new WebSocketLink({
-        uri: `ws://${apiUrl}/graphql`,
+        uri: `wss://${apiUrl}/graphql`,
         options: {
             reconnect: true,
             connectionParams: () => ({
