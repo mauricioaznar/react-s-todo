@@ -154,7 +154,7 @@ export default function App() {
                                 return (
                                     <ListItemLink
                                         key={link.name}
-                                        primary={link.name}
+                                        primary={link.title}
                                         icon={link.icon}
                                         to={link.path}
 
