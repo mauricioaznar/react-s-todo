@@ -82,9 +82,7 @@ const wsLink = new WebSocketLink({
             reconnect: true,
             connectionParams: () => ({
                 isWebSocket: true,
-                headers: {
-                    authorization: `Bearer ${window.localStorage.getItem('token')}`,
-                }
+                authorization: `Bearer ${window.localStorage.getItem('token')}`,
             }),
         },
     });

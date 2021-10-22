@@ -136,7 +136,7 @@ export type AccessToken = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  todoCreated: Todo;
+  todo: Todo;
 };
 
 
@@ -557,6 +557,35 @@ export function useCreateTodoMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutation>;
 export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
 export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
+export const TodoDocument = gql`
+    subscription Todo {
+  todo {
+    description
+  }
+}
+    `;
+
+/**
+ * __useTodoSubscription__
+ *
+ * To run a query within a React component, call `useTodoSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTodoSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTodoSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTodoSubscription(baseOptions?: Apollo.SubscriptionHookOptions<TodoSubscription, TodoSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<TodoSubscription, TodoSubscriptionVariables>(TodoDocument, options);
+      }
+export type TodoSubscriptionHookResult = ReturnType<typeof useTodoSubscription>;
+export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>;
 export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -635,6 +664,11 @@ export type CreateTodoMutationVariables = Exact<{
 
 export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', description: string } };
 
+export type TodoSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TodoSubscription = { __typename?: 'Subscription', todo: { __typename?: 'Todo', description: string } };
+
 export const namedOperations = {
   Query: {
     GetCats: 'GetCats',
@@ -651,5 +685,8 @@ export const namedOperations = {
     DeleteTodo: 'DeleteTodo',
     UpdateTodo: 'UpdateTodo',
     CreateTodo: 'CreateTodo'
+  },
+  Subscription: {
+    Todo: 'Todo'
   }
 }

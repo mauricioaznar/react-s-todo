@@ -11,7 +11,13 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, Fab, IconButton} from "@mui/material";
-import {GetTodosQuery, namedOperations, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {
+    GetTodosQuery,
+    namedOperations,
+    useDeleteTodoMutation,
+    useGetTodosQuery,
+    useTodoSubscription
+} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,8 +30,19 @@ import Grid from "@mui/material/Grid";
 
 
 export default function TodoList() {
+
     const history = useHistory()
-    const {data, loading} = useGetTodosQuery()
+
+    const { loading, data } = useGetTodosQuery()
+
+    useTodoSubscription(
+        {
+            onSubscriptionData(options) {
+                options.client.refetchQueries({include: [namedOperations.Query.GetTodos]})
+            },
+
+        }
+    );
 
     if (loading) {
         return <h1>Loading</h1>;
