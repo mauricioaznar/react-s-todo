@@ -16,11 +16,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/SwipeableDrawer';
-
-
-// local
-import CatList from "./cat/CatList";
-import CatForm from "./cat/CatForm";
 import {
     Container,
     Divider,
@@ -35,12 +30,18 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
+
+
+// local
+import CatList from "./cat/CatList";
+import CatForm from "./cat/CatForm";
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
 import SignInForm from "./auth/SignInForm";
 import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
 import TodoList from "./todo/TodoList";
+import {useApolloClient} from "@apollo/client";
 
 interface RouterLink {
     title: string;
@@ -75,6 +76,7 @@ export default function App() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+    const client = useApolloClient()
     const {logout} = useActions()
     // const theme = useTheme();
     // const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
@@ -111,7 +113,8 @@ export default function App() {
                     >
                         Dashboard
                     </Typography>
-                    <IconButton color="inherit" onClick={() => {
+                    <IconButton color="inherit" onClick={async () => {
+                        await client.clearStore()
                         logout()
                     }}>
                         <LogoutIcon/>
