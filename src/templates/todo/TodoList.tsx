@@ -101,7 +101,7 @@ export default function TodoList() {
                                 >
                                     {
                                         (styles, item: GetTodosQuery["todos"][number]) =>
-                                            item && <animated.tr style={{...styles, width: '100%', backgroundColor: 'red'}} >
+                                            item && <animated.tr style={{...styles, width: '100%'}} >
                                                 <TodoRow  todo={item} />
                                             </animated.tr>
                                     }
