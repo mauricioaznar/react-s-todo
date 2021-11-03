@@ -94,7 +94,6 @@ export default function TodoList() {
                                     from={{ opacity: 0,  translateY: '-50%' }}
                                     enter={{ opacity: 1,   translateY: '0' }}
                                     leave={{ opacity: 0,    translateY: '-50%'}}
-                                    delay={500}
                                     config={{
                                         duration: 500
                                     }}
