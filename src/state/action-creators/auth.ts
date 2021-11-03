@@ -1,7 +1,7 @@
 import {ActionType} from "../action-types";
 import {Action} from "../actions";
 import {Dispatch} from "redux";
-import {CurrentUserQuery, User} from "../../schema";
+import {CurrentUserQuery} from "../../schema";
 
 
 export const login = (accessToken: string) => {
