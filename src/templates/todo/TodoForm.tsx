@@ -144,7 +144,7 @@ export default function TodoForm() {
                                     setCompleted(!completed)
                                 }}
                                 control={<Checkbox />}
-                                label="Disabled"
+                                label="Completed"
                             />
                         </FormGroup>
                         <Button

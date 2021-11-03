@@ -11,6 +11,7 @@ interface ListItemLinkProps {
     primary: string;
     to: string;
     exact?: boolean;
+    onClick: () => void;
 }
 
 export function ListItemLink(props: ListItemLinkProps) {
@@ -31,6 +32,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                     {...itemProps}
                     role={undefined}
                     exact={exact || false}
+                    onClick={props.onClick}
                 />;
             }),
         [to],

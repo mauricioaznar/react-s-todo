@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {ComponentType, ReactElement} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, useLocation} from 'react-router-dom';
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 // mui
 import Box from '@mui/material/Box';
@@ -76,6 +77,7 @@ export default function App() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+    const location = useLocation()
     const client = useApolloClient()
     const {logout} = useActions()
     // const theme = useTheme();
@@ -160,7 +162,7 @@ export default function App() {
                                         primary={link.title}
                                         icon={link.icon}
                                         to={link.path}
-
+                                        onClick={() => { setOpen(false) }}
                                     />
                                 )
                             })
@@ -209,16 +211,28 @@ export default function App() {
                                     minHeight: '50vh'
                                 }}
                             >
-                                <Switch>
-                                    {links.map((link) => (
-                                        <Route
-                                            key={link.name}
-                                            path={link.path}
-                                            component={link.component}
-                                            exact={link.exact || false}
-                                        />
-                                    ))}
-                                </Switch>
+                                <TransitionGroup
+                                    exit={false}
+                                >
+                                    <CSSTransition
+                                        timeout={1000}
+                                        classNames='fade'
+                                        key={location.key}
+                                    >
+                                        <Switch
+
+                                        >
+                                            {links.map((link) => (
+                                                <Route
+                                                    key={link.name}
+                                                    path={link.path}
+                                                    component={link.component}
+                                                    exact={link.exact || false}
+                                                />
+                                            ))}
+                                        </Switch>
+                                    </CSSTransition>
+                                </TransitionGroup>
                             </Paper>
                         </Grid>
                     </Grid>
