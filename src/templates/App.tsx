@@ -210,9 +210,7 @@ export default function App() {
                                     minHeight: '50vh'
                                 }}
                             >
-                                <Switch
-
-                                >
+                                <Switch>
                                     {links.map(({ name, path, component: Component, exact}) => (
                                         <Route
                                             key={name}

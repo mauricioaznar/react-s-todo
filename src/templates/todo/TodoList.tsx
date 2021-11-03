@@ -1,5 +1,6 @@
 import * as React from 'react'
 import {useState} from 'react'
+import {animated, Transition} from 'react-spring'
 
 // icons
 import CreateIcon from '@mui/icons-material/Create';
@@ -56,7 +57,6 @@ export default function TodoList() {
         history.push('/todoForm')
     }
 
-
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
             <Grid container alignItems={'center'}>
@@ -85,12 +85,27 @@ export default function TodoList() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data?.todos.map((todo) => (
-                                    <TodoRow
-                                        key={todo._id}
-                                        todo={todo}
-                                    />
-                                ))}
+                                <Transition
+                                    items={data?.todos}
+                                    keys={(item: unknown) => {
+                                        const todo = item as GetTodosQuery["todos"][number]
+                                        return todo._id
+                                    }}
+                                    from={{ opacity: 0,  translateY: '-50%' }}
+                                    enter={{ opacity: 1,   translateY: '0' }}
+                                    leave={{ opacity: 0,    translateY: '-50%'}}
+                                    delay={500}
+                                    config={{
+                                        duration: 500
+                                    }}
+                                >
+                                    {
+                                        (styles, item: GetTodosQuery["todos"][number]) =>
+                                            item && <animated.tr style={{...styles, width: '100%', backgroundColor: 'red'}} >
+                                                <TodoRow  todo={item} />
+                                            </animated.tr>
+                                    }
+                                </Transition>
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -134,9 +149,7 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
     }
 
     return (
-        <TableRow
-            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-        >
+        <React.Fragment>
             <TableCell>
                 {todo.description}
             </TableCell>
@@ -200,6 +213,6 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
                 }}
                 message={message}
             />
-        </TableRow>
+        </React.Fragment>
     );
 }
