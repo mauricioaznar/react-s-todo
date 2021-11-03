@@ -35,7 +35,7 @@ const httpLink = createHttpLink({
     uri: `${httpProtocol}://${apiUrl}/graphql`,
 });
 
-const authLink = setContext(async (_, { headers }) => {
+const authLink = setContext(async (_, {headers}) => {
     const token = localStorage.getItem('token');
     return {
         headers: {
@@ -46,7 +46,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 
-const logoutLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+const logoutLink = onError(({graphQLErrors, networkError, operation, forward}) => {
     if (graphQLErrors) {
         for (let err of graphQLErrors) {
             if (err.extensions?.code === 'UNAUTHENTICATED') {
@@ -54,16 +54,16 @@ const logoutLink = onError(({ graphQLErrors, networkError, operation, forward })
                 // when an AuthenticationError is thrown in a resolver
 
 
-                    store.dispatch(logout()  as any)
-                    const oldHeaders = operation.getContext().headers;
-                    operation.setContext({
-                        headers: {
-                            ...oldHeaders,
-                            authorization: null,
-                        },
-                    });
-                    // Retry the request, returning the new observable
-                    return forward(operation);
+                store.dispatch(logout() as any)
+                const oldHeaders = operation.getContext().headers;
+                operation.setContext({
+                    headers: {
+                        ...oldHeaders,
+                        authorization: null,
+                    },
+                });
+                // Retry the request, returning the new observable
+                return forward(operation);
 
             }
 
@@ -79,18 +79,23 @@ const logoutLink = onError(({ graphQLErrors, networkError, operation, forward })
 
 const webSocketProtocol = process.env.NODE_ENV === 'development' ? 'ws' : 'wss'
 const wsLink = new WebSocketLink({
-        uri: `${webSocketProtocol}://${apiUrl}/graphql`,
-        options: {
-            reconnect: true,
-            lazy: true,
-            inactivityTimeout: 1000,
-            connectionParams: () => {
-                return {
-                    isWebSocket: true,
-                    authorization: `Bearer ${window.localStorage.getItem('token')}`,
-                }
-            },
+    uri: `${webSocketProtocol}://${apiUrl}/graphql`,
+    options: {
+        reconnect: true,
+        lazy: true,
+        inactivityTimeout: 1000,
+        connectionParams: () => {
+            return {
+                isWebSocket: true,
+                authorization: `Bearer ${window.localStorage.getItem('token')}`,
+            }
+        },
+        connectionCallback: (error) => {
+            if (error) {
+                // console.error(error)
+            }
         }
+    }
 });
 
 const linkMiddleware = new ApolloLink((operation, forward) => {
@@ -98,7 +103,7 @@ const linkMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const splitLink = split(
-    ({ query }) => {
+    ({query}) => {
         const definition = getMainDefinition(query);
         return (
             definition.kind === 'OperationDefinition' &&
@@ -124,12 +129,12 @@ ReactDOM.render(
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <Router>
-                        <CssBaseline />
-                        <Main />
+                        <CssBaseline/>
+                        <Main/>
                     </Router>
                 </ThemeProvider>
             </Provider>
         </LocalizationProvider>
     </ApolloProvider>,
-  document.querySelector('#root'),
+    document.querySelector('#root'),
 );
