@@ -20,7 +20,7 @@ export default function UserList() {
     const {data, loading} = useGetUsersQuery()
 
     if (loading) {
-        return <h1>Loading</h1>;
+        return null;
     }
 
 

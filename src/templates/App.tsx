@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ComponentType, ReactElement} from 'react';
-import {Route, Switch, useLocation} from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import {Route, Switch} from 'react-router-dom';
+import {Spring, animated} from 'react-spring'
 
 // mui
 import Box from '@mui/material/Box';
@@ -73,11 +73,10 @@ const links: RouterLink[] = [
 const drawerWidth: number = 240;
 
 export default function App() {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const location = useLocation()
     const client = useApolloClient()
     const {logout} = useActions()
     // const theme = useTheme();
@@ -211,28 +210,36 @@ export default function App() {
                                     minHeight: '50vh'
                                 }}
                             >
-                                <TransitionGroup
-                                    exit={false}
-                                >
-                                    <CSSTransition
-                                        timeout={1000}
-                                        classNames='fade'
-                                        key={location.key}
-                                    >
-                                        <Switch
+                                <Switch
 
-                                        >
-                                            {links.map((link) => (
-                                                <Route
-                                                    key={link.name}
-                                                    path={link.path}
-                                                    component={link.component}
-                                                    exact={link.exact || false}
-                                                />
-                                            ))}
-                                        </Switch>
-                                    </CSSTransition>
-                                </TransitionGroup>
+                                >
+                                    {links.map(({ name, path, component: Component, exact}) => (
+                                        <Route
+                                            key={name}
+                                            path={path}
+                                            render={(routeProps) => {
+                                                return (
+                                                    <Spring
+                                                        config={{
+                                                            duration: 500
+                                                        }}
+                                                        from={{ opacity: 0 }}
+                                                        to={{ opacity: 1 }}
+                                                    >
+                                                        {
+                                                            (styles) => {
+                                                                return <animated.div style={styles}>
+                                                                    <Component {...routeProps}  />
+                                                                </animated.div>
+                                                            }
+                                                        }
+                                                    </Spring>
+                                                )
+                                            }}
+                                            exact={exact || false}
+                                        />
+                                    ))}
+                                </Switch>
                             </Paper>
                         </Grid>
                     </Grid>
