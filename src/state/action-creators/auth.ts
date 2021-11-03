@@ -1,6 +1,7 @@
 import {ActionType} from "../action-types";
 import {Action} from "../actions";
 import {Dispatch} from "redux";
+import {CurrentUserQuery, User} from "../../schema";
 
 
 export const login = (accessToken: string) => {
@@ -9,6 +10,15 @@ export const login = (accessToken: string) => {
         dispatch({
             type: ActionType.LOGIN,
             payload: accessToken
+        })
+    }
+}
+
+export const setCurrentUser = (user: CurrentUserQuery["currentUser"]) => {
+    return async (dispatch: Dispatch<Action>) => {
+        dispatch({
+            type: ActionType.SET_CURRENT_USER,
+            payload: user
         })
     }
 }

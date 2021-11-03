@@ -27,6 +27,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import MauSnackbar from "../../components/MauSnackbar";
+import {ApolloError} from "@apollo/client";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 
 export default function TodoList() {
@@ -99,26 +102,35 @@ export default function TodoList() {
 
 
 function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
-    const [isDisabled, setDisabled] = useState(false)
 
+    const {currentUser} = useTypedSelector(
+        (state) => state.auth
+    )
+
+    const [isDisabled, setIsDisabled] = useState(false)
+    const [message, setMessage] = useState('')
     const [deleteTodoMutation] = useDeleteTodoMutation({
         refetchQueries: [namedOperations.Query.GetTodos]
     })
-
     const history = useHistory()
 
     function handleEditClick(todo: GetTodosQuery["todos"][number]) {
         history.push('/todoForm', {todo})
     }
 
-
     async function onDelete(todo: GetTodosQuery["todos"][number]) {
-        setDisabled(true)
-        await deleteTodoMutation({
-            variables: {
-                id: todo._id
+        setIsDisabled(true)
+        try {
+            await deleteTodoMutation({
+                variables: {
+                    id: todo._id
+                }
+            })
+        } catch (e) {
+            if (e instanceof  ApolloError) {
+                setMessage(e.message)
             }
-        })
+        }
     }
 
     return (
@@ -159,23 +171,35 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
                         flexWrap: 'nowrap'
                     }}
                 >
-                    <IconButton
-                        size={'small'}
-                        onClick={() => {
-                            handleEditClick(todo)
-                        }}>
-                        <CreateIcon fontSize={'small'}/>
-                    </IconButton>
-                    <IconButton
-                        disabled={isDisabled}
-                        size={'small'}
-                        onClick={() => {
-                            onDelete(todo)
-                        }}>
-                        <DeleteIcon fontSize={'small'}/>
-                    </IconButton>
+                    {
+                        currentUser?._id === todo.user?._id ? <IconButton
+                            size={'small'}
+                            onClick={() => {
+                                handleEditClick(todo)
+                            }}>
+                            <CreateIcon fontSize={'small'}/>
+                        </IconButton> : null
+
+                    }
+                    {
+                        currentUser?._id === todo.user?._id ? <IconButton
+                            disabled={isDisabled}
+                            size={'small'}
+                            onClick={() => {
+                                onDelete(todo)
+                            }}>
+                            <DeleteIcon fontSize={'small'}/>
+                        </IconButton> : null
+                    }
                 </Box>
             </TableCell>
+            <MauSnackbar
+                onClose={() => {
+                    setIsDisabled(false)
+                    setMessage('')
+                }}
+                message={message}
+            />
         </TableRow>
     );
 }

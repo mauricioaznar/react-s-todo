@@ -19,6 +19,8 @@ import {useState} from "react";
 import {nameof} from "../../helpers/nameof";
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import {DatePicker} from "@mui/lab";
+import MauSnackbar from "../../components/MauSnackbar";
+import {ApolloError} from "@apollo/client";
 
 
 const theme = createTheme();
@@ -27,6 +29,7 @@ export default function TodoForm() {
 
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
+    const [message, setMessage] = useState('')
 
     // @ts-ignore
     const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
@@ -65,31 +68,32 @@ export default function TodoForm() {
             }
         }
 
-        let errors
-
-        if (todo) {
-            const res = await updateTodoMutation(
-                {
+        try {
+            if (todo) {
+                await updateTodoMutation(
+                    {
+                        variables: {
+                            id: todo._id,
+                            ...options
+                        }
+                    }
+                )
+            } else {
+                await createTodoMutation({
                     variables: {
-                        id: todo._id,
                         ...options
                     }
-                }
-            )
-            errors = !res.errors || res.errors.length === 0
-        } else {
-            const res = await createTodoMutation({
-                variables: {
-                    ...options
-                }
-            })
-            errors = !res.errors || res.errors.length === 0
-        }
+                })
+            }
 
-
-        if (errors) {
             history.push('/todoList')
+
+        } catch (e) {
+            if (e instanceof  ApolloError) {
+                setMessage(e.message)
+            }
         }
+
     };
 
     return (
@@ -154,6 +158,13 @@ export default function TodoForm() {
                         </Button>
                     </Box>
                 </Box>
+                <MauSnackbar
+                    onClose={() => {
+                        setIsDisabled(false)
+                        setMessage('')
+                    }}
+                    message={message}
+                />
             </Container>
         </ThemeProvider>
     );

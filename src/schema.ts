@@ -189,6 +189,7 @@ export const GetTodosDocument = gql`
     completed
     due
     user {
+      _id
       username
     }
   }
@@ -225,6 +226,7 @@ export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
     username
+    _id
   }
 }
     `;
@@ -594,12 +596,12 @@ export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'C
 export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, user?: { __typename?: 'User', username: string } | null | undefined }> };
+export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 

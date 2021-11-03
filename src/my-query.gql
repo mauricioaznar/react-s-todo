@@ -18,6 +18,7 @@
             completed
             due
             user {
+                _id
                 username
             }
         }
@@ -26,6 +27,7 @@
     query CurrentUser {
         currentUser {
             username
+            _id
         }
     }
 

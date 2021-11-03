@@ -1,12 +1,15 @@
 import {ActionType} from "../action-types";
 import {Action} from "../actions";
+import {CurrentUserQuery, GetTodosQuery, User} from "../../schema";
 
 interface AuthState {
     accessToken: string | null;
+    currentUser: CurrentUserQuery["currentUser"] | null;
 }
 
 const initialState = {
-    accessToken: null
+    accessToken: null,
+    currentUser: null
 }
 
 const reducer = (
@@ -16,11 +19,18 @@ const reducer = (
     switch (action.type) {
         case ActionType.LOGIN:
             return {
+                ...state,
                 accessToken: action.payload
             }
         case ActionType.LOGOUT:
             return {
+                ...state,
                 accessToken: null
+            }
+        case ActionType.SET_CURRENT_USER:
+            return {
+                ...state,
+                currentUser: action.payload
             }
         default:
             return state;

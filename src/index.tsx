@@ -97,11 +97,11 @@ const wsLink = new WebSocketLink({
         },
         connectionCallback: (error: unknown) => {
             const errorMessage = error as ErrorMessage
-            if (typeof error === 'object' && errorMessage.message) {
+            if (errorMessage && typeof error === 'object' && errorMessage.message) {
                 throw new Error(errorMessage.message)
             }
             const errorArray = error as []
-            if (errorArray.length && errorArray.length > 0) {
+            if (errorArray && errorArray.length && errorArray.length > 0) {
                 throw new Error(errorArray.join(' '))
             }
         }

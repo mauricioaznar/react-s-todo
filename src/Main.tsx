@@ -10,13 +10,14 @@ const Main = () => {
         (state) => state.auth
     )
 
-    const {login} = useActions()
+    const {login, setCurrentUser} = useActions()
 
 
     const [getCurrentUser, { loading, data }] = useCurrentUserLazyQuery();
 
     useEffect(() => {
         if (data?.currentUser.username) {
+            setCurrentUser(data.currentUser)
             login(window.localStorage.getItem('token')!)
         }
     }, [data])

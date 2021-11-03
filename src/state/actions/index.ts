@@ -1,4 +1,5 @@
 import {ActionType} from "../action-types";
+import {CurrentUserQuery, User} from "../../schema";
 
 interface Login {
     type: ActionType.LOGIN
@@ -9,4 +10,9 @@ interface Logout {
     type: ActionType.LOGOUT
 }
 
-export type Action = Login | Logout
+interface SetCurrentUser {
+    type: ActionType.SET_CURRENT_USER,
+    payload: CurrentUserQuery["currentUser"]
+}
+
+export type Action = Login | Logout | SetCurrentUser
