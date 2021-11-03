@@ -78,6 +78,11 @@ const logoutLink = onError(({graphQLErrors, networkError, operation, forward}) =
 })
 
 const webSocketProtocol = process.env.NODE_ENV === 'development' ? 'ws' : 'wss'
+
+interface ErrorMessage {
+    message: string;
+}
+
 const wsLink = new WebSocketLink({
     uri: `${webSocketProtocol}://${apiUrl}/graphql`,
     options: {
@@ -90,9 +95,14 @@ const wsLink = new WebSocketLink({
                 authorization: `Bearer ${window.localStorage.getItem('token')}`,
             }
         },
-        connectionCallback: (error) => {
-            if (error) {
-                // console.error(error)
+        connectionCallback: (error: unknown) => {
+            const errorMessage = error as ErrorMessage
+            if (typeof error === 'object' && errorMessage.message) {
+                throw new Error(errorMessage.message)
+            }
+            const errorArray = error as []
+            if (errorArray.length && errorArray.length > 0) {
+                throw new Error(errorArray.join(' '))
             }
         }
     }
