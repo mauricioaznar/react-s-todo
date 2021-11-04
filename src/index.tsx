@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
 import {BrowserRouter as Router} from 'react-router-dom';
 import theme from './theme';
-import {ApolloClient, ApolloLink, ApolloProvider, createHttpLink, from, InMemoryCache, split,} from "@apollo/client";
+import {ApolloClient, ApolloProvider, createHttpLink, from, InMemoryCache, split,} from "@apollo/client";
 import Main from "./Main";
 import {Provider} from "react-redux";
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -109,9 +109,9 @@ const wsLink = new WebSocketLink({
     }
 });
 
-const linkMiddleware = new ApolloLink((operation, forward) => {
-    return forward(operation);
-})
+// const linkMiddleware = new ApolloLink((operation, forward) => {
+//     return forward(operation);
+// })
 
 const splitLink = split(
     ({query}) => {
@@ -121,7 +121,7 @@ const splitLink = split(
             definition.operation === 'subscription'
         );
     },
-    wsLink.concat(linkMiddleware),
+    wsLink,
     from([
         authLink,
         logoutLink,

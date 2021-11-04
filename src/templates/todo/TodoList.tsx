@@ -37,7 +37,12 @@ export default function TodoList() {
 
     const history = useHistory()
 
-    const { loading, data } = useGetTodosQuery()
+    const { loading, data } = useGetTodosQuery({
+        onCompleted: () => {
+            setFirst(false)
+        }
+    })
+    const [first, setFirst] = useState(true)
 
     useTodoSubscription(
         {
@@ -56,6 +61,8 @@ export default function TodoList() {
     function handleCreateClick() {
         history.push('/todoForm')
     }
+
+    const AnimatedTableRow = animated(TableRow)
 
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
@@ -97,12 +104,16 @@ export default function TodoList() {
                                     config={{
                                         duration: 500
                                     }}
+                                    immediate={first}
                                 >
                                     {
-                                        (styles, item: GetTodosQuery["todos"][number]) =>
-                                            item && <animated.tr style={{...styles, width: '100%'}} >
-                                                <TodoRow  todo={item} />
-                                            </animated.tr>
+                                        (styles, item: GetTodosQuery["todos"][number]) => {
+                                            return (
+                                                item && <AnimatedTableRow style={styles}>
+                                                    <TodoCells todo={item}/>
+                                                </AnimatedTableRow>
+                                            )
+                                        }
                                     }
                                 </Transition>
                             </TableBody>
@@ -115,7 +126,7 @@ export default function TodoList() {
 }
 
 
-function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
+function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
 
     const {currentUser} = useTypedSelector(
         (state) => state.auth
@@ -132,7 +143,7 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
         history.push('/todoForm', {todo})
     }
 
-    async function onDelete(todo: GetTodosQuery["todos"][number]) {
+    async function handleDeleteClick(todo: GetTodosQuery["todos"][number]) {
         setIsDisabled(true)
         try {
             await deleteTodoMutation({
@@ -197,8 +208,8 @@ function TodoRow({todo}: { todo: GetTodosQuery["todos"][number] }) {
                         currentUser?._id === todo.user?._id ? <IconButton
                             disabled={isDisabled}
                             size={'small'}
-                            onClick={() => {
-                                onDelete(todo)
+                            onClick={async () => {
+                                await handleDeleteClick(todo)
                             }}>
                             <DeleteIcon fontSize={'small'}/>
                         </IconButton> : null
