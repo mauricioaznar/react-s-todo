@@ -70,6 +70,8 @@ export default function SignInForm() {
                 setMessage(e.message)
             }
         }
+        setMessage('')
+        setIsDisabled(false)
     };
 
     return (
@@ -135,10 +137,6 @@ export default function SignInForm() {
                         </Box>
                     </Box>
                     <MauSnackbar
-                        onClose={() => {
-                            setIsDisabled(false)
-                            setMessage('')
-                        }}
                         message={message}
                     />
                 </Container>

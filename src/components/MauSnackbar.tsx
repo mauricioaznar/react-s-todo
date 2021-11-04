@@ -1,33 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {Snackbar} from "@mui/material";
+import * as React from 'react';
+import {useSnackbar} from 'notistack';
+import ApolloErrorSeparator from "../constants/apollo-error-separator";
 
 interface MauSnackbarProps {
     message: string;
-    onClose: () => void;
 }
 
 
-const MauSnackbar = ({message, onClose}: MauSnackbarProps) => {
+const MauSnackbar = ({message}: MauSnackbarProps) => {
 
-    const [isOpen, setIsOpen] = useState(false)
+    const { enqueueSnackbar } = useSnackbar();
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (message !== '') {
-            setIsOpen(true)
+            const messages = message.split(ApolloErrorSeparator)
+
+            messages.forEach((m) => {
+                enqueueSnackbar(m, { variant: 'error'})
+            })
         }
     }, [message])
 
-    return (
-        <Snackbar
-            open={isOpen}
-            autoHideDuration={6000}
-            onClose={() => {
-                setIsOpen(false)
-                onClose()
-            }}
-            message={message}
-        />
-    );
+    return null;
 };
 
 export default MauSnackbar;

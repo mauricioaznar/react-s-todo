@@ -56,13 +56,14 @@ export default function LogInForm() {
             if (accessToken) {
                 login(accessToken)
             }
-
-            setIsDisabled(false)
         } catch (e: unknown) {
             if (e instanceof ApolloError) {
                 setMessage(e.message)
             }
         }
+        setMessage('')
+        setIsDisabled(false)
+
     };
 
     return (
@@ -129,10 +130,6 @@ export default function LogInForm() {
                         </Box>
                     </Box>
                     <MauSnackbar
-                        onClose={() => {
-                            setIsDisabled(false)
-                            setMessage('')
-                        }}
                         message={message}
                     />
                 </Container>

@@ -93,6 +93,8 @@ export default function TodoForm() {
                 setMessage(e.message)
             }
         }
+        setMessage('')
+        setIsDisabled(false)
 
     };
 
@@ -160,10 +162,6 @@ export default function TodoForm() {
                     </Box>
                 </Box>
                 <MauSnackbar
-                    onClose={() => {
-                        setIsDisabled(false)
-                        setMessage('')
-                    }}
                     message={message}
                 />
             </Container>

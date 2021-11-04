@@ -16,6 +16,8 @@ import {setContext} from "@apollo/client/link/context";
 import {LocalizationProvider} from "@mui/lab";
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
+import ApolloErrorSeparator from "./constants/apollo-error-separator";
+import {SnackbarProvider} from "notistack";
 
 const apiUrl = process.env.NODE_ENV === 'development' ? 'localhost:3005' : 's-todo-server.mauaznar.com'
 
@@ -46,7 +48,7 @@ const authLink = setContext(async (_, {headers}) => {
 });
 
 
-const logoutLink = onError(({graphQLErrors, networkError, operation, forward}) => {
+const errorLink = onError(({graphQLErrors, networkError, operation, forward}) => {
     if (graphQLErrors) {
         for (let err of graphQLErrors) {
             if (err.extensions?.code === 'UNAUTHENTICATED') {
@@ -65,6 +67,10 @@ const logoutLink = onError(({graphQLErrors, networkError, operation, forward}) =
                 // Retry the request, returning the new observable
                 return forward(operation);
 
+            } else {
+                if (Array.isArray(err.message)) {
+                    err.message = err.message.join(ApolloErrorSeparator)
+                }
             }
 
         }
@@ -123,7 +129,7 @@ const splitLink = split(
     wsLink,
     from([
         authLink,
-        logoutLink,
+        errorLink,
         httpLink
     ]),
 );
@@ -138,10 +144,12 @@ ReactDOM.render(
         <LocalizationProvider dateAdapter={DateAdapter}>
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
-                    <Router>
-                        <CssBaseline/>
-                        <Main/>
-                    </Router>
+                    <SnackbarProvider maxSnack={6}>
+                        <Router>
+                            <CssBaseline/>
+                            <Main/>
+                        </Router>
+                    </SnackbarProvider>
                 </ThemeProvider>
             </Provider>
         </LocalizationProvider>

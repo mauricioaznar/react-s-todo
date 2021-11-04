@@ -37,7 +37,6 @@ import {formatDate} from "../../helpers/format-date";
 export default function TodoList() {
 
     // hooks
-
     const history = useHistory()
 
     const { loading, data } = useGetTodosQuery({
@@ -164,6 +163,8 @@ function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
                 setMessage(e.message)
             }
         }
+        setMessage('')
+        setIsDisabled(false)
     }
 
     return (
@@ -227,10 +228,6 @@ function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
                 </Box>
             </TableCell>
             <MauSnackbar
-                onClose={() => {
-                    setIsDisabled(false)
-                    setMessage('')
-                }}
                 message={message}
             />
         </React.Fragment>
