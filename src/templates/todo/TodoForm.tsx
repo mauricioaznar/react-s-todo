@@ -21,6 +21,7 @@ import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import {DatePicker} from "@mui/lab";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
+import {useForm, Controller} from "react-hook-form";
 
 
 const theme = createTheme();
@@ -30,6 +31,10 @@ export default function TodoForm() {
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
+
+    const {register, handleSubmit,  setValue, formState: { errors }, control} = useForm({
+    });
+
 
     // @ts-ignore
     const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
@@ -56,8 +61,10 @@ export default function TodoForm() {
     });
 
     // eslint-disable-next-line no-undef
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log(errors)
+        handleSubmit((data) => { console.log(data) })
         setIsDisabled(true)
 
         const options = {
@@ -115,17 +122,33 @@ export default function TodoForm() {
                     <Typography component="h1" variant="h5">
                         Todo
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="description"
-                            label="Description"
+                    <Box component="form" onSubmit={handleFormSubmit} noValidate sx={{mt: 1}}>
+                        <Controller
+                            control={control}
                             name="description"
-                            autoFocus
-                            value={description}
-                            onChange={(e) => { setDescription(e.target.value) }}
+                            defaultValue={''}
+                            rules={{
+                                required: true,
+                                minLength: 4
+                            }}
+                            render={({field: {ref, ...rest}, fieldState}) => {
+                                console.log(fieldState)
+                                return (
+                                    <TextField
+                                        {...rest}
+                                        margin="normal"
+                                        fullWidth
+                                        label="Description"
+                                        autoFocus
+                                    />
+                                )
+                            }}
+                        />
+                        <Controller
+                            defaultValue={''}
+                            render={({ field }) => <TextField {...field} />}
+                            name="TextField"
+                            control={control}
                         />
                         <DatePicker
                             label="Basic example"
@@ -133,8 +156,6 @@ export default function TodoForm() {
                             onChange={(newValue) => {
                                 setDue(newValue);
                             }}
-                            inputFormat={'YYYY-MM-DD'}
-
                             renderInput={(params) => <TextField {...params}  fullWidth margin={'normal'} />}
                         />
                         <FormGroup>

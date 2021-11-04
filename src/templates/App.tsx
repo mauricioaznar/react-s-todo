@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ComponentType, ReactElement} from 'react';
 import {Route, Switch} from 'react-router-dom';
-import {Spring, animated} from 'react-spring'
+import {animated, Spring} from 'react-spring'
 
 // mui
 import Box from '@mui/material/Box';
@@ -43,6 +43,8 @@ import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
 import TodoList from "./todo/TodoList";
 import {useApolloClient} from "@apollo/client";
+import {Query, useTodoSubscription} from "../schema";
+import {nameof} from "../helpers/nameof";
 
 interface RouterLink {
     title: string;
@@ -81,6 +83,18 @@ export default function App() {
     const {logout} = useActions()
     // const theme = useTheme();
     // const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
+
+    useTodoSubscription(
+        {
+            onSubscriptionData({client}) {
+                client.cache.evict({
+                    id: "ROOT_QUERY",
+                    fieldName: nameof<Query>('todos')
+                })
+            },
+
+        }
+    );
 
 
     return (

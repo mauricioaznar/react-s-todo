@@ -12,13 +12,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
-import {
-    GetTodosQuery,
-    namedOperations,
-    useDeleteTodoMutation,
-    useGetTodosQuery,
-    useTodoSubscription
-} from "../../schema";
+import {GetTodosQuery, namedOperations, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -58,14 +52,14 @@ export default function TodoList() {
         config: springConfig.gentle,
     })
 
-    useTodoSubscription(
-        {
-            onSubscriptionData(options) {
-                options.client.refetchQueries({include: [namedOperations.Query.GetTodos]})
-            },
-
-        }
-    );
+    // useTodoSubscription(
+    //     {
+    //         onSubscriptionData(options) {
+    //             options.client.refetchQueries({include: [namedOperations.Query.GetTodos]})
+    //         },
+    //
+    //     }
+    // );
 
     function handleCreateClick() {
         history.push('/todoForm')
