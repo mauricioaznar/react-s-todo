@@ -131,6 +131,7 @@ export default function TodoForm() {
                             onChange={(newValue) => {
                                 setDue(newValue);
                             }}
+                            inputFormat={'YYYY-MM-DD'}
 
                             renderInput={(params) => <TextField {...params}  fullWidth margin={'normal'} />}
                         />
