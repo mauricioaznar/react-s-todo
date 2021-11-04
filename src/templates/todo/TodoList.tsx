@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {useState} from 'react'
-import {animated, Transition} from 'react-spring'
+import {animated, config as springConfig, useTransition} from 'react-spring'
 
 // icons
 import CreateIcon from '@mui/icons-material/Create';
@@ -35,6 +35,8 @@ import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 export default function TodoList() {
 
+    // hooks
+
     const history = useHistory()
 
     const { loading, data } = useGetTodosQuery({
@@ -42,7 +44,20 @@ export default function TodoList() {
             setFirst(false)
         }
     })
+
     const [first, setFirst] = useState(true)
+
+    const transitions = useTransition(data?.todos, {
+        keys: (item: unknown) => {
+            const todo = item as GetTodosQuery["todos"][number]
+            return todo._id
+        },
+        from: { opacity: 0, translateY: '-50%' },
+        enter: { opacity: 1, translateY: '0' },
+        leave: { opacity: 0, translateY: '-50%'},
+        immediate: first,
+        config: springConfig.gentle,
+    })
 
     useTodoSubscription(
         {
@@ -53,10 +68,11 @@ export default function TodoList() {
         }
     );
 
+    // functions and flow control
+
     if (loading) {
         return null;
     }
-
 
     function handleCreateClick() {
         history.push('/todoForm')
@@ -80,7 +96,7 @@ export default function TodoList() {
             </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <TableContainer component={Paper}>
+                    <TableContainer component={Paper} sx={{overflowY: 'hidden'}}>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -92,30 +108,15 @@ export default function TodoList() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <Transition
-                                    items={data?.todos}
-                                    keys={(item: unknown) => {
-                                        const todo = item as GetTodosQuery["todos"][number]
-                                        return todo._id
-                                    }}
-                                    from={{ opacity: 0,  translateY: '-50%' }}
-                                    enter={{ opacity: 1,   translateY: '0' }}
-                                    leave={{ opacity: 0,    translateY: '-50%'}}
-                                    config={{
-                                        duration: 500
-                                    }}
-                                    immediate={first}
-                                >
-                                    {
-                                        (styles, item: GetTodosQuery["todos"][number]) => {
-                                            return (
-                                                item && <AnimatedTableRow style={styles}>
-                                                    <TodoCells todo={item}/>
-                                                </AnimatedTableRow>
-                                            )
-                                        }
-                                    }
-                                </Transition>
+                                {
+                                    transitions((styles, todo) => {
+                                        return (
+                                            todo && <AnimatedTableRow style={styles}>
+                                                <TodoCells todo={todo}/>
+                                            </AnimatedTableRow>
+                                        )
+                                    })
+                                }
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -127,6 +128,8 @@ export default function TodoList() {
 
 
 function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
+
+    // hooks
 
     const {currentUser} = useTypedSelector(
         (state) => state.auth
@@ -142,6 +145,8 @@ function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
     function handleEditClick(todo: GetTodosQuery["todos"][number]) {
         history.push('/todoForm', {todo})
     }
+
+    // functions and flow control
 
     async function handleDeleteClick(todo: GetTodosQuery["todos"][number]) {
         setIsDisabled(true)
