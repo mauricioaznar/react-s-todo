@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -14,8 +13,6 @@ import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
 import {useHistory} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
-
-
 
 
 // const theme = createTheme();
@@ -85,7 +82,6 @@ export default function SignInForm() {
 
             <Grid item xs>
                 <Container component="main" maxWidth="xs">
-                    <CssBaseline/>
                     <Box
                         sx={{
                             display: 'flex',

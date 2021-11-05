@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {GetTodosQuery, Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
@@ -15,7 +14,8 @@ import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useForm} from "react-hook-form";
-import MauTextField from "../../components/MauTextField";
+import MauTextField from "../../components/inputs/MauTextField";
+import MauDatePicker from "../../components/inputs/MauDatePicker";
 
 
 interface TodoFormInputs {
@@ -23,7 +23,6 @@ interface TodoFormInputs {
     due: string,
 }
 
-const theme = createTheme();
 
 export default function TodoForm() {
 
@@ -118,7 +117,6 @@ export default function TodoForm() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <Box
@@ -145,10 +143,9 @@ export default function TodoForm() {
                                 control={control}
                                 name="description"
                             />
-                            <MauTextField
+                            <MauDatePicker
                                 rules={{
                                     required: true,
-                                    minLength: 4
                                 }}
                                 label={'Due'}
                                 control={control}
@@ -183,6 +180,5 @@ export default function TodoForm() {
                     message={message}
                 />
             </Container>
-        </ThemeProvider>
     );
 }

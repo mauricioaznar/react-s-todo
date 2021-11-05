@@ -1,0 +1,3 @@
+.MuiCalendarPicker-root div button:focus {
+    background-color: rgba(120, 120, 120, 0.4) ;
+}

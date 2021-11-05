@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './styles.css'
 import ReactDOM from 'react-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
@@ -144,9 +145,10 @@ ReactDOM.render(
         <LocalizationProvider dateAdapter={DateAdapter}>
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
+                    <CssBaseline/>
                     <SnackbarProvider maxSnack={6}>
                         <Router>
-                            <CssBaseline/>
+
                             <Main/>
                         </Router>
                     </SnackbarProvider>

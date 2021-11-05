@@ -1,25 +1,28 @@
 import React from 'react'
 import {Controller} from "react-hook-form";
 import TextField from "@mui/material/TextField";
+import {MauInputProps} from "./common/MauInputProps";
 
-interface Rules  {
+interface Rules {
     required?: boolean;
     min?: number;
     max?: number;
     maxLength?: number;
     minLength?: number;
     pattern?: RegExp;
-
 }
 
-interface MauTextFieldProps  {
-    control: any,
-    name: string,
-    label: string,
+
+interface MauTextFieldProps extends MauInputProps {
     rules: Rules;
 }
 
-const getRuleMessage = ({rule, rules, fieldName}: {rule: keyof Rules, value: string, rules: Rules, fieldName: string}) => {
+const getRuleMessage = ({
+                            rule,
+                            rules,
+                            fieldName
+                        }: { rule: keyof Rules, value: string, rules: Rules, fieldName: string }) => {
+
     switch (rule) {
         case 'required': {
             return `${fieldName} is required.`
@@ -33,14 +36,16 @@ const getRuleMessage = ({rule, rules, fieldName}: {rule: keyof Rules, value: str
     }
 }
 
-const MauTextField = ({ control, name, label, rules }: MauTextFieldProps) => {
+
+
+const MauTextField = ({control, name, label, rules}: MauTextFieldProps) => {
     return (
         <Controller
             control={control}
             name={name}
             rules={rules}
             render={(ops) => {
-                const {field: {onChange, value}, fieldState: { error }} = ops
+                const {field: {onChange, value}, fieldState: {error}} = ops
                 let helperText = ''
                 if (error) {
                     const rule = error.type as keyof Rules

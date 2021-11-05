@@ -1,20 +1,16 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
-import {useState} from "react";
 import {nameof} from "../../helpers/nameof";
 
-
-const theme = createTheme();
 
 export default function CatForm() {
 
@@ -92,9 +88,7 @@ export default function CatForm() {
     };
 
     return (
-        <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline/>
                 <Box
                     sx={{
                         display: 'flex',
@@ -176,6 +170,5 @@ export default function CatForm() {
                     </Box>
                 </Box>
             </Container>
-        </ThemeProvider>
     );
 }
