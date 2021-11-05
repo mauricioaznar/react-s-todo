@@ -144,14 +144,15 @@ export default function TodoForm() {
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
                             <Controller
                                 control={control}
+                                
                                 name="description"
+
                                 rules={{
                                     required: true,
                                     minLength: 4
                                 }}
                                 render={(ops) => {
                                     const {field: {onChange, value}, fieldState: { error }} = ops
-                                    console.log(error)
                                     let helperText = ''
                                     switch(error?.type) {
                                         case 'minLength': {
