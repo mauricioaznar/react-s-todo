@@ -70,9 +70,8 @@ export default function TodoForm() {
         },
     });
 
-    const onSubmit = (data: unknown) => {
-        console.log(data)
-        console.log(data)
+    const onSubmit = (data: { description: string }) => {
+        console.log(data.description)
     }
 
     const onError = (err: FieldErrors<FieldValues>) => {
