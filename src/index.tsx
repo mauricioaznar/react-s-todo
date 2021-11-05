@@ -7,7 +7,7 @@ import Main from "./Main";
 import {Provider as StoreProvider} from "react-redux";
 
 import {store} from "./state";
-import client from "./services/apollo-client";
+import client from "./services/init-apollo-client";
 
 
 ReactDOM.render(
