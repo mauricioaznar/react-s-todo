@@ -9,6 +9,8 @@ import PetsIcon from '@mui/icons-material/Pets';
 import InputIcon from '@mui/icons-material/Input';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
@@ -29,7 +31,7 @@ import {
     ListItemText,
     Paper,
     Toolbar,
-    Typography
+    Typography, useTheme
 } from "@mui/material";
 
 
@@ -45,6 +47,7 @@ import TodoList from "./todo/TodoList";
 import {useApolloClient} from "@apollo/client";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
+import ColorModeContext from "../services/color-mode-context";
 
 interface RouterLink {
     title: string;
@@ -75,6 +78,8 @@ const links: RouterLink[] = [
 const drawerWidth: number = 240;
 
 export default function App() {
+    const theme = useTheme();
+    const colorMode = React.useContext(ColorModeContext);
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -184,6 +189,14 @@ export default function App() {
                 </List>
                 <Divider/>
                 <List style={{marginTop: `auto`}}>
+                    <ListItem>
+                        <ListItemIcon>
+                            {theme.palette.mode} mode
+                            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                            </IconButton>
+                        </ListItemIcon>
+                    </ListItem>
                     <ListItem dense>
                         <ListItemIcon>
                             <CopyrightIcon/>
