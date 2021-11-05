@@ -12,6 +12,7 @@ import {LocalizationProvider} from "@mui/lab";
 import {createTheme} from "@mui/material";
 import ColorModeContext from "./services/color-mode-context";
 import {red} from "@mui/material/colors";
+import BigLoader from "./components/BigLoader";
 
 
 const Main = () => {
@@ -23,7 +24,7 @@ const Main = () => {
 
     const {login, setCurrentUser} = useActions()
 
-    const [getCurrentUser, { loading, data }] = useCurrentUserLazyQuery();
+    const [getCurrentUser, {loading, data}] = useCurrentUserLazyQuery();
 
     useEffect(() => {
         if (data?.currentUser.username) {
@@ -80,8 +81,11 @@ const Main = () => {
                     <CssBaseline/>
                     <SnackbarProvider maxSnack={6}>
                         {
-                            loading ? 'Loading' :
-                                accessToken ? <App/> : <LogInForm/>
+                            loading
+                                ? <BigLoader/>
+                                : accessToken
+                                    ? <App/>
+                                    : <LogInForm/>
                         }
                     </SnackbarProvider>
                 </ThemeProvider>

@@ -189,13 +189,13 @@ export default function App() {
                 </List>
                 <Divider/>
                 <List style={{marginTop: `auto`}}>
-                    <ListItem>
+                    <ListItem button={true} onClick={colorMode.toggleColorMode}>
                         <ListItemIcon>
-                            {theme.palette.mode} mode
-                            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                            </IconButton>
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                         </ListItemIcon>
+                        <ListItemText>
+                            {theme.palette.mode} mode
+                        </ListItemText>
                     </ListItem>
                     <ListItem dense>
                         <ListItemIcon>
