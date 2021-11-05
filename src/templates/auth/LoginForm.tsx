@@ -59,9 +59,10 @@ export default function LogInForm() {
             if (e instanceof ApolloError) {
                 setMessage(e.message)
             }
+            setMessage('')
+            setIsDisabled(false)
         }
-        setMessage('')
-        setIsDisabled(false)
+
 
     };
 
