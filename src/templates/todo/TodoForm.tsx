@@ -45,8 +45,8 @@ export default function TodoForm() {
     // and all in an array
     const {handleSubmit, control} = useForm<TodoFormInputs>({
         defaultValues: {
-            description: todo.description,
-            due: todo.due
+            description:  todo?.description || '',
+            due: todo?.due || ''
         }
     });
 
