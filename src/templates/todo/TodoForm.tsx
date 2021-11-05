@@ -21,7 +21,7 @@ import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import {DatePicker} from "@mui/lab";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
-import {useForm, Controller} from "react-hook-form";
+import {useForm, Controller, UnpackNestedValue, FieldValues, FieldErrors} from "react-hook-form";
 
 
 const theme = createTheme();
@@ -32,14 +32,24 @@ export default function TodoForm() {
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
-    const {register, handleSubmit,  setValue, formState: { errors }, control} = useForm({
+
+    // todo
+    // 1 make a wrapper around controller
+    // 2 make an interface for the rules object (perhaps pull it from react hook form
+    // 3 pass rules to both the Controller component and the render function
+    // 4 make a function to display message appropriately (corresponding to rule and value)
+    // extra make a function that maps custom validate function (email, isEvent, currency) to the rule object
+    // and all in an array
+    const {handleSubmit, formState: { errors }, control, } = useForm({
+        defaultValues: {
+            description: ''
+        }
     });
 
 
     // @ts-ignore
     const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
 
-    const [description, setDescription] = useState(todo !== undefined ? todo.description : '')
     const [completed, setCompleted] = useState(todo !== undefined ? todo.completed : false)
     const [due, setDue] = React.useState<Date | null>(todo !== undefined && todo.due ? new Date(todo.due) : null);
 
@@ -60,48 +70,57 @@ export default function TodoForm() {
         },
     });
 
+    const onSubmit = (data: unknown) => {
+        console.log(data)
+        console.log(data)
+    }
+
+    const onError = (err: FieldErrors<FieldValues>) => {
+        console.log(err)
+    }
+
     // eslint-disable-next-line no-undef
-    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        console.log(errors)
-        handleSubmit((data) => { console.log(data) })
-        setIsDisabled(true)
+    const handleFormSubmit = async (event:  React.MouseEvent<HTMLButtonElement>) => {
+        // event.preventDefault();
 
-        const options = {
-            todoInput: {
-                description: description,
-                completed: completed,
-                due: due ? due.toString() : ''
-            }
-        }
 
-        try {
-            if (todo) {
-                await updateTodoMutation(
-                    {
-                        variables: {
-                            id: todo._id,
-                            ...options
-                        }
-                    }
-                )
-            } else {
-                await createTodoMutation({
-                    variables: {
-                        ...options
-                    }
-                })
-            }
+        // setIsDisabled(true)
 
-            history.push('/todoList')
-
-        } catch (e) {
-            if (e instanceof  ApolloError) {
-                setMessage(e.message)
-            }
-        }
-        setMessage('')
-        setIsDisabled(false)
+        // const options = {
+        //     todoInput: {
+        //         description: description,
+        //         completed: completed,
+        //         due: due ? due.toString() : ''
+        //     }
+        // }
+        //
+        // try {
+        //     if (todo) {
+        //         await updateTodoMutation(
+        //             {
+        //                 variables: {
+        //                     id: todo._id,
+        //                     ...options
+        //                 }
+        //             }
+        //         )
+        //     } else {
+        //         await createTodoMutation({
+        //             variables: {
+        //                 ...options
+        //             }
+        //         })
+        //     }
+        //
+        //     history.push('/todoList')
+        //
+        // } catch (e) {
+        //     if (e instanceof  ApolloError) {
+        //         setMessage(e.message)
+        //     }
+        // }
+        // setMessage('')
+        // setIsDisabled(false)
 
     };
 
@@ -122,64 +141,59 @@ export default function TodoForm() {
                     <Typography component="h1" variant="h5">
                         Todo
                     </Typography>
-                    <Box component="form" onSubmit={handleFormSubmit} noValidate sx={{mt: 1}}>
-                        <Controller
-                            control={control}
-                            name="description"
-                            defaultValue={''}
-                            rules={{
-                                required: true,
-                                minLength: 4
-                            }}
-                            render={({field: {ref, ...rest}, fieldState}) => {
-                                console.log(fieldState)
-                                return (
-                                    <TextField
-                                        {...rest}
-                                        margin="normal"
-                                        fullWidth
-                                        label="Description"
-                                        autoFocus
-                                    />
-                                )
-                            }}
-                        />
-                        <Controller
-                            defaultValue={''}
-                            render={({ field }) => <TextField {...field} />}
-                            name="TextField"
-                            control={control}
-                        />
-                        <DatePicker
-                            label="Basic example"
-                            value={due}
-                            onChange={(newValue) => {
-                                setDue(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params}  fullWidth margin={'normal'} />}
-                        />
-                        <FormGroup>
-                            <FormControlLabel
-                                sx={{
-                                    justifyContent: "flex-end"
+                    <Box sx={{mt: 1}}>
+                        <form onSubmit={handleSubmit(onSubmit, onError)}>
+                            <Controller
+                                control={control}
+                                name="description"
+                                rules={{
+                                    required: true,
+                                    minLength: 4
                                 }}
-                                checked={completed}
-                                onChange={() => {
-                                    setCompleted(!completed)
+                                render={(ops) => {
+                                    const {field: {onChange, value}, fieldState: { error }} = ops
+                                    console.log(error)
+                                    let helperText = ''
+                                    switch(error?.type) {
+                                        case 'minLength': {
+                                            helperText = 'min length must be bigger than'
+                                            break;
+                                        }
+                                        case 'required': {
+                                            helperText = 'this field is required'
+                                            break;
+                                        }
+                                        default: {
+                                            helperText = ''
+                                            break;
+                                        }
+                                    }
+                                    return (
+                                        <TextField
+                                            margin="normal"
+                                            fullWidth
+                                            value={value}
+                                            onChange={(e) => {
+                                                onChange(e.target.value)
+                                            }}
+                                            error={!!error}
+                                            helperText={helperText}
+                                            label="Description"
+                                            autoFocus
+                                        />
+                                    )
                                 }}
-                                control={<Checkbox />}
-                                label="Completed"
                             />
-                        </FormGroup>
-                        <Button
-                            disabled={isDisabled}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Submit
-                        </Button>
+                            <Button
+                                disabled={isDisabled}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+                            >
+                                Submit
+                            </Button>
+                        </form>
                     </Box>
                 </Box>
                 <MauSnackbar
