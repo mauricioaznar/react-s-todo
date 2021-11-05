@@ -49,6 +49,7 @@ export type Todo = {
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
+  locked: Scalars['Boolean'];
   user?: Maybe<User>;
 };
 
@@ -122,6 +123,7 @@ export type TodoInput = {
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
+  locked: Scalars['Boolean'];
 };
 
 export type UserInput = {
@@ -188,6 +190,7 @@ export const GetTodosDocument = gql`
     description
     completed
     due
+    locked
     user {
       _id
       username
@@ -596,7 +599,7 @@ export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'C
 export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
+export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

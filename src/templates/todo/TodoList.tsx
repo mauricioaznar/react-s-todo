@@ -6,8 +6,10 @@ import {animated, config as springConfig, useTransition} from 'react-spring'
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from '@mui/icons-material/Delete';
+import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import LockRoundedIcon from '@mui/icons-material/LockRounded';
 
 // components
 import {useHistory} from 'react-router-dom'
@@ -87,8 +89,10 @@ export default function TodoList() {
                     <TableContainer component={Paper} sx={{overflowY: 'hidden', overflowX: 'hidden'}}>
                         <Table>
                             <TableHead>
-                                <TableRow>
-                                    <TableCell width={'30%'}>Description</TableCell>
+                                <TableRow
+                                >
+                                    <TableCell />
+                                    <TableCell width={'25%'}>Description</TableCell>
                                     <TableCell width={'20%'}>Due</TableCell>
                                     <TableCell width={'20%'}>Completed</TableCell>
                                     <TableCell width={'20%'}>User</TableCell>
@@ -99,9 +103,7 @@ export default function TodoList() {
                                 {
                                     loading
                                         ? <TableRow>
-                                            <TableCell colSpan={5} align={'center'} sx={{
-                                                py: 4
-                                            }}>
+                                            <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
                                                 <CircularProgress />
                                             </TableCell>
                                         </TableRow>
@@ -163,6 +165,24 @@ function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
 
     return (
         <React.Fragment>
+            <TableCell
+                align={'center'}
+            >
+                <Box
+                    sx={{
+                        '& > :not(style)': {
+                            m: 2,
+                        },
+                    }}
+                >
+                    {
+                        todo.locked
+                            ? <LockRoundedIcon fontSize={'medium'} />
+                            : <LockOpenRoundedIcon fontSize={'medium'} />
+                    }
+                </Box>
+
+            </TableCell>
             <TableCell>
                 {todo.description}
             </TableCell>

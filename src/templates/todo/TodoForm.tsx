@@ -50,6 +50,7 @@ export default function TodoForm() {
     });
 
     const [completed, setCompleted] = useState(todo !== undefined ? todo.completed : false)
+    const [locked, setLocked] = useState(todo !== undefined ? todo.locked : false)
 
     const [createTodoMutation] = useCreateTodoMutation({
         update(cache) {
@@ -77,6 +78,7 @@ export default function TodoForm() {
             todoInput: {
                 description: description,
                 completed: completed,
+                locked: locked,
                 due: due ? due.toString() : ''
             }
         }
@@ -162,6 +164,19 @@ export default function TodoForm() {
                                     }}
                                     control={<Checkbox />}
                                     label="Completed"
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControlLabel
+                                    sx={{
+                                        justifyContent: "flex-end"
+                                    }}
+                                    checked={locked}
+                                    onChange={() => {
+                                        setLocked(!locked)
+                                    }}
+                                    control={<Checkbox />}
+                                    label="Locked"
                                 />
                             </FormGroup>
                             <Button
