@@ -10,6 +10,8 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 
 // components
 import {useHistory} from 'react-router-dom'
@@ -35,7 +37,14 @@ export default function TodoList() {
     // hooks
     const history = useHistory()
 
+    const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
+
     const { loading, data } = useGetTodosQuery({
+        variables: {
+            todoQueryArgs: {
+                archived: archived
+            }
+        },
         onCompleted: () => {
             setFirst(false)
         }
@@ -79,9 +88,28 @@ export default function TodoList() {
                     }
                 </Grid>
                 <Grid item>
-                    <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
-                        <AddIcon/>
-                    </Fab>
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <IconButton
+                                onClick={() => {
+                                    const newArchived = !archived
+                                    window.localStorage.setItem('archived', newArchived ? 'true' : 'false')
+                                    setArchived(newArchived)
+                                }}
+                            >
+                                {
+                                    archived
+                                        ? <ArchiveIcon fontSize={'medium'} />
+                                        : <ArchiveOutlinedIcon fontSize={'medium'} />
+                                }
+                            </IconButton>
+                        </Grid>
+                        <Grid item>
+                            <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
+                                <AddIcon/>
+                            </Fab>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid container spacing={3}>

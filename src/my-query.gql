@@ -11,13 +11,14 @@
         }
     }
 
-    query GetTodos {
-        todos {
+    query GetTodos ($todoQueryArgs: TodoQueryArgs) {
+        todos (todoQueryArgs: $todoQueryArgs) {
             _id
             description
             completed
             due
             locked
+            archived
             user {
                 _id
                 username

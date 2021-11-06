@@ -22,6 +22,11 @@ export type Query = {
   users: Array<User>;
 };
 
+
+export type QueryTodosArgs = {
+  todoQueryArgs?: Maybe<TodoQueryArgs>;
+};
+
 export type Cat = {
   __typename?: 'Cat';
   _id: Scalars['String'];
@@ -43,9 +48,14 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type TodoQueryArgs = {
+  archived?: Maybe<Scalars['Boolean']>;
+};
+
 export type Todo = {
   __typename?: 'Todo';
   _id: Scalars['String'];
+  archived: Scalars['Boolean'];
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
@@ -120,6 +130,7 @@ export type CharacteristicsInput = {
 };
 
 export type TodoInput = {
+  archived: Scalars['Boolean'];
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
@@ -184,13 +195,14 @@ export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const GetTodosDocument = gql`
-    query GetTodos {
-  todos {
+    query GetTodos($todoQueryArgs: TodoQueryArgs) {
+  todos(todoQueryArgs: $todoQueryArgs) {
     _id
     description
     completed
     due
     locked
+    archived
     user {
       _id
       username
@@ -211,6 +223,7 @@ export const GetTodosDocument = gql`
  * @example
  * const { data, loading, error } = useGetTodosQuery({
  *   variables: {
+ *      todoQueryArgs: // value for 'todoQueryArgs'
  *   },
  * });
  */
@@ -596,10 +609,12 @@ export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
 
-export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTodosQueryVariables = Exact<{
+  todoQueryArgs?: Maybe<TodoQueryArgs>;
+}>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
+export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

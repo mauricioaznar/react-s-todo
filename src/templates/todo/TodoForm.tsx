@@ -51,6 +51,7 @@ export default function TodoForm() {
 
     const [completed, setCompleted] = useState(todo !== undefined ? todo.completed : false)
     const [locked, setLocked] = useState(todo !== undefined ? todo.locked : false)
+    const [archived, setArchived] = useState(todo !== undefined ? todo.archived : false)
 
     const [createTodoMutation] = useCreateTodoMutation({
         update(cache) {
@@ -79,6 +80,7 @@ export default function TodoForm() {
                 description: description,
                 completed: completed,
                 locked: locked,
+                archived: archived,
                 due: due ? due.toString() : ''
             }
         }
@@ -177,6 +179,19 @@ export default function TodoForm() {
                                     }}
                                     control={<Checkbox />}
                                     label="Locked"
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControlLabel
+                                    sx={{
+                                        justifyContent: "flex-end"
+                                    }}
+                                    checked={archived}
+                                    onChange={() => {
+                                        setArchived(!archived)
+                                    }}
+                                    control={<Checkbox />}
+                                    label="Archived"
                                 />
                             </FormGroup>
                             <Button
