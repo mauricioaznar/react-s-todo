@@ -12,11 +12,12 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
+import ForwardIcon from '@mui/icons-material/Forward';
 
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
-import {GetTodosQuery, namedOperations, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -38,24 +39,27 @@ export default function TodoList() {
     const history = useHistory()
 
     const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
+    const [after, setAfter] = useState<null | string | undefined>(null)
 
     const { loading, data } = useGetTodosQuery({
         variables: {
-            todoQueryArgs: {
-                archived: archived
-            }
+            archived: archived,
+            first: 4,
+            after: after
         },
         onCompleted: () => {
             setFirst(false)
         }
     })
 
+    const edges = data?.todos?.page?.edges
+
     const [first, setFirst] = useState(true)
 
-    const transitions = useTransition(data?.todos, {
+    const transitions = useTransition(edges, {
         keys: (item: unknown) => {
-            const todo = item as GetTodosQuery["todos"][number]
-            return todo._id
+            const todo = item as TodoEdge
+            return todo.cursor!
         },
         from: { opacity: 0, x: first ? '0%' : '10%' },
         enter: { opacity: 1,  x: '0%' },
@@ -89,6 +93,17 @@ export default function TodoList() {
                 </Grid>
                 <Grid item>
                     <Grid container spacing={2}>
+                        <Grid item>
+                            <IconButton
+                                onClick={() => {
+                                    const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
+                                    const hasNextPage = data?.todos.page.pageInfo?.hasNextPage
+                                    setAfter(hasNextPage ? newCursor : null)
+                                }}
+                            >
+                                <ForwardIcon fontSize={'medium'} />
+                            </IconButton>
+                        </Grid>
                         <Grid item>
                             <IconButton
                                 onClick={() => {
@@ -138,7 +153,7 @@ export default function TodoList() {
                                         : transitions((styles, todo) => {
                                             return (
                                                 todo && <AnimatedTableRow style={styles}>
-                                                    <TodoCells todo={todo}/>
+                                                    <TodoCells todoEdge={todo}/>
                                                 </AnimatedTableRow>
                                             )
                                         })
@@ -153,9 +168,11 @@ export default function TodoList() {
 }
 
 
-function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
+function TodoCells({todoEdge}: { todoEdge: TodoEdge }) {
 
     // hooks
+
+    const todo = todoEdge.node!
 
     const {currentUser} = useTypedSelector(
         (state) => state.auth
@@ -168,13 +185,13 @@ function TodoCells({todo}: { todo: GetTodosQuery["todos"][number] }) {
     })
     const history = useHistory()
 
-    function handleEditClick(todo: GetTodosQuery["todos"][number]) {
+    function handleEditClick(todo: Todo) {
         history.push('/todoForm', {todo})
     }
 
     // functions and flow control
 
-    async function handleDeleteClick(todo: GetTodosQuery["todos"][number]) {
+    async function handleDeleteClick(todo: Todo) {
         setIsDisabled(true)
         try {
             await deleteTodoMutation({

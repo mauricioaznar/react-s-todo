@@ -11,17 +11,32 @@
         }
     }
 
-    query GetTodos ($todoQueryArgs: TodoQueryArgs) {
-        todos (todoQueryArgs: $todoQueryArgs) {
-            _id
-            description
-            completed
-            due
-            locked
-            archived
-            user {
-                _id
-                username
+    query GetTodos ($archived: Boolean, $first: Float, $after: String) {
+        todos (archived: $archived, first: $first, after: $after) {
+            page {
+                edges {
+                    cursor
+                    node {
+                        _id
+                        description
+                        completed
+                        due
+                        locked
+                        archived
+                        user {
+                            _id
+                            username
+                        }
+                    }
+                }
+                pageInfo {
+                    hasNextPage
+                }
+            }
+            pageData {
+                count
+                limit
+                offset
             }
         }
     }

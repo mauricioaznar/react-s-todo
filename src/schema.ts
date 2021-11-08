@@ -18,13 +18,17 @@ export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
   currentUser: User;
-  todos: Array<Todo>;
+  todos: TodoResponse;
   users: Array<User>;
 };
 
 
 export type QueryTodosArgs = {
-  todoQueryArgs?: Maybe<TodoQueryArgs>;
+  after?: Maybe<Scalars['String']>;
+  archived?: Maybe<Scalars['Boolean']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Float']>;
+  last?: Maybe<Scalars['Float']>;
 };
 
 export type Cat = {
@@ -48,8 +52,22 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type TodoQueryArgs = {
-  archived?: Maybe<Scalars['Boolean']>;
+export type TodoResponse = {
+  __typename?: 'TodoResponse';
+  page: TodoConnection;
+  pageData?: Maybe<PageData>;
+};
+
+export type TodoConnection = {
+  __typename?: 'TodoConnection';
+  edges?: Maybe<Array<TodoEdge>>;
+  pageInfo?: Maybe<TodoPageInfo>;
+};
+
+export type TodoEdge = {
+  __typename?: 'TodoEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<Todo>;
 };
 
 export type Todo = {
@@ -61,6 +79,21 @@ export type Todo = {
   due: Scalars['String'];
   locked: Scalars['Boolean'];
   user?: Maybe<User>;
+};
+
+export type TodoPageInfo = {
+  __typename?: 'TodoPageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export type PageData = {
+  __typename?: 'PageData';
+  count?: Maybe<Scalars['Float']>;
+  limit?: Maybe<Scalars['Float']>;
+  offset?: Maybe<Scalars['Float']>;
 };
 
 export type Mutation = {
@@ -195,17 +228,32 @@ export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const GetTodosDocument = gql`
-    query GetTodos($todoQueryArgs: TodoQueryArgs) {
-  todos(todoQueryArgs: $todoQueryArgs) {
-    _id
-    description
-    completed
-    due
-    locked
-    archived
-    user {
-      _id
-      username
+    query GetTodos($archived: Boolean, $first: Float, $after: String) {
+  todos(archived: $archived, first: $first, after: $after) {
+    page {
+      edges {
+        cursor
+        node {
+          _id
+          description
+          completed
+          due
+          locked
+          archived
+          user {
+            _id
+            username
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    pageData {
+      count
+      limit
+      offset
     }
   }
 }
@@ -223,7 +271,9 @@ export const GetTodosDocument = gql`
  * @example
  * const { data, loading, error } = useGetTodosQuery({
  *   variables: {
- *      todoQueryArgs: // value for 'todoQueryArgs'
+ *      archived: // value for 'archived'
+ *      first: // value for 'first'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -610,11 +660,13 @@ export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
 
 export type GetTodosQueryVariables = Exact<{
-  todoQueryArgs?: Maybe<TodoQueryArgs>;
+  archived?: Maybe<Scalars['Boolean']>;
+  first?: Maybe<Scalars['Float']>;
+  after?: Maybe<Scalars['String']>;
 }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined }> };
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
