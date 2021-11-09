@@ -45,7 +45,7 @@ export default function TodoList() {
     const [before, setBefore] = useState<null | string | undefined>(null)
     const [last, setLast] = useState<number | null | undefined>(null)
 
-    const { loading, data  } = useGetTodosQuery({
+    const { loading, data, error } = useGetTodosQuery({
         variables: {
             archived: archived,
             first: first,
@@ -57,6 +57,7 @@ export default function TodoList() {
             setFirstRender(false)
         }
     })
+
 
     const [firstRender, setFirstRender] = useState(true)
 
@@ -203,6 +204,9 @@ export default function TodoList() {
                     </TableContainer>
                 </Grid>
             </Grid>
+            <MauSnackbar
+                message={error ? error.message : ''}
+            />
         </Container>
     );
 }

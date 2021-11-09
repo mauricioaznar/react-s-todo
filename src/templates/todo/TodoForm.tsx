@@ -10,17 +10,20 @@ import Container from '@mui/material/Container';
 import {GetTodosQuery, Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
 import {useHistory} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
-import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauDatePicker from "../../components/inputs/MauDatePicker";
+import MauCheckbox from "../../components/inputs/MauCheckbox";
 
 
 interface TodoFormInputs {
     description: string,
     due: string,
+    completed: boolean,
+    archived: boolean,
+    locked: boolean,
 }
 
 
@@ -36,22 +39,17 @@ export default function TodoForm() {
 
 
     // todo
-    // 1 make a wrapper around controller
-    // 2 make an interface for the rules object (perhaps pull it from react hook form
-    // 3 pass rules to both the Controller component and the render function
-    // 4 make a function to display message appropriately (corresponding to rule and value)
     // extra make a function that maps custom validate function (email, isEvent, currency) to the rule object
     // and all in an array
     const {handleSubmit, control} = useForm<TodoFormInputs>({
         defaultValues: {
-            description:  todo?.description || '',
-            due: todo?.due || ''
+            description: todo?.description || '',
+            due: todo?.due || '',
+            completed: todo?.completed || false,
+            archived: todo?.archived || false,
+            locked: todo?.locked || false,
         }
     });
-
-    const [completed, setCompleted] = useState(todo !== undefined ? todo.completed : false)
-    const [locked, setLocked] = useState(todo !== undefined ? todo.locked : false)
-    const [archived, setArchived] = useState(todo !== undefined ? todo.archived : false)
 
     const [createTodoMutation] = useCreateTodoMutation({
         update(cache) {
@@ -61,6 +59,7 @@ export default function TodoForm() {
             })
         },
     });
+
     const [updateTodoMutation] = useUpdateTodoMutation({
         update(cache) {
             cache.evict({
@@ -71,7 +70,7 @@ export default function TodoForm() {
     });
 
     const onSubmit = async (data: TodoFormInputs) => {
-        const { description, due }  = data
+        const {description, due, completed, locked, archived} = data
 
         setIsDisabled(true)
 
@@ -106,7 +105,7 @@ export default function TodoForm() {
             history.push('/todoList')
 
         } catch (e) {
-            if (e instanceof  ApolloError) {
+            if (e instanceof ApolloError) {
                 setMessage(e.message)
             }
         }
@@ -121,94 +120,70 @@ export default function TodoForm() {
     }
 
     return (
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <PetsIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Todo
-                    </Typography>
-                    <Box sx={{mt: 1}}>
-                        <form onSubmit={handleSubmit(onSubmit, onError)}>
-                            <MauTextField
-                                rules={{
-                                    required: true,
-                                    minLength: 4
-                                }}
-                                label={'Description'}
-                                control={control}
-                                name="description"
-                            />
-                            <MauDatePicker
-                                rules={{
-                                    required: true,
-                                }}
-                                label={'Due'}
-                                control={control}
-                                name="due"
-                            />
-                            <FormGroup>
-                                <FormControlLabel
-                                    sx={{
-                                        justifyContent: "flex-end"
-                                    }}
-                                    checked={completed}
-                                    onChange={() => {
-                                        setCompleted(!completed)
-                                    }}
-                                    control={<Checkbox />}
-                                    label="Completed"
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControlLabel
-                                    sx={{
-                                        justifyContent: "flex-end"
-                                    }}
-                                    checked={locked}
-                                    onChange={() => {
-                                        setLocked(!locked)
-                                    }}
-                                    control={<Checkbox />}
-                                    label="Locked"
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControlLabel
-                                    sx={{
-                                        justifyContent: "flex-end"
-                                    }}
-                                    checked={archived}
-                                    onChange={() => {
-                                        setArchived(!archived)
-                                    }}
-                                    control={<Checkbox />}
-                                    label="Archived"
-                                />
-                            </FormGroup>
-                            <Button
-                                disabled={isDisabled}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{mt: 3, mb: 2}}
-                            >
-                                Submit
-                            </Button>
-                        </form>
-                    </Box>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                    <PetsIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Todo
+                </Typography>
+                <Box sx={{mt: 1}}>
+                    <form onSubmit={handleSubmit(onSubmit, onError)}>
+                        <MauTextField
+                            rules={{
+                                required: true,
+                                minLength: 4
+                            }}
+                            label={'Description'}
+                            control={control}
+                            name="description"
+                        />
+                        <MauDatePicker
+                            rules={{
+                                required: true,
+                            }}
+                            label={'Due'}
+                            control={control}
+                            name="due"
+                        />
+                        <MauCheckbox
+                            control={control}
+                            name={'completed'}
+                            label={'Completed'}
+                        />
+                        <MauCheckbox
+                            control={control}
+                            name={'locked'}
+                            label={'Locked'}
+                        />
+                        <MauCheckbox
+                            control={control}
+                            name={'archived'}
+                            label={'Archived'}
+                        />
+                        <Button
+                            disabled={isDisabled}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{mt: 3, mb: 2}}
+                        >
+                            Submit
+                        </Button>
+                    </form>
                 </Box>
-                <MauSnackbar
-                    message={message}
-                />
-            </Container>
+            </Box>
+            <MauSnackbar
+                message={message}
+            />
+        </Container>
     );
 }
