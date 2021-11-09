@@ -14,10 +14,11 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
 
 // components
 import {useHistory} from 'react-router-dom'
-import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
+import {Box, CircularProgress, Fab, IconButton, InputAdornment, Typography} from "@mui/material";
 import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,7 +32,10 @@ import Grid from "@mui/material/Grid";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {formatDate} from "../../helpers/format-date";
+import {DATE_FORMAT, DATE_MASK, formatDate} from "../../helpers/format-date";
+import {DatePicker} from "@mui/lab";
+import moment from "moment";
+import TextField from "@mui/material/TextField";
 
 
 export default function TodoList() {
@@ -44,10 +48,12 @@ export default function TodoList() {
     const [first, setFirst] = useState<number | null | undefined>(5)
     const [before, setBefore] = useState<null | string | undefined>(null)
     const [last, setLast] = useState<number | null | undefined>(null)
+    const [due, setDue] = useState<string | null>(null)
 
     const { loading, data, error } = useGetTodosQuery({
         variables: {
             archived: archived,
+            due: due,
             first: first,
             last: last,
             after: after,
@@ -110,7 +116,55 @@ export default function TodoList() {
                     }
                 </Grid>
                 <Grid item>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} alignItems={'center'}>
+                        <Grid item sx={{ mr: 2 }}>
+                            <DatePicker
+                                mask={DATE_MASK}
+                                inputFormat={DATE_FORMAT}
+                                label={'Selected due'}
+                                value={due}
+                                clearable={true}
+                                onChange={(newValue) => {
+                                    if (moment.isMoment(newValue)) {
+                                        setDue(newValue.format(DATE_FORMAT));
+                                    } else {
+                                        setDue(newValue);
+                                    }
+                                }}
+                                renderInput={({InputProps, ...params}) => {
+                                    return (
+                                        <TextField
+                                            {...params}
+                                            color={'primary'}
+                                            margin="normal"
+                                            fullWidth
+                                            label={'Due'}
+                                            InputProps={{
+                                                endAdornment: <>
+                                                    {
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="toggle password visibility"
+                                                                onClick={() => {
+                                                                    setDue(null)
+                                                                }}
+                                                                edge="end"
+                                                                disabled={!due}
+                                                            >
+                                                                <CloseIcon />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    }
+                                                    {
+                                                        InputProps?.endAdornment
+                                                    }
+                                                </>
+                                            }}
+                                        />
+                                    )
+                                }}
+                            />
+                        </Grid>
                         <Grid item>
                             <IconButton
                                 disabled={data?.todos?.pageData?.offset === 0}

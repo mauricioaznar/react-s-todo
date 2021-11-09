@@ -27,6 +27,7 @@ export type QueryTodosArgs = {
   after?: Maybe<Scalars['String']>;
   archived?: Maybe<Scalars['Boolean']>;
   before?: Maybe<Scalars['String']>;
+  due?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Float']>;
   last?: Maybe<Scalars['Float']>;
 };
@@ -228,8 +229,8 @@ export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const GetTodosDocument = gql`
-    query GetTodos($archived: Boolean, $first: Float, $after: String, $last: Float, $before: String) {
-  todos(archived: $archived, first: $first, after: $after, last: $last, before: $before) {
+    query GetTodos($archived: Boolean, $first: Float, $after: String, $last: Float, $before: String, $due: String) {
+  todos(archived: $archived, first: $first, after: $after, last: $last, before: $before, due: $due) {
     page {
       edges {
         cursor
@@ -279,6 +280,7 @@ export const GetTodosDocument = gql`
  *      after: // value for 'after'
  *      last: // value for 'last'
  *      before: // value for 'before'
+ *      due: // value for 'due'
  *   },
  * });
  */
@@ -670,6 +672,7 @@ export type GetTodosQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
   last?: Maybe<Scalars['Float']>;
   before?: Maybe<Scalars['String']>;
+  due?: Maybe<Scalars['String']>;
 }>;
 
 
