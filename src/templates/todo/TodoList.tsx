@@ -17,7 +17,7 @@ import ForwardIcon from '@mui/icons-material/Forward';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
-import {Query, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -31,7 +31,6 @@ import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {formatDate} from "../../helpers/format-date";
-import {nameof} from "../../helpers/nameof";
 
 
 export default function TodoList() {
@@ -187,12 +186,7 @@ function TodoCells({todoEdge}: { todoEdge: TodoEdge }) {
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
     const [deleteTodoMutation] = useDeleteTodoMutation({
-        update(cache) {
-            cache.evict({
-                id: "ROOT_QUERY",
-                fieldName: nameof<Query>('todos')
-            })
-        },
+        refetchQueries: [namedOperations.Query.GetTodos]
     })
     const history = useHistory()
 
