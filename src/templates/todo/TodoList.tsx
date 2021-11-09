@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
 
 // icons
@@ -17,7 +17,7 @@ import ForwardIcon from '@mui/icons-material/Forward';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
-import {GetTodosQuery, Query, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {Query, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -41,26 +41,21 @@ export default function TodoList() {
 
     const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
     const [after, setAfter] = useState<null | string | undefined>(null)
-    const [edges, setEdges] = useState<GetTodosQuery['todos']['page']['edges']>([])
 
     const { loading, data } = useGetTodosQuery({
         variables: {
             archived: archived,
-            first: 4,
+            first: 5,
             after: after
         },
+        onCompleted: () => {
+            setFirst(false)
+        }
     })
 
-    useEffect(() => {
-        if (data?.todos.page.edges) {
-            const eds = data.todos.page.edges
-            const newEdges = edges?.concat(eds)
-            setEdges(newEdges)
-        }
-        setFirst(false)
-    }, [data])
-
     const [first, setFirst] = useState(true)
+
+    const edges = data?.todos.page.edges
 
     // enter and leave overlapping
     // https://github.com/pmndrs/react-spring/issues/1064
@@ -72,8 +67,7 @@ export default function TodoList() {
         from: { opacity: 0, x: first ? '0%' : '10%' },
         enter: { opacity: 1, x: '0%', },
         leave: { opacity: 0, x: '10%' },
-        exitBeforeEnter: false,
-        trail: 100,
+        trail: 150,
         config: springConfig.default,
     })
 
@@ -122,7 +116,6 @@ export default function TodoList() {
                                     window.localStorage.setItem('archived', newArchived ? 'true' : 'false')
                                     setArchived(newArchived)
                                     setAfter(null)
-                                    setEdges([])
                                 }}
                             >
                                 {
