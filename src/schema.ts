@@ -228,8 +228,8 @@ export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const GetTodosDocument = gql`
-    query GetTodos($archived: Boolean, $first: Float, $after: String) {
-  todos(archived: $archived, first: $first, after: $after) {
+    query GetTodos($archived: Boolean, $first: Float, $after: String, $last: Float, $before: String) {
+  todos(archived: $archived, first: $first, after: $after, last: $last, before: $before) {
     page {
       edges {
         cursor
@@ -248,6 +248,9 @@ export const GetTodosDocument = gql`
       }
       pageInfo {
         hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
       }
     }
     pageData {
@@ -274,6 +277,8 @@ export const GetTodosDocument = gql`
  *      archived: // value for 'archived'
  *      first: // value for 'first'
  *      after: // value for 'after'
+ *      last: // value for 'last'
+ *      before: // value for 'before'
  *   },
  * });
  */
@@ -663,10 +668,12 @@ export type GetTodosQueryVariables = Exact<{
   archived?: Maybe<Scalars['Boolean']>;
   first?: Maybe<Scalars['Float']>;
   after?: Maybe<Scalars['String']>;
+  last?: Maybe<Scalars['Float']>;
+  before?: Maybe<Scalars['String']>;
 }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

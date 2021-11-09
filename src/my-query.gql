@@ -11,8 +11,8 @@
         }
     }
 
-    query GetTodos ($archived: Boolean, $first: Float, $after: String) {
-        todos (archived: $archived, first: $first, after: $after) {
+    query GetTodos ($archived: Boolean, $first: Float, $after: String, $last: Float, $before: String) {
+        todos (archived: $archived, first: $first, after: $after, last: $last, before: $before) {
             page {
                 edges {
                     cursor
@@ -31,6 +31,9 @@
                 }
                 pageInfo {
                     hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
                 }
             }
             pageData {

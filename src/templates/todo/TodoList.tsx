@@ -12,7 +12,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
-import ForwardIcon from '@mui/icons-material/Forward';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 // components
 import {useHistory} from 'react-router-dom'
@@ -40,34 +41,46 @@ export default function TodoList() {
 
     const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
     const [after, setAfter] = useState<null | string | undefined>(null)
+    const [first, setFirst] = useState<number | null | undefined>(5)
+    const [before, setBefore] = useState<null | string | undefined>(null)
+    const [last, setLast] = useState<number | null | undefined>(null)
 
-    const { loading, data } = useGetTodosQuery({
+    const { loading, data  } = useGetTodosQuery({
         variables: {
             archived: archived,
-            first: 5,
-            after: after
+            first: first,
+            last: last,
+            after: after,
+            before: before
         },
         onCompleted: () => {
-            setFirst(false)
+            setFirstRender(false)
         }
     })
 
-    const [first, setFirst] = useState(true)
+    const [firstRender, setFirstRender] = useState(true)
 
     const edges = data?.todos.page.edges
+
+    const offset = data?.todos?.pageData?.offset || 0
+    const count = data?.todos?.pageData?.count || 0
+    const limit = data?.todos?.pageData?.limit || 0
+
+    const forwardDisabled = (data?.todos?.pageData) ? (offset >= count - limit) : true
 
     // enter and leave overlapping
     // https://github.com/pmndrs/react-spring/issues/1064
     const transitions = useTransition( edges, {
         keys: (item: unknown) => {
             const todo = item as TodoEdge
-            return todo.cursor!
+            return todo.node?._id!
         },
-        from: { opacity: 0, x: first ? '0%' : '10%' },
+        from: { opacity: 0, x: firstRender ? '0%' : '10%' },
         enter: { opacity: 1, x: '0%', },
         leave: { opacity: 0, x: '10%' },
+        order: ['enter', 'update', 'leave'],
         trail: 150,
-        config: springConfig.default,
+        config: springConfig.gentle,
     })
 
 
@@ -99,21 +112,42 @@ export default function TodoList() {
                     <Grid container spacing={2}>
                         <Grid item>
                             <IconButton
-                                disabled={!data?.todos.page.pageInfo?.hasNextPage}
+                                disabled={data?.todos?.pageData?.offset === 0}
                                 onClick={() => {
-                                    const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
-                                    setAfter(newCursor)
+                                    const newCursor = edges && edges.length > 0 ? edges[0].cursor : null;
+                                    setAfter(null)
+                                    setFirst(null)
+                                    setLast(5)
+                                    setBefore(newCursor)
                                 }}
                             >
-                                <ForwardIcon fontSize={'medium'} />
+                                <ArrowBackIosIcon fontSize={'medium'} />
                             </IconButton>
                         </Grid>
                         <Grid item>
                             <IconButton
+                                disabled={forwardDisabled}
+                                onClick={() => {
+                                    const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
+                                    setBefore(null)
+                                    setLast(null)
+                                    setFirst(5)
+                                    setAfter(newCursor)
+                                }}
+                            >
+                                <ArrowForwardIosIcon fontSize={'medium'} />
+                            </IconButton>
+                        </Grid>
+                        <Grid item>
+                            <IconButton
+                                sx={{ mr: 2 }}
                                 onClick={() => {
                                     const newArchived = !archived
                                     window.localStorage.setItem('archived', newArchived ? 'true' : 'false')
                                     setArchived(newArchived)
+                                    setBefore(null)
+                                    setLast(null)
+                                    setFirst(5)
                                     setAfter(null)
                                 }}
                             >
@@ -155,10 +189,11 @@ export default function TodoList() {
                                                 <CircularProgress />
                                             </TableCell>
                                         </TableRow>
-                                        : transitions((styles, todo) => {
+                                        : transitions((styles: any, todo: any) => {
+                                            const todoEdge = todo as TodoEdge
                                             return (
                                                 todo && <AnimatedTableRow style={styles}>
-                                                    <TodoCells todoEdge={todo}/>
+                                                    <TodoCells todoEdge={todoEdge}/>
                                                 </AnimatedTableRow>
                                             )
                                         })
