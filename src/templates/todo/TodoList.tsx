@@ -17,7 +17,7 @@ import ForwardIcon from '@mui/icons-material/Forward';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
-import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {GetTodosQuery, namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -40,6 +40,7 @@ export default function TodoList() {
 
     const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
     const [after, setAfter] = useState<null | string | undefined>(null)
+    const [edges, setEdges] = useState<GetTodosQuery['todos']['page']['edges']>([])
 
     const { loading, data } = useGetTodosQuery({
         variables: {
@@ -47,25 +48,34 @@ export default function TodoList() {
             first: 4,
             after: after
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
+            if (data.todos.page.edges) {
+                const eds = data.todos.page.edges
+                const newEdges = edges?.concat(eds)
+                setEdges(newEdges)
+            }
             setFirst(false)
-        }
-    })
+        },
 
-    const edges = data?.todos?.page?.edges
+    })
 
     const [first, setFirst] = useState(true)
 
-    const transitions = useTransition(edges, {
+    // enter and leave overlapping
+    // https://github.com/pmndrs/react-spring/issues/1064
+    const transitions = useTransition( edges, {
         keys: (item: unknown) => {
             const todo = item as TodoEdge
             return todo.cursor!
         },
         from: { opacity: 0, x: first ? '0%' : '10%' },
-        enter: { opacity: 1,  x: '0%' },
-        leave: { opacity: 0, x: '10%'},
-        config: springConfig.gentle,
+        enter: { opacity: 1, x: '0%', },
+        leave: { opacity: 0, x: '10%' },
+        exitBeforeEnter: false,
+        trail: 100,
+        config: springConfig.default,
     })
+
 
     // useTodoSubscription(
     //     {
@@ -95,10 +105,10 @@ export default function TodoList() {
                     <Grid container spacing={2}>
                         <Grid item>
                             <IconButton
+                                disabled={!data?.todos.page.pageInfo?.hasNextPage}
                                 onClick={() => {
                                     const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
-                                    const hasNextPage = data?.todos.page.pageInfo?.hasNextPage
-                                    setAfter(hasNextPage ? newCursor : null)
+                                    setAfter(newCursor)
                                 }}
                             >
                                 <ForwardIcon fontSize={'medium'} />
@@ -110,6 +120,8 @@ export default function TodoList() {
                                     const newArchived = !archived
                                     window.localStorage.setItem('archived', newArchived ? 'true' : 'false')
                                     setArchived(newArchived)
+                                    setAfter(null)
+                                    setEdges([])
                                 }}
                             >
                                 {
@@ -144,7 +156,7 @@ export default function TodoList() {
                             </TableHead>
                             <TableBody>
                                 {
-                                    loading
+                                    loading && first
                                         ? <TableRow>
                                             <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
                                                 <CircularProgress />
