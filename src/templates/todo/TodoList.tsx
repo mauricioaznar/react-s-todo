@@ -38,17 +38,25 @@ import moment from "moment";
 import TextField from "@mui/material/TextField";
 
 
+
+const TODO_AFTER = 'todo_after'
+const TODO_FIRST = 'todo_first'
+const TODO_LAST = 'todo_last'
+const TODO_BEFORE = 'todo_before'
+const TODO_DUE = 'todo_due'
+const TODO_ARCHIVED = 'todo_archived'
+
 export default function TodoList() {
 
     // hooks
     const history = useHistory()
 
-    const [archived, setArchived] = useState(window.localStorage.getItem('archived') === 'true')
-    const [after, setAfter] = useState<null | string | undefined>(null)
-    const [first, setFirst] = useState<number | null | undefined>(5)
-    const [before, setBefore] = useState<null | string | undefined>(null)
-    const [last, setLast] = useState<number | null | undefined>(null)
-    const [due, setDue] = useState<string | null>(null)
+    const [archived, setArchived] = useState(window.localStorage.getItem(TODO_ARCHIVED) === 'true')
+    const [after, setAfter] = useState<null | string | undefined>(window.localStorage.getItem(TODO_AFTER) || null)
+    const [first, setFirst] = useState<number | null | undefined>(window.localStorage.getItem(TODO_FIRST) ? Number(window.localStorage.getItem(TODO_FIRST)) : null)
+    const [before, setBefore] = useState<null | string | undefined>(window.localStorage.getItem(TODO_BEFORE) || null)
+    const [last, setLast] = useState<number | null | undefined>(window.localStorage.getItem(TODO_LAST) ? Number(window.localStorage.getItem(TODO_LAST)) : null)
+    const [due, setDue] = useState<string | null>(window.localStorage.getItem(TODO_DUE) || null)
 
     const { loading, data, error } = useGetTodosQuery({
         variables: {
@@ -126,8 +134,15 @@ export default function TodoList() {
                                 clearable={true}
                                 onChange={(newValue) => {
                                     if (moment.isMoment(newValue)) {
-                                        setDue(newValue.format(DATE_FORMAT));
+                                        const newDue = newValue.format(DATE_FORMAT)
+                                        setDue(newDue);
+                                        window.localStorage.setItem(TODO_DUE, newDue)
                                     } else {
+                                        if (newValue) {
+                                            window.localStorage.setItem(TODO_DUE, newValue)
+                                        } else {
+                                            window.localStorage.removeItem(TODO_DUE)
+                                        }
                                         setDue(newValue);
                                     }
                                 }}
@@ -171,9 +186,18 @@ export default function TodoList() {
                                 onClick={() => {
                                     const newCursor = edges && edges.length > 0 ? edges[0].cursor : null;
                                     setAfter(null)
+                                    window.localStorage.removeItem(TODO_AFTER)
                                     setFirst(null)
-                                    setLast(5)
+                                    window.localStorage.removeItem(TODO_FIRST)
+                                    const newLast = 5
+                                    setLast(newLast)
+                                    window.localStorage.setItem(TODO_LAST, newLast.toString())
                                     setBefore(newCursor)
+                                    if (newCursor) {
+                                        window.localStorage.setItem(TODO_BEFORE, newCursor)
+                                    } else {
+                                        window.localStorage.removeItem(TODO_BEFORE)
+                                    }
                                 }}
                             >
                                 <ArrowBackIosIcon fontSize={'medium'} />
@@ -185,9 +209,18 @@ export default function TodoList() {
                                 onClick={() => {
                                     const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
                                     setBefore(null)
+                                    window.localStorage.removeItem(TODO_BEFORE)
                                     setLast(null)
-                                    setFirst(5)
+                                    window.localStorage.removeItem(TODO_LAST)
+                                    const newFirst = 5
+                                    setFirst(newFirst)
+                                    window.localStorage.setItem(TODO_FIRST, newFirst.toString())
                                     setAfter(newCursor)
+                                    if (newCursor) {
+                                        window.localStorage.setItem(TODO_AFTER, newCursor)
+                                    } else {
+                                        window.localStorage.removeItem(TODO_AFTER)
+                                    }
                                 }}
                             >
                                 <ArrowForwardIosIcon fontSize={'medium'} />
@@ -198,12 +231,17 @@ export default function TodoList() {
                                 sx={{ mr: 2 }}
                                 onClick={() => {
                                     const newArchived = !archived
-                                    window.localStorage.setItem('archived', newArchived ? 'true' : 'false')
+                                    window.localStorage.setItem(TODO_ARCHIVED, newArchived ? 'true' : 'false')
                                     setArchived(newArchived)
+                                    window.localStorage.removeItem(TODO_BEFORE)
                                     setBefore(null)
+                                    window.localStorage.removeItem(TODO_LAST)
                                     setLast(null)
-                                    setFirst(5)
+                                    const newFirst = 5
+                                    setFirst(newFirst)
+                                    window.localStorage.setItem(TODO_FIRST, newFirst.toString())
                                     setAfter(null)
+                                    window.localStorage.removeItem(TODO_AFTER)
                                 }}
                             >
                                 {
