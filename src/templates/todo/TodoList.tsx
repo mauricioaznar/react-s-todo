@@ -19,7 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // components
 import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, InputAdornment, Typography} from "@mui/material";
-import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {GetTodosQuery, namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -38,6 +38,14 @@ import moment from "moment";
 import TextField from "@mui/material/TextField";
 
 
+type Concrete<Type> = {
+    [Property in keyof Type]-?: Type[Property];
+};
+
+
+type TodoEdges = Exclude<Concrete<GetTodosQuery['todos']['page']['edges']>, null | undefined>
+type TodoItem = TodoEdges[number]
+type TodoNode = Exclude<TodoEdges[number]['node'], null | undefined>
 
 const TODO_AFTER = 'todo_after'
 const TODO_FIRST = 'todo_first'
@@ -45,12 +53,13 @@ const TODO_LAST = 'todo_last'
 const TODO_BEFORE = 'todo_before'
 const TODO_DUE = 'todo_due'
 const TODO_ARCHIVED = 'todo_archived'
+const TODO_COMPLETED = 'todo_completed'
 
 export default function TodoList() {
 
-    // hooks
     const history = useHistory()
 
+    const [completed, setCompleted] = useState(window.localStorage.getItem(TODO_COMPLETED) === 'true')
     const [archived, setArchived] = useState(window.localStorage.getItem(TODO_ARCHIVED) === 'true')
     const [after, setAfter] = useState<null | string | undefined>(window.localStorage.getItem(TODO_AFTER) || null)
     const [first, setFirst] = useState<number | null | undefined>(window.localStorage.getItem(TODO_FIRST) ? Number(window.localStorage.getItem(TODO_FIRST)) : null)
@@ -61,6 +70,7 @@ export default function TodoList() {
     const { loading, data, error } = useGetTodosQuery({
         variables: {
             archived: archived,
+            completed: completed,
             due: due,
             first: first,
             last: last,
@@ -82,6 +92,8 @@ export default function TodoList() {
     const limit = data?.todos?.pageData?.limit || 0
 
     const forwardDisabled = (data?.todos?.pageData) ? (offset >= count - limit) : true
+
+
 
     // enter and leave overlapping
     // https://github.com/pmndrs/react-spring/issues/1064
@@ -162,6 +174,7 @@ export default function TodoList() {
                                                                 aria-label="toggle password visibility"
                                                                 onClick={() => {
                                                                     setDue(null)
+                                                                    window.localStorage.removeItem(TODO_DUE)
                                                                 }}
                                                                 edge="end"
                                                                 disabled={!due}
@@ -252,6 +265,22 @@ export default function TodoList() {
                             </IconButton>
                         </Grid>
                         <Grid item>
+                            <IconButton
+                                sx={{ mr: 2 }}
+                                onClick={() => {
+                                    const newCompleted = !completed
+                                    window.localStorage.setItem(TODO_COMPLETED, newCompleted ? 'true' : 'false')
+                                    setCompleted(newCompleted)
+                                }}
+                            >
+                                {
+                                    completed
+                                        ? <CheckBoxIcon fontSize={'medium'} />
+                                        : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
+                                }
+                            </IconButton>
+                        </Grid>
+                        <Grid item>
                             <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
                                 <AddIcon/>
                             </Fab>
@@ -283,10 +312,11 @@ export default function TodoList() {
                                             </TableCell>
                                         </TableRow>
                                         : transitions((styles: any, todo: any) => {
-                                            const todoEdge = todo as TodoEdge
+                                            const todoItem = todo as TodoItem
+                                            const todoNode = todoItem.node as TodoNode
                                             return (
                                                 todo && <AnimatedTableRow style={styles}>
-                                                    <TodoCells todoEdge={todoEdge}/>
+                                                    <TodoCells todo={todoNode}/>
                                                 </AnimatedTableRow>
                                             )
                                         })
@@ -304,11 +334,7 @@ export default function TodoList() {
 }
 
 
-function TodoCells({todoEdge}: { todoEdge: TodoEdge }) {
-
-    // hooks
-
-    const todo = todoEdge.node!
+function TodoCells({todo}: { todo: TodoNode }) {
 
     const {currentUser} = useTypedSelector(
         (state) => state.auth
