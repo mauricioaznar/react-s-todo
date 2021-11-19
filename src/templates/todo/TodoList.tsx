@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
+import {useHistory} from 'react-router-dom'
+import moment from "moment";
 
 // icons
 import CreateIcon from '@mui/icons-material/Create';
@@ -15,11 +17,7 @@ import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
-
-// components
-import {useHistory} from 'react-router-dom'
 import {Box, CircularProgress, Fab, IconButton, InputAdornment, Typography} from "@mui/material";
-import {GetTodosQuery, namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,24 +27,23 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import {DatePicker} from "@mui/lab";
+
+// components
+import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {DATE_FORMAT, DATE_MASK, formatDate} from "../../helpers/format-date";
-import {DatePicker} from "@mui/lab";
-import moment from "moment";
-import TextField from "@mui/material/TextField";
+import {TodoItem, TodoNode} from "../../types/todo";
+import LocalStorage from "../../helpers/local-storage";
+import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
 
 
-type Concrete<Type> = {
-    [Property in keyof Type]-?: Type[Property];
-};
 
 
-type TodoEdges = Exclude<Concrete<GetTodosQuery['todos']['page']['edges']>, null | undefined>
-type TodoItem = TodoEdges[number]
-type TodoNode = Exclude<TodoEdges[number]['node'], null | undefined>
-
+// constants
 const TODO_AFTER = 'todo_after'
 const TODO_FIRST = 'todo_first'
 const TODO_LAST = 'todo_last'
@@ -59,13 +56,16 @@ export default function TodoList() {
 
     const history = useHistory()
 
-    const [completed, setCompleted] = useState(window.localStorage.getItem(TODO_COMPLETED) === 'true')
-    const [archived, setArchived] = useState(window.localStorage.getItem(TODO_ARCHIVED) === 'true')
-    const [after, setAfter] = useState<null | string | undefined>(window.localStorage.getItem(TODO_AFTER) || null)
-    const [first, setFirst] = useState<number | null | undefined>(window.localStorage.getItem(TODO_FIRST) ? Number(window.localStorage.getItem(TODO_FIRST)) : null)
-    const [before, setBefore] = useState<null | string | undefined>(window.localStorage.getItem(TODO_BEFORE) || null)
-    const [last, setLast] = useState<number | null | undefined>(window.localStorage.getItem(TODO_LAST) ? Number(window.localStorage.getItem(TODO_LAST)) : null)
-    const [due, setDue] = useState<string | null>(window.localStorage.getItem(TODO_DUE) || null)
+    const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
+    const [archived, setArchived] = useState(LocalStorage.getBoolean(TODO_ARCHIVED))
+    const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE))
+
+    const { first, last, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
+        afterKey: TODO_AFTER,
+        firstKey: TODO_FIRST,
+        beforeKey: TODO_BEFORE,
+        lastKey: TODO_LAST
+    })
 
     const { loading, data, error } = useGetTodosQuery({
         variables: {
@@ -110,16 +110,6 @@ export default function TodoList() {
         config: springConfig.gentle,
     })
 
-
-    // useTodoSubscription(
-    //     {
-    //         onSubscriptionData(options) {
-    //             options.client.refetchQueries({include: [namedOperations.Query.GetTodos]})
-    //         },
-    //
-    //     }
-    // );
-
     function handleCreateClick() {
         history.push('/todoForm')
     }
@@ -148,15 +138,10 @@ export default function TodoList() {
                                     if (moment.isMoment(newValue)) {
                                         const newDue = newValue.format(DATE_FORMAT)
                                         setDue(newDue);
-                                        window.localStorage.setItem(TODO_DUE, newDue)
                                     } else {
-                                        if (newValue) {
-                                            window.localStorage.setItem(TODO_DUE, newValue)
-                                        } else {
-                                            window.localStorage.removeItem(TODO_DUE)
-                                        }
                                         setDue(newValue);
                                     }
+                                    LocalStorage.saveMomentDate(newValue, TODO_DUE)
                                 }}
                                 renderInput={({InputProps, ...params}) => {
                                     return (
@@ -174,7 +159,7 @@ export default function TodoList() {
                                                                 aria-label="toggle password visibility"
                                                                 onClick={() => {
                                                                     setDue(null)
-                                                                    window.localStorage.removeItem(TODO_DUE)
+                                                                    LocalStorage.removeItem(TODO_DUE)
                                                                 }}
                                                                 edge="end"
                                                                 disabled={!due}
@@ -198,19 +183,7 @@ export default function TodoList() {
                                 disabled={data?.todos?.pageData?.offset === 0}
                                 onClick={() => {
                                     const newCursor = edges && edges.length > 0 ? edges[0].cursor : null;
-                                    setAfter(null)
-                                    window.localStorage.removeItem(TODO_AFTER)
-                                    setFirst(null)
-                                    window.localStorage.removeItem(TODO_FIRST)
-                                    const newLast = 5
-                                    setLast(newLast)
-                                    window.localStorage.setItem(TODO_LAST, newLast.toString())
                                     setBefore(newCursor)
-                                    if (newCursor) {
-                                        window.localStorage.setItem(TODO_BEFORE, newCursor)
-                                    } else {
-                                        window.localStorage.removeItem(TODO_BEFORE)
-                                    }
                                 }}
                             >
                                 <ArrowBackIosIcon fontSize={'medium'} />
@@ -221,19 +194,7 @@ export default function TodoList() {
                                 disabled={forwardDisabled}
                                 onClick={() => {
                                     const newCursor = edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
-                                    setBefore(null)
-                                    window.localStorage.removeItem(TODO_BEFORE)
-                                    setLast(null)
-                                    window.localStorage.removeItem(TODO_LAST)
-                                    const newFirst = 5
-                                    setFirst(newFirst)
-                                    window.localStorage.setItem(TODO_FIRST, newFirst.toString())
                                     setAfter(newCursor)
-                                    if (newCursor) {
-                                        window.localStorage.setItem(TODO_AFTER, newCursor)
-                                    } else {
-                                        window.localStorage.removeItem(TODO_AFTER)
-                                    }
                                 }}
                             >
                                 <ArrowForwardIosIcon fontSize={'medium'} />
@@ -244,17 +205,9 @@ export default function TodoList() {
                                 sx={{ mr: 2 }}
                                 onClick={() => {
                                     const newArchived = !archived
-                                    window.localStorage.setItem(TODO_ARCHIVED, newArchived ? 'true' : 'false')
+                                    LocalStorage.saveBoolean(newArchived, TODO_ARCHIVED)
                                     setArchived(newArchived)
-                                    window.localStorage.removeItem(TODO_BEFORE)
-                                    setBefore(null)
-                                    window.localStorage.removeItem(TODO_LAST)
-                                    setLast(null)
-                                    const newFirst = 5
-                                    setFirst(newFirst)
-                                    window.localStorage.setItem(TODO_FIRST, newFirst.toString())
-                                    setAfter(null)
-                                    window.localStorage.removeItem(TODO_AFTER)
+                                    resetGraphqlPagination()
                                 }}
                             >
                                 {
@@ -269,7 +222,7 @@ export default function TodoList() {
                                 sx={{ mr: 2 }}
                                 onClick={() => {
                                     const newCompleted = !completed
-                                    window.localStorage.setItem(TODO_COMPLETED, newCompleted ? 'true' : 'false')
+                                    LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
                                     setCompleted(newCompleted)
                                 }}
                             >
