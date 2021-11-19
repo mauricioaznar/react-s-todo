@@ -2,7 +2,6 @@ import * as React from 'react'
 import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
 import {useHistory} from 'react-router-dom'
-import moment from "moment";
 
 // icons
 import CreateIcon from '@mui/icons-material/Create';
@@ -31,16 +30,14 @@ import TextField from "@mui/material/TextField";
 import {DatePicker} from "@mui/lab";
 
 // components
-import {namedOperations, Todo, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {namedOperations, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {DATE_FORMAT, DATE_MASK, formatDate} from "../../helpers/format-date";
-import {TodoItem, TodoNode} from "../../types/todo";
+import {TodoNode} from "../../types/todo";
 import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
-
-
 
 
 // constants
@@ -64,7 +61,8 @@ export default function TodoList() {
         afterKey: TODO_AFTER,
         firstKey: TODO_FIRST,
         beforeKey: TODO_BEFORE,
-        lastKey: TODO_LAST
+        lastKey: TODO_LAST,
+        limit: 10
     })
 
     const { loading, data, error } = useGetTodosQuery({
@@ -135,12 +133,7 @@ export default function TodoList() {
                                 value={due}
                                 clearable={true}
                                 onChange={(newValue) => {
-                                    if (moment.isMoment(newValue)) {
-                                        const newDue = newValue.format(DATE_FORMAT)
-                                        setDue(newDue);
-                                    } else {
-                                        setDue(newValue);
-                                    }
+                                    setDue(newValue);
                                     LocalStorage.saveMomentDate(newValue, TODO_DUE)
                                 }}
                                 renderInput={({InputProps, ...params}) => {
@@ -265,7 +258,7 @@ export default function TodoList() {
                                             </TableCell>
                                         </TableRow>
                                         : transitions((styles: any, todo: any) => {
-                                            const todoItem = todo as TodoItem
+                                            const todoItem = todo as { node: any }
                                             const todoNode = todoItem.node as TodoNode
                                             return (
                                                 todo && <AnimatedTableRow style={styles}>
@@ -300,13 +293,13 @@ function TodoCells({todo}: { todo: TodoNode }) {
     })
     const history = useHistory()
 
-    function handleEditClick(todo: Todo) {
+    function handleEditClick(todo: TodoNode) {
         history.push('/todoForm', {todo})
     }
 
     // functions and flow control
 
-    async function handleDeleteClick(todo: Todo) {
+    async function handleDeleteClick(todo: TodoNode) {
         setIsDisabled(true)
         try {
             await deleteTodoMutation({

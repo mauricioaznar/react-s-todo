@@ -25,7 +25,7 @@ const MauCheckbox = ({ control, name, label }: MauCheckboxProps) => {
                                 onChange(!value)
                             }}
                             control={<Checkbox />}
-                            label={label}
+                            label={label || ''}
                         />
                     </FormGroup>
                 )

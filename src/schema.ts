@@ -79,8 +79,15 @@ export type Todo = {
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
+  items: Array<TodoItem>;
   locked: Scalars['Boolean'];
   user?: Maybe<User>;
+};
+
+export type TodoItem = {
+  __typename?: 'TodoItem';
+  completed: Scalars['Boolean'];
+  description: Scalars['String'];
 };
 
 export type TodoPageInfo = {
@@ -169,7 +176,13 @@ export type TodoInput = {
   completed: Scalars['Boolean'];
   description: Scalars['String'];
   due: Scalars['String'];
+  items: Array<TodoItemInput>;
   locked: Scalars['Boolean'];
+};
+
+export type TodoItemInput = {
+  completed: Scalars['Boolean'];
+  description: Scalars['String'];
 };
 
 export type UserInput = {
@@ -245,6 +258,10 @@ export const GetTodosDocument = gql`
           user {
             _id
             username
+          }
+          items {
+            description
+            completed
           }
         }
       }
@@ -679,7 +696,7 @@ export type GetTodosQueryVariables = Exact<{
 }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, completed: boolean, due: string, locked: boolean, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

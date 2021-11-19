@@ -1,22 +1,49 @@
 import * as React from 'react';
 import {useState} from 'react';
+import {useHistory} from "react-router-dom";
+import {ApolloError} from "@apollo/client";
+import {useFieldArray, useForm} from "react-hook-form";
+
+// mui
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import {
+    Grid,
+    IconButton,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Toolbar,
+    Tooltip
+} from "@mui/material";
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+
+// components
 import {GetTodosQuery, Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
-import {useHistory} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import MauSnackbar from "../../components/MauSnackbar";
-import {ApolloError} from "@apollo/client";
-import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauDatePicker from "../../components/inputs/MauDatePicker";
 import MauCheckbox from "../../components/inputs/MauCheckbox";
 
+
+
+interface TodoItem {
+
+    description: string;
+    completed: boolean;
+
+}
 
 interface TodoFormInputs {
     description: string,
@@ -24,6 +51,7 @@ interface TodoFormInputs {
     completed: boolean,
     archived: boolean,
     locked: boolean,
+    items: TodoItem[]
 }
 
 
@@ -48,7 +76,13 @@ export default function TodoForm() {
             completed: todo?.completed || false,
             archived: todo?.archived || false,
             locked: todo?.locked || false,
+            items: todo?.items || [],
         }
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "items"
     });
 
     const [createTodoMutation] = useCreateTodoMutation({
@@ -70,7 +104,7 @@ export default function TodoForm() {
     });
 
     const onSubmit = async (data: TodoFormInputs) => {
-        const {description, due, completed, locked, archived} = data
+        const {description, due, completed, locked, archived, items} = data
 
         setIsDisabled(true)
 
@@ -80,7 +114,13 @@ export default function TodoForm() {
                 completed: completed,
                 locked: locked,
                 archived: archived,
-                due: due ? due.toString() : ''
+                due: due ? due.toString() : '',
+                items: items.map( i => {
+                    return {
+                        description: i.description,
+                        completed: i.completed
+                    }
+                })
             }
         }
 
@@ -109,10 +149,9 @@ export default function TodoForm() {
                 setMessage(e.message)
             }
         }
+
         setMessage('')
         setIsDisabled(false)
-
-
     }
 
     const onError = () => {
@@ -120,7 +159,7 @@ export default function TodoForm() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="sm">
             <CssBaseline/>
             <Box
                 sx={{
@@ -132,7 +171,7 @@ export default function TodoForm() {
                 <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                     <PetsIcon/>
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography variant="h4">
                     Todo
                 </Typography>
                 <Box sx={{mt: 1}}>
@@ -169,6 +208,101 @@ export default function TodoForm() {
                             name={'archived'}
                             label={'Archived'}
                         />
+
+
+                        <Grid
+                            item
+                            sx={{
+                                mt: 2
+                            }}
+                            xs={12}
+                        >
+                            <Grid
+                                container
+                                direction={'column'}
+                            >
+                                <Grid
+                                    item
+                                    xs={12}
+                                >
+                                    <Toolbar
+                                      disableGutters
+                                    >
+                                        <Typography
+                                            sx={{
+                                                flexGrow: 1
+                                            }}
+                                            variant="h6"
+                                        >
+                                            Items
+                                        </Typography>
+                                        <Tooltip title="Filter list">
+                                            <IconButton
+                                                aria-label="filter list"
+                                                onClick={() => {
+                                                    append({
+                                                        description: "",
+                                                        completed: false,
+                                                    })
+                                                }}
+                                            >
+                                                <AddIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Toolbar>
+                                    <TableContainer component={Paper}>
+                                        <Table
+
+                                            size={"small"}
+                                            aria-label="credit notes table"
+                                        >
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Description</TableCell>
+                                                    <TableCell>Completed</TableCell>
+                                                    <TableCell>&nbsp;</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody >
+                                                {fields.map((field, index) => (
+                                                    <TableRow key={index} >
+                                                        <TableCell>
+                                                            <MauTextField
+                                                                size={"small"}
+                                                                rules={{
+                                                                    required: true,
+                                                                    minLength: 4
+                                                                }}
+                                                                control={control}
+                                                                name={`items.${index}.description`}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <MauCheckbox
+                                                                control={control}
+                                                                name={`items.${index}.completed`}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <IconButton
+                                                                aria-label="filter list"
+                                                                onClick={() => {
+                                                                    remove(index)
+                                                                }}
+                                                            >
+                                                                <DeleteOutlineIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                    </TableRow>
+
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
                         <Button
                             disabled={isDisabled}
                             type="submit"

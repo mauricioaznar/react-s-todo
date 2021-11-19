@@ -43,6 +43,10 @@
                             _id
                             username
                         }
+                        items {
+                            description
+                            completed
+                        }
                     }
                 }
                 pageInfo {

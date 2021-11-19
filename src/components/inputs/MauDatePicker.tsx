@@ -45,7 +45,7 @@ const MauDatePicker = ({control, name, label, rules}: MauDatePickerProps) => {
                     const rule = error.type as keyof Rules
                     helperText = getRuleMessage({
                         rule: rule,
-                        fieldName: label,
+                        fieldName: label || name,
                         rules: rules,
                         value: value
                     })

@@ -15,6 +15,7 @@ interface Rules {
 
 interface MauTextFieldProps extends MauInputProps {
     rules: Rules;
+    size?: "medium" | "small"
 }
 
 const getRuleMessage = ({
@@ -38,7 +39,7 @@ const getRuleMessage = ({
 
 
 
-const MauTextField = ({control, name, label, rules}: MauTextFieldProps) => {
+const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFieldProps) => {
     return (
         <Controller
             control={control}
@@ -51,13 +52,14 @@ const MauTextField = ({control, name, label, rules}: MauTextFieldProps) => {
                     const rule = error.type as keyof Rules
                     helperText = getRuleMessage({
                         rule: rule,
-                        fieldName: label,
+                        fieldName: label || name,
                         rules: rules,
                         value: value
                     })
                 }
                 return (
                     <TextField
+                        size={size}
                         margin="normal"
                         fullWidth
                         value={value}
