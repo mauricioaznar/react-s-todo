@@ -14,18 +14,16 @@
     query GetTodos (
         $archived: Boolean,
         $completed: Boolean,
-        $first: Float,
+        $limit: Float,
         $after: String,
-        $last: Float,
         $before: String,
         $due: String
     ) {
         todos (
             archived: $archived,
             completed: $completed,
-            first: $first,
+            limit: $limit,
             after: $after,
-            last: $last,
             before: $before,
             due: $due
         ) {

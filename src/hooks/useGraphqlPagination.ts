@@ -3,121 +3,94 @@ import LocalStorage from "../helpers/local-storage";
 
 interface UseGraphqlPagination {
     afterKey?: string,
-    firstKey?: string,
     beforeKey?: string,
-    lastKey?: string,
+    limitKey?: string,
     limit?: number,
-
-
 }
 
 export const useGraphqlPagination = (props: UseGraphqlPagination) => {
 
-    const {afterKey, firstKey, beforeKey, lastKey, limit = 5} = props
+    const {afterKey, beforeKey, limit} = props
 
-    const [after, setAfter] = useState<null | string | undefined>(
+    const [after, setAfterLocal] = useState<null | string | undefined>(
         afterKey ? LocalStorage.getString(afterKey) : null
     )
-    const [first, setFirst] = useState<number | null | undefined>(
 
-        firstKey ? LocalStorage.getNumber(firstKey) : null
-
-    )
-    const [before, setBefore] = useState<null | string | undefined>(
+    const [before, setBeforeLocal] = useState<null | string | undefined>(
         beforeKey ? LocalStorage.getString(beforeKey) : null
     )
-    const [last, setLast] = useState<number | null | undefined>(
-        lastKey ? LocalStorage.getNumber(lastKey) : null
-    )
 
-
-    useEffect(() => {
-
-
-        setBefore(null)
-        if (beforeKey) {
-            LocalStorage.removeItem(beforeKey)
-        }
-        setLast(null)
-        if (lastKey) {
-            LocalStorage.removeItem(lastKey)
-        }
-
-        const newFirst = limit
-        setFirst(newFirst)
-        if (firstKey) {
-            LocalStorage.saveNumber(newFirst, firstKey)
-        }
-
-        if (afterKey) {
-            if (after) {
-                LocalStorage.saveString(after, afterKey)
-            } else {
-                LocalStorage.removeItem(afterKey)
-            }
-
-        }
-
-    }, [after])
-
-
-    useEffect(() => {
-
-
-        setAfter(null)
-        if (afterKey) {
-            LocalStorage.removeItem(afterKey)
-        }
-        setFirst(null)
-        if (firstKey) {
-            LocalStorage.removeItem(firstKey)
-        }
-
-        const newLast = limit
-        setFirst(newLast)
-        if (lastKey) {
-            LocalStorage.saveNumber(newLast, lastKey)
-        }
-
-        if (beforeKey) {
-            if (before) {
-                LocalStorage.saveString(before, beforeKey)
-            } else {
+    const setAfter = useCallback((a: string | null | undefined) => {
+        if (a) {
+            setBeforeLocal(null)
+            if (beforeKey) {
                 LocalStorage.removeItem(beforeKey)
             }
 
-        }
+            setAfterLocal(a)
+            if (afterKey) {
+                if (a) {
+                    LocalStorage.saveString(a, afterKey)
+                } else {
+                    LocalStorage.removeItem(afterKey)
+                }
 
+            }
+        }
+    }, [])
+
+
+    useEffect(() => {
+        setAfter(after)
+    }, [after])
+
+
+    const setBefore = useCallback((b: string | null | undefined) => {
+        if (b) {
+
+            setAfterLocal(null)
+            if (afterKey) {
+                LocalStorage.removeItem(afterKey)
+            }
+
+            setBeforeLocal(b)
+            if (beforeKey) {
+                if (b) {
+                    LocalStorage.saveString(b, beforeKey)
+                } else {
+                    LocalStorage.removeItem(beforeKey)
+                }
+
+            }
+        }
+    }, [])
+
+
+    useEffect(() => {
+        setBefore(before)
     }, [before])
 
 
+
     const resetGraphqlPagination = useCallback(() => {
-        setBefore(null)
+        setBeforeLocal(null)
         if (beforeKey) {
             LocalStorage.removeItem(beforeKey)
         }
-        setLast(null)
-        if (lastKey) {
-            LocalStorage.removeItem(lastKey)
-        }
-        setFirst(limit)
-        if (firstKey) {
-            LocalStorage.removeItem(limit.toString())
-        }
-        setAfter(null)
+        setAfterLocal(null)
         if (afterKey) {
             LocalStorage.removeItem(afterKey)
         }
     }, [])
 
 
+
     return {
         after,
         setAfter,
-        first,
         before,
+        limit,
         setBefore,
-        last,
         resetGraphqlPagination
     }
 

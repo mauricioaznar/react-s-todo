@@ -42,8 +42,7 @@ import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
 
 // constants
 const TODO_AFTER = 'todo_after'
-const TODO_FIRST = 'todo_first'
-const TODO_LAST = 'todo_last'
+const TODO_LIMIT = 'todo_limit'
 const TODO_BEFORE = 'todo_before'
 const TODO_DUE = 'todo_due'
 const TODO_ARCHIVED = 'todo_archived'
@@ -57,11 +56,10 @@ export default function TodoList() {
     const [archived, setArchived] = useState(LocalStorage.getBoolean(TODO_ARCHIVED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE))
 
-    const { first, last, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
+    const { limit, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
         afterKey: TODO_AFTER,
-        firstKey: TODO_FIRST,
         beforeKey: TODO_BEFORE,
-        lastKey: TODO_LAST,
+        limitKey: TODO_LIMIT,
         limit: 10
     })
 
@@ -70,8 +68,7 @@ export default function TodoList() {
             archived: archived,
             completed: completed,
             due: due,
-            first: first,
-            last: last,
+            limit: limit,
             after: after,
             before: before
         },
@@ -80,16 +77,14 @@ export default function TodoList() {
         }
     })
 
-
     const [firstRender, setFirstRender] = useState(true)
 
     const edges = data?.todos.page.edges
 
     const offset = data?.todos?.pageData?.offset || 0
     const count = data?.todos?.pageData?.count || 0
-    const limit = data?.todos?.pageData?.limit || 0
 
-    const forwardDisabled = (data?.todos?.pageData) ? (offset >= count - limit) : true
+    const forwardDisabled = (data?.todos?.pageData) ? (offset >= count - (limit ? limit : 0)) : true
 
 
 
@@ -251,7 +246,7 @@ export default function TodoList() {
                             </TableHead>
                             <TableBody>
                                 {
-                                    loading && first
+                                    loading
                                         ? <TableRow>
                                             <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
                                                 <CircularProgress />
