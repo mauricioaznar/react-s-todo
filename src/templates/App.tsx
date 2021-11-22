@@ -48,6 +48,7 @@ import {useApolloClient} from "@apollo/client";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
 import ColorModeContext from "../services/color-mode-context";
+import TodoEnhancedList from "./todo/TodoEnhancedList";
 
 interface RouterLink {
     title: string;
@@ -71,6 +72,14 @@ const links: RouterLink[] = [
         component: TodoList,
         navbar: true,
         title: 'Todos'
+    },
+    {
+        icon: <FormatListBulletedIcon/>,
+        name: 'TodoEnhancedList',
+        path: '/todoEnhancedList',
+        component: TodoEnhancedList,
+        navbar: true,
+        title: 'Todos enhanced'
     },
     {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: TodoForm, title: 'todo'},
 ];
