@@ -45,6 +45,7 @@ import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/form
 import {TodoNode} from "../../types/todo";
 import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
+import moment from "moment";
 
 
 // constants
@@ -54,6 +55,9 @@ const TODO_BEFORE = 'todo_before'
 const TODO_DUE = 'todo_due'
 const TODO_ARCHIVED = 'todo_archived'
 const TODO_COMPLETED = 'todo_completed'
+
+
+// month picker bug https://github.com/mui-org/material-ui/issues/28352
 
 export default function TodoEnhancedList() {
 
@@ -157,7 +161,11 @@ export default function TodoEnhancedList() {
                                 value={due}
                                 clearable={true}
                                 onChange={(newValue) => {
-                                    setDue(newValue);
+                                    if (moment.isMoment(newValue)) {
+                                        moment(newValue).format(YEAR_MONTH_FORMAT)
+                                    } else {
+                                        setDue(newValue)
+                                    }
                                     LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
                                 }}
                                 renderInput={({InputProps, ...params}) => {
