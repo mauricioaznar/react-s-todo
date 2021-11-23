@@ -162,7 +162,8 @@ export default function TodoEnhancedList() {
                                 clearable={true}
                                 onChange={(newValue) => {
                                     if (moment.isMoment(newValue)) {
-                                        moment(newValue).format(YEAR_MONTH_FORMAT)
+                                        const date = moment(newValue).format(YEAR_MONTH_FORMAT)
+                                        setDue(date)
                                     } else {
                                         setDue(newValue)
                                     }
