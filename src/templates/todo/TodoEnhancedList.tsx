@@ -30,7 +30,14 @@ import TextField from "@mui/material/TextField";
 import {DatePicker} from "@mui/lab";
 
 // components
-import {namedOperations, TodoEdge, useDeleteTodoMutation, useGetTodosQuery} from "../../schema";
+import {
+    ColumnOrder,
+    FilterTodoColumn,
+    namedOperations,
+    TodoEdge,
+    useDeleteTodoMutation,
+    useGetTodosQuery
+} from "../../schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
@@ -48,15 +55,13 @@ const TODO_DUE = 'todo_due'
 const TODO_ARCHIVED = 'todo_archived'
 const TODO_COMPLETED = 'todo_completed'
 
-type Order = 'asc' | 'desc' | null;
-
 export default function TodoEnhancedList() {
 
     const history = useHistory()
 
 
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof TodoNode>('_id');
+    const [order, setOrder] = React.useState<ColumnOrder>(ColumnOrder.Desc);
+    const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
 
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [archived, setArchived] = useState(LocalStorage.getBoolean(TODO_ARCHIVED))
@@ -76,7 +81,9 @@ export default function TodoEnhancedList() {
             due: due,
             limit: limit,
             after: after,
-            before: before
+            before: before,
+            order: order,
+            orderBy: orderBy
         },
         onCompleted: () => {
             setFirstRender(false)
@@ -113,18 +120,18 @@ export default function TodoEnhancedList() {
         history.push('/todoForm')
     }
 
-    function handleOrderBy(event: React.MouseEvent<unknown>, property: keyof TodoNode) {
+    function handleOrderBy(event: React.MouseEvent<unknown>, property: FilterTodoColumn) {
         if (property !== orderBy) {
             setOrderBy(property)
-            setOrder('asc')
-        } else if (property === orderBy && order === 'asc') {
-            setOrder('desc')
+            setOrder(ColumnOrder.Asc)
+        } else if (property === orderBy && order === ColumnOrder.Asc) {
+            setOrder(ColumnOrder.Desc)
         } else if (property === orderBy && order === null) {
-            setOrder('asc')
+            setOrder(ColumnOrder.Asc)
             setOrderBy(property)
         } else {
-            setOrderBy('_id')
-            setOrder(null)
+            setOrderBy(FilterTodoColumn.Id)
+            setOrder(ColumnOrder.Desc)
         }
     }
 
@@ -260,11 +267,17 @@ export default function TodoEnhancedList() {
                                     <SortableHead
                                         onRequestSort={handleOrderBy}
                                         order={order}
-                                        title={'description'}
+                                        title={FilterTodoColumn.Description}
                                         orderBy={orderBy}
                                         width={'30%'}
                                     />
-                                    <TableCell width={'20%'}>Due</TableCell>
+                                    <SortableHead
+                                        onRequestSort={handleOrderBy}
+                                        order={order}
+                                        title={FilterTodoColumn.Due}
+                                        orderBy={orderBy}
+                                        width={'20%'}
+                                    />
                                     <TableCell width={'10%'}>Completed</TableCell>
                                     <TableCell width={'20%'}>User</TableCell>
                                     <TableCell width={'10%'}>Actions</TableCell>
@@ -302,10 +315,10 @@ export default function TodoEnhancedList() {
 
 
 interface EnhancedTableProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TodoNode) => void;
-    order: Order;
-    orderBy: keyof TodoNode |  null;
-    title: keyof TodoNode;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: FilterTodoColumn) => void;
+    order: ColumnOrder;
+    orderBy: FilterTodoColumn |  null;
+    title: FilterTodoColumn;
     width?: string;
 
 }
@@ -314,7 +327,7 @@ function SortableHead (props: EnhancedTableProps) {
     const { onRequestSort, order, orderBy, title, width } = props
 
     const createSortHandler =
-        (property: keyof TodoNode) => (event: React.MouseEvent<unknown>) => {
+        (property: FilterTodoColumn) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
 

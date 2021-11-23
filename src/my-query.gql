@@ -17,7 +17,9 @@
         $limit: Float,
         $after: String,
         $before: String,
-        $due: String
+        $due: String,
+        $orderBy: FilterTodoColumn,
+        $order: ColumnOrder,
     ) {
         todos (
             archived: $archived,
@@ -25,7 +27,9 @@
             limit: $limit,
             after: $after,
             before: $before,
-            due: $due
+            due: $due,
+            order: $order,
+            orderBy: $orderBy
         ) {
             page {
                 edges {

@@ -30,6 +30,8 @@ export type QueryTodosArgs = {
   completed?: Maybe<Scalars['Boolean']>;
   due?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Float']>;
+  order?: Maybe<ColumnOrder>;
+  orderBy?: Maybe<FilterTodoColumn>;
 };
 
 export type Cat = {
@@ -52,6 +54,17 @@ export type User = {
   _id: Scalars['String'];
   username: Scalars['String'];
 };
+
+export enum ColumnOrder {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
+export enum FilterTodoColumn {
+  Id = '_id',
+  Description = 'description',
+  Due = 'due'
+}
 
 export type TodoResponse = {
   __typename?: 'TodoResponse';
@@ -242,8 +255,8 @@ export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const GetTodosDocument = gql`
-    query GetTodos($archived: Boolean, $completed: Boolean, $limit: Float, $after: String, $before: String, $due: String) {
-  todos(archived: $archived, completed: $completed, limit: $limit, after: $after, before: $before, due: $due) {
+    query GetTodos($archived: Boolean, $completed: Boolean, $limit: Float, $after: String, $before: String, $due: String, $orderBy: FilterTodoColumn, $order: ColumnOrder) {
+  todos(archived: $archived, completed: $completed, limit: $limit, after: $after, before: $before, due: $due, order: $order, orderBy: $orderBy) {
     page {
       edges {
         cursor
@@ -298,6 +311,8 @@ export const GetTodosDocument = gql`
  *      after: // value for 'after'
  *      before: // value for 'before'
  *      due: // value for 'due'
+ *      orderBy: // value for 'orderBy'
+ *      order: // value for 'order'
  *   },
  * });
  */
@@ -690,6 +705,8 @@ export type GetTodosQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   due?: Maybe<Scalars['String']>;
+  orderBy?: Maybe<FilterTodoColumn>;
+  order?: Maybe<ColumnOrder>;
 }>;
 
 
