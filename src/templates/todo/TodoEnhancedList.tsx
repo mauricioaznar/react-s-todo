@@ -154,7 +154,7 @@ export default function TodoEnhancedList() {
                     <Grid container spacing={2} alignItems={'center'}>
                         <Grid item sx={{ mr: 2 }}>
                             <DatePicker
-                                views={['year', 'month']}
+                                views={due ? ['month'] : ['year', 'month']}
                                 mask={YEAR_MONTH_MASK}
                                 inputFormat={YEAR_MONTH_FORMAT}
                                 label={'Selected due'}
@@ -279,16 +279,15 @@ export default function TodoEnhancedList() {
                                         order={order}
                                         title={FilterTodoColumn.Description}
                                         orderBy={orderBy}
-                                        width={'30%'}
+                                        width={'35%'}
                                     />
                                     <SortableHead
                                         onRequestSort={handleOrderBy}
                                         order={order}
                                         title={FilterTodoColumn.Due}
                                         orderBy={orderBy}
-                                        width={'20%'}
+                                        width={'25%'}
                                     />
-                                    <TableCell width={'10%'}>Completed</TableCell>
                                     <TableCell width={'20%'}>User</TableCell>
                                     <TableCell width={'10%'}>Actions</TableCell>
                                 </TableRow>
@@ -420,24 +419,6 @@ function TodoCells({todo}: { todo: TodoNode }) {
                 {
                     formatDate(todo.due)
                 }
-            </TableCell>
-            <TableCell
-                align={'center'}
-            >
-                <Box
-                    sx={{
-                        '& > :not(style)': {
-                            m: 2,
-                        },
-                    }}
-                >
-                    {
-                        todo.completed
-                        ? <CheckBoxIcon fontSize={'medium'} />
-                        : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
-                    }
-                </Box>
-
             </TableCell>
             <TableCell>
                 {todo.user?.username}

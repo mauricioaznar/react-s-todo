@@ -43,7 +43,6 @@ import {useActions} from "../hooks/useActions";
 import SignInForm from "./auth/SignInForm";
 import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
-import TodoList from "./todo/TodoList";
 import {useApolloClient} from "@apollo/client";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
@@ -67,16 +66,8 @@ const links: RouterLink[] = [
     {icon: <PeopleAltIcon/>, name: 'UserList', path: '/userList', component: UserList, navbar: true, title: 'Users'},
     {
         icon: <FormatListBulletedIcon/>,
-        name: 'TodoList',
+        name: 'Todoist',
         path: '/todoList',
-        component: TodoList,
-        navbar: true,
-        title: 'Todos'
-    },
-    {
-        icon: <FormatListBulletedIcon/>,
-        name: 'TodoEnhancedList',
-        path: '/todoEnhancedList',
         component: TodoEnhancedList,
         navbar: true,
         title: 'Todos enhanced'

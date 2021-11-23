@@ -73,7 +73,6 @@ export default function TodoForm() {
         defaultValues: {
             description: todo?.description || '',
             due: todo?.due || '',
-            completed: todo?.completed || false,
             archived: todo?.archived || false,
             locked: todo?.locked || false,
             items: todo?.items || [],
@@ -104,14 +103,13 @@ export default function TodoForm() {
     });
 
     const onSubmit = async (data: TodoFormInputs) => {
-        const {description, due, completed, locked, archived, items} = data
+        const {description, due, locked, archived, items} = data
 
         setIsDisabled(true)
 
         const options = {
             todoInput: {
                 description: description,
-                completed: completed,
                 locked: locked,
                 archived: archived,
                 due: due ? due.toString() : '',
@@ -192,11 +190,6 @@ export default function TodoForm() {
                             label={'Due'}
                             control={control}
                             name="due"
-                        />
-                        <MauCheckbox
-                            control={control}
-                            name={'completed'}
-                            label={'Completed'}
                         />
                         <MauCheckbox
                             control={control}

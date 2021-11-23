@@ -37,7 +37,6 @@
                     node {
                         _id
                         description
-                        completed
                         due
                         locked
                         archived
