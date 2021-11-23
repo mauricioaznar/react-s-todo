@@ -28,9 +28,9 @@ export function getNumber(key: string): number | null {
         : null
 }
 
-export function saveMomentDate(value: string | null, key: string) {
+export function saveMomentDate(value: string | null, key: string, format: string = DATE_FORMAT) {
     if (moment.isMoment(value)) {
-        window.localStorage.setItem(key, value.format(DATE_FORMAT))
+        window.localStorage.setItem(key, value.format(format))
     } else if (typeof value === 'string') {
         window.localStorage.setItem(key, value)
     } else {
@@ -39,9 +39,9 @@ export function saveMomentDate(value: string | null, key: string) {
 
 }
 
-export function getMomentDate(key: string) {
+export function getMomentDate(key: string, format: string = DATE_FORMAT) {
     return window.localStorage.getItem(key) !== null
-        ? moment(window.localStorage.getItem(key)).format(DATE_FORMAT)
+        ? moment(window.localStorage.getItem(key)).format(format)
         : null
 }
 

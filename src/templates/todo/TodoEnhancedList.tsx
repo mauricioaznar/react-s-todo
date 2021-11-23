@@ -41,7 +41,7 @@ import {
 import MauSnackbar from "../../components/MauSnackbar";
 import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {DATE_FORMAT, DATE_MASK, formatDate} from "../../helpers/format-date";
+import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/format-date";
 import {TodoNode} from "../../types/todo";
 import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
@@ -65,7 +65,7 @@ export default function TodoEnhancedList() {
 
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [archived, setArchived] = useState(LocalStorage.getBoolean(TODO_ARCHIVED))
-    const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE))
+    const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
 
     const { limit, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
         afterKey: TODO_AFTER,
@@ -150,14 +150,15 @@ export default function TodoEnhancedList() {
                     <Grid container spacing={2} alignItems={'center'}>
                         <Grid item sx={{ mr: 2 }}>
                             <DatePicker
-                                mask={DATE_MASK}
-                                inputFormat={DATE_FORMAT}
+                                views={['year', 'month']}
+                                mask={YEAR_MONTH_MASK}
+                                inputFormat={YEAR_MONTH_FORMAT}
                                 label={'Selected due'}
                                 value={due}
                                 clearable={true}
                                 onChange={(newValue) => {
                                     setDue(newValue);
-                                    LocalStorage.saveMomentDate(newValue, TODO_DUE)
+                                    LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
                                 }}
                                 renderInput={({InputProps, ...params}) => {
                                     return (
