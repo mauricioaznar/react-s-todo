@@ -11,8 +11,6 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
@@ -53,13 +51,18 @@ const TODO_AFTER = 'todo_after'
 const TODO_LIMIT = 'todo_limit'
 const TODO_BEFORE = 'todo_before'
 const TODO_DUE = 'todo_due'
-const TODO_ARCHIVED = 'todo_archived'
 const TODO_COMPLETED = 'todo_completed'
 
 
 // month picker bug https://github.com/mui-org/material-ui/issues/28352
 
-export default function TodoEnhancedList() {
+interface TodoListProps {
+    archived?: boolean;
+}
+
+export default function TodoList(props: TodoListProps) {
+
+    const { archived = false } = props
 
     const history = useHistory()
 
@@ -68,7 +71,6 @@ export default function TodoEnhancedList() {
     const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
 
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
-    const [archived, setArchived] = useState(LocalStorage.getBoolean(TODO_ARCHIVED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
 
     const { limit, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
@@ -230,26 +232,10 @@ export default function TodoEnhancedList() {
                             <IconButton
                                 sx={{ mr: 2 }}
                                 onClick={() => {
-                                    const newArchived = !archived
-                                    LocalStorage.saveBoolean(newArchived, TODO_ARCHIVED)
-                                    setArchived(newArchived)
-                                    resetGraphqlPagination()
-                                }}
-                            >
-                                {
-                                    archived
-                                        ? <ArchiveIcon fontSize={'medium'} />
-                                        : <ArchiveOutlinedIcon fontSize={'medium'} />
-                                }
-                            </IconButton>
-                        </Grid>
-                        <Grid item>
-                            <IconButton
-                                sx={{ mr: 2 }}
-                                onClick={() => {
                                     const newCompleted = !completed
                                     LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
                                     setCompleted(newCompleted)
+                                    resetGraphqlPagination()
                                 }}
                             >
                                 {

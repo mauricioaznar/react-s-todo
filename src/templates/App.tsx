@@ -1,12 +1,10 @@
 import * as React from 'react';
-import {ComponentType, ReactElement} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {ReactElement} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import {animated, Spring} from 'react-spring'
 
 // mui
 import Box from '@mui/material/Box';
-import PetsIcon from '@mui/icons-material/Pets';
-import InputIcon from '@mui/icons-material/Input';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -31,13 +29,12 @@ import {
     ListItemText,
     Paper,
     Toolbar,
-    Typography, useTheme
+    Typography,
+    useTheme
 } from "@mui/material";
 
 
 // local
-import CatList from "./cat/CatList";
-import CatForm from "./cat/CatForm";
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
 import SignInForm from "./auth/SignInForm";
@@ -47,32 +44,38 @@ import {useApolloClient} from "@apollo/client";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
 import ColorModeContext from "../services/color-mode-context";
-import TodoEnhancedList from "./todo/TodoEnhancedList";
+import TodoList from "./todo/TodoList";
 
 interface RouterLink {
     title: string;
     icon: ReactElement<any, any>,
     name: string;
     path: string;
-    component: ComponentType<any>;
+    component: ReactElement<any, any>;
     exact?: boolean;
     navbar?: boolean;
 }
 
 const links: RouterLink[] = [
-    {icon: <PetsIcon/>, name: 'CatList', path: '/', component: CatList, exact: true, navbar: true, title: 'Cats'},
-    {icon: <InputIcon/>, name: 'CatForm', path: '/catForm', component: CatForm, title: 'Cat'},
-    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: SignInForm, title: 'Sign in'},
-    {icon: <PeopleAltIcon/>, name: 'UserList', path: '/userList', component: UserList, navbar: true, title: 'Users'},
+    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <SignInForm />, title: 'Sign in'},
+    {icon: <PeopleAltIcon/>, name: 'UserList', path: '/users', component: <UserList />, navbar: true, title: 'Users'},
     {
         icon: <FormatListBulletedIcon/>,
-        name: 'Todoist',
-        path: '/todoList',
-        component: TodoEnhancedList,
+        name: 'TodoList',
+        path: '/todos',
+        component: <TodoList archived={false} />,
         navbar: true,
-        title: 'Todos enhanced'
+        title: 'Todos'
     },
-    {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: TodoForm, title: 'todo'},
+    {
+        icon: <FormatListBulletedIcon/>,
+        name: 'Archive',
+        path: '/archive',
+        component: <TodoList archived={true} />,
+        navbar: true,
+        title: 'Archive'
+    },
+    {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: <TodoForm />, title: 'todo'},
 ];
 
 const drawerWidth: number = 240;
@@ -86,8 +89,6 @@ export default function App() {
     };
     const client = useApolloClient()
     const {logout} = useActions()
-    // const theme = useTheme();
-    // const matchesSmAndUp = useMediaQuery(theme.breakpoints.up('sm'));
 
     useTodoSubscription(
         {
@@ -226,7 +227,6 @@ export default function App() {
                 <Toolbar/>
                 <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                     <Grid container spacing={3} justifyContent={'center'}>
-                        {/* Chart */}
                         <Grid item xs>
                             <Paper
                                 sx={{
@@ -238,32 +238,35 @@ export default function App() {
                                 }}
                             >
                                 <Switch>
-                                    {links.map(({ name, path, component: Component, exact}) => (
-                                        <Route
-                                            key={name}
-                                            path={path}
-                                            render={(routeProps) => {
-                                                return (
-                                                    <Spring
-                                                        config={{
-                                                            duration: 500
-                                                        }}
-                                                        from={{ opacity: 0 }}
-                                                        to={{ opacity: 1 }}
-                                                    >
-                                                        {
-                                                            (styles) => {
-                                                                return <animated.div style={styles}>
-                                                                    <Component {...routeProps}  />
-                                                                </animated.div>
+                                    {links.map(({ name, path, component: Elem, exact}) => {
+                                        return (
+                                            <Route
+                                                key={name}
+                                                path={path}
+                                                render={() => {
+                                                    return (
+                                                        <Spring
+                                                            config={{
+                                                                duration: 500
+                                                            }}
+                                                            from={{ opacity: 0 }}
+                                                            to={{ opacity: 1 }}
+                                                        >
+                                                            {
+                                                                (styles) => {
+                                                                    return <animated.div style={styles}>
+                                                                        { Elem }
+                                                                    </animated.div>
+                                                                }
                                                             }
-                                                        }
-                                                    </Spring>
-                                                )
-                                            }}
-                                            exact={exact || false}
-                                        />
-                                    ))}
+                                                        </Spring>
+                                                    )
+                                                }}
+                                                exact={exact || false}
+                                            />
+                                        )
+                                    })}
+                                    <Redirect to={'/todos'} from={'/'}/>
                                 </Switch>
                             </Paper>
                         </Grid>
