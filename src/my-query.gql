@@ -39,6 +39,7 @@
                         description
                         due
                         locked
+                        completed_percentage
                         archived
                         user {
                             _id

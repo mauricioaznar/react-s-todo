@@ -279,15 +279,16 @@ export default function TodoEnhancedList() {
                                         order={order}
                                         title={FilterTodoColumn.Description}
                                         orderBy={orderBy}
-                                        width={'35%'}
+                                        width={'30%'}
                                     />
                                     <SortableHead
                                         onRequestSort={handleOrderBy}
                                         order={order}
                                         title={FilterTodoColumn.Due}
                                         orderBy={orderBy}
-                                        width={'25%'}
+                                        width={'20%'}
                                     />
+                                    <TableCell width={'10%'}>Completed</TableCell>
                                     <TableCell width={'20%'}>User</TableCell>
                                     <TableCell width={'10%'}>Actions</TableCell>
                                 </TableRow>
@@ -420,6 +421,7 @@ function TodoCells({todo}: { todo: TodoNode }) {
                     formatDate(todo.due)
                 }
             </TableCell>
+            <TableCell>{ todo.completed_percentage }</TableCell>
             <TableCell>
                 {todo.user?.username}
             </TableCell>
