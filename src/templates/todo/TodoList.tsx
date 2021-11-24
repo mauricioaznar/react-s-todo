@@ -2,8 +2,10 @@ import * as React from 'react'
 import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
 import {useHistory} from 'react-router-dom'
+import moment from "moment";
+import {ApolloError} from "@apollo/client";
 
-// icons
+// mui
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,7 +16,7 @@ import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
-import {Box, CircularProgress, Fab, IconButton, InputAdornment, TableSortLabel, Typography} from "@mui/material";
+import {Box, CircularProgress, Fab, IconButton, InputAdornment, Typography} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -27,7 +29,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import {DatePicker} from "@mui/lab";
 
-// components
+// local
 import {
     ColumnOrder,
     FilterTodoColumn,
@@ -37,13 +39,13 @@ import {
     useGetTodosQuery
 } from "../../schema";
 import MauSnackbar from "../../components/MauSnackbar";
-import {ApolloError} from "@apollo/client";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/format-date";
-import {TodoNode} from "../../types/todo";
+import {TodoEdges, TodoNode} from "../../types/todo";
 import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
-import moment from "moment";
+import {EnhancedTableProps} from "../../components/enhanced-table/types";
+import EnhancedTableHead from "../../components/enhanced-table/enhanced-table-head";
 
 
 // constants
@@ -65,7 +67,6 @@ export default function TodoList(props: TodoListProps) {
     const { archived = false } = props
 
     const history = useHistory()
-
 
     const [order, setOrder] = React.useState<ColumnOrder>(ColumnOrder.Desc);
     const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
@@ -99,28 +100,9 @@ export default function TodoList(props: TodoListProps) {
     const [firstRender, setFirstRender] = useState(true)
 
     const edges = data?.todos.page.edges
-
     const offset = data?.todos?.pageData?.offset || 0
     const count = data?.todos?.pageData?.count || 0
-
     const forwardDisabled = (data?.todos?.pageData) ? (offset >= count - (limit ? limit : 0)) : true
-
-
-
-    // enter and leave overlapping
-    // https://github.com/pmndrs/react-spring/issues/1064
-    const transitions = useTransition( edges, {
-        keys: (item: unknown) => {
-            const todo = item as TodoEdge
-            return todo.node?._id!
-        },
-        from: { opacity: 0, x: firstRender ? '0%' : '10%' },
-        enter: { opacity: 1, x: '0%', },
-        leave: { opacity: 0, x: '10%' },
-        order: ['enter', 'update', 'leave'],
-        trail: 150,
-        config: springConfig.gentle,
-    })
 
     function handleCreateClick() {
         history.push('/todoForm')
@@ -141,7 +123,6 @@ export default function TodoList(props: TodoListProps) {
         }
     }
 
-    const AnimatedTableRow = animated(TableRow)
 
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
@@ -255,51 +236,14 @@ export default function TodoList(props: TodoListProps) {
             </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <TableContainer component={Paper} sx={{overflowY: 'hidden', overflowX: 'hidden'}}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell width={'10%'}>&nbsp;</TableCell>
-                                    <SortableHead
-                                        onRequestSort={handleOrderBy}
-                                        order={order}
-                                        title={FilterTodoColumn.Description}
-                                        orderBy={orderBy}
-                                        width={'30%'}
-                                    />
-                                    <SortableHead
-                                        onRequestSort={handleOrderBy}
-                                        order={order}
-                                        title={FilterTodoColumn.Due}
-                                        orderBy={orderBy}
-                                        width={'20%'}
-                                    />
-                                    <TableCell width={'10%'}>Completed</TableCell>
-                                    <TableCell width={'20%'}>User</TableCell>
-                                    <TableCell width={'10%'}>Actions</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    loading
-                                        ? <TableRow>
-                                            <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
-                                                <CircularProgress />
-                                            </TableCell>
-                                        </TableRow>
-                                        : transitions((styles: any, todo: any) => {
-                                            const todoItem = todo as { node: any }
-                                            const todoNode = todoItem.node as TodoNode
-                                            return (
-                                                todo && <AnimatedTableRow style={styles}>
-                                                    <TodoCells todo={todoNode}/>
-                                                </AnimatedTableRow>
-                                            )
-                                        })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <EnhancedTodoTable
+                        edges={edges}
+                        onRequestSort={handleOrderBy}
+                        order={order}
+                        orderBy={orderBy}
+                        loading={loading}
+                        firstRender={firstRender}
+                    />
                 </Grid>
             </Grid>
             <MauSnackbar
@@ -310,38 +254,85 @@ export default function TodoList(props: TodoListProps) {
 }
 
 
-interface EnhancedTableProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: FilterTodoColumn) => void;
-    order: ColumnOrder;
-    orderBy: FilterTodoColumn |  null;
-    title: FilterTodoColumn;
-    width?: string;
 
+
+export interface EnhancedTodoTableProps<T> extends EnhancedTableProps<T> {
+    firstRender: boolean;
+    loading: boolean;
+    edges: TodoEdges | undefined | null;
 }
 
-function SortableHead (props: EnhancedTableProps) {
-    const { onRequestSort, order, orderBy, title, width } = props
+function EnhancedTodoTable (props: EnhancedTodoTableProps<FilterTodoColumn>) {
+    const { onRequestSort, order, orderBy, firstRender, loading, edges } = props
 
-    const createSortHandler =
-        (property: FilterTodoColumn) => (event: React.MouseEvent<unknown>) => {
-            onRequestSort(event, property);
-        };
+
+    // enter and leave overlapping
+    // https://github.com/pmndrs/react-spring/issues/1064
+    const transitions = useTransition( edges, {
+        keys: (item: unknown) => {
+            const todo = item as TodoEdge
+            return todo.node?._id!
+        },
+        from: { opacity: 0, x: firstRender ? '0%' : '10%' },
+        enter: { opacity: 1, x: '0%', },
+        leave: { opacity: 0, x: '10%' },
+        order: ['enter', 'update', 'leave'],
+        trail: 150,
+        config: springConfig.gentle,
+    })
+
+
+    const AnimatedTableRow = animated(TableRow)
 
     return (
-        <TableCell
-            width={width ? width : 'auto'}
-            sortDirection={orderBy === title && order !== null ? order : false}
-        >
-            <TableSortLabel
-                active={orderBy === title}
-                direction={orderBy === title && order !== null ? order : 'asc'}
-                onClick={createSortHandler(title)}
-            >
-                {title}
-            </TableSortLabel>
-        </TableCell>
+        <TableContainer component={Paper} sx={{overflowY: 'hidden', overflowX: 'hidden'}}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell width={'10%'}>&nbsp;</TableCell>
+                        <EnhancedTableHead
+                            onRequestSort={onRequestSort}
+                            order={order}
+                            title={FilterTodoColumn.Description}
+                            orderBy={orderBy}
+                            width={'30%'}
+                        />
+                        <EnhancedTableHead
+                            onRequestSort={onRequestSort}
+                            order={order}
+                            title={FilterTodoColumn.Due}
+                            orderBy={orderBy}
+                            width={'20%'}
+                        />
+                        <TableCell width={'10%'}>Completed</TableCell>
+                        <TableCell width={'20%'}>User</TableCell>
+                        <TableCell width={'10%'}>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        loading
+                            ? <TableRow>
+                                <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                            : transitions((styles: any, todo: any) => {
+                                const todoItem = todo as { node: any }
+                                const todoNode = todoItem.node as TodoNode
+                                return (
+                                    todo && <AnimatedTableRow style={styles}>
+                                        <TodoCells todo={todoNode}/>
+                                    </AnimatedTableRow>
+                                )
+                            })
+                    }
+                </TableBody>
+            </Table>
+        </TableContainer>
     )
 }
+
 
 function TodoCells({todo}: { todo: TodoNode }) {
 

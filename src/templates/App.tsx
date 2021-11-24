@@ -2,6 +2,7 @@ import * as React from 'react';
 import {ReactElement} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {animated, Spring} from 'react-spring'
+import {useApolloClient} from "@apollo/client";
 
 // mui
 import Box from '@mui/material/Box';
@@ -40,7 +41,6 @@ import {useActions} from "../hooks/useActions";
 import SignInForm from "./auth/SignInForm";
 import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
-import {useApolloClient} from "@apollo/client";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
 import ColorModeContext from "../services/color-mode-context";
