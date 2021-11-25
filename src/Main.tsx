@@ -11,7 +11,7 @@ import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {createTheme} from "@mui/material";
 import ColorModeContext from "./services/color-mode-context";
-import {red} from "@mui/material/colors";
+import {amber, deepOrange, grey} from "@mui/material/colors";
 import BigLoader from "./components/BigLoader";
 
 
@@ -56,21 +56,67 @@ const Main = () => {
     );
 
     const memoTheme = React.useMemo(
-        () =>
-            createTheme({
+        () => {
+            const displayFont = {
+                fontFamily: [
+                    '"Bebas Neue"',
+                    'cursive'
+                ].join(',')
+            }
+            const sansFont = {
+                fontFamily: [
+                    '"Nunito"',
+                    'sans-serif'
+                ].join(',')
+            }
+            return createTheme({
                 palette: {
                     mode,
-                    primary: {
-                        main: '#556cd6',
-                    },
-                    secondary: {
-                        main: '#19857b',
-                    },
-                    error: {
-                        main: red.A400,
-                    },
+                    ...(mode === 'light'
+                        ? {
+                            // palette values for light mode
+                            common: {
+                                black: deepOrange[500],
+                                white: deepOrange[500]
+                            },
+                            primary: amber,
+                            divider: amber[100],
+                            background: {
+                                default: deepOrange[500],
+                                paper: deepOrange[900],
+                            },
+                            text: {
+                                primary: grey[900],
+                                secondary: grey[800],
+                            },
+                        }
+                        : {
+                            // palette values for dark mode
+                            primary: deepOrange,
+                            divider: deepOrange[700],
+                            background: {
+                                default:  deepOrange[500],
+                                paper: deepOrange[900],
+                            },
+                            text: {
+                                primary: '#fff',
+                                secondary: grey[500],
+                            },
+                        }),
                 },
-            }),
+                typography: {
+                    ...sansFont,
+                    h1: displayFont,
+                    h2: displayFont,
+                    h3: displayFont,
+                    h4: displayFont,
+                    h5: displayFont,
+                    h6: displayFont,
+
+                }
+            })
+        }
+,
         [mode],
     );
 

@@ -1,10 +1,8 @@
 import React from 'react'
 import {Controller} from "react-hook-form";
-import TextField from "@mui/material/TextField";
 import {MauInputProps} from "./common/MauInputProps";
-import {DatePicker} from "@mui/lab";
-import moment from "moment";
 import {DATE_FORMAT, DATE_MASK} from "../../helpers/format-date";
+import ClearableDatePicker from "../clearable-date-picker/clearable-date-picker";
 
 interface Rules {
     required?: boolean;
@@ -32,7 +30,7 @@ const getRuleMessage = ({
 
 
 
-const MauDatePicker = ({control, name, label, rules}: MauDatePickerProps) => {
+const MauDatePicker = ({control, name, label, rules, disabled}: MauDatePickerProps) => {
     return (
         <Controller
             control={control}
@@ -51,33 +49,18 @@ const MauDatePicker = ({control, name, label, rules}: MauDatePickerProps) => {
                     })
                 }
                 return (
-                    <DatePicker
+                    <ClearableDatePicker
+                        views={['day']}
+                        disabled={disabled}
                         mask={DATE_MASK}
                         inputFormat={DATE_FORMAT}
                         label={label}
                         value={value}
-                        clearable={true}
                         onChange={(newValue) => {
-                            if (moment.isMoment(newValue)) {
-                                onChange(newValue.format(DATE_FORMAT));
-                            } else {
-                                onChange(newValue);
-                            }
+                            onChange(newValue);
                         }}
-                        renderInput={(params) => {
-                            return (
-                                <TextField
-                                    {...params}
-                                    color={'primary'}
-                                    margin="normal"
-                                    fullWidth
-                                    error={!!error}
-                                    helperText={helperText}
-                                    label={label}
-                                    autoFocus
-                                />
-                            )
-                        }}
+                        error={!!error}
+                        helperText={helperText}
                     />
                 )
             }}

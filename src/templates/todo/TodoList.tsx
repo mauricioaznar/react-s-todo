@@ -2,7 +2,6 @@ import * as React from 'react'
 import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
 import {useHistory} from 'react-router-dom'
-import moment from "moment";
 import {ApolloError} from "@apollo/client";
 
 // mui
@@ -15,8 +14,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import CloseIcon from '@mui/icons-material/Close';
-import {Box, CircularProgress, Fab, IconButton, InputAdornment, Typography} from "@mui/material";
+import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,8 +24,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import {DatePicker} from "@mui/lab";
 
 // local
 import {
@@ -46,6 +42,7 @@ import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
 import {EnhancedTableProps} from "../../components/enhanced-table/types";
 import EnhancedTableHead from "../../components/enhanced-table/enhanced-table-head";
+import ClearableDatePicker from "../../components/clearable-date-picker/clearable-date-picker";
 
 
 // constants
@@ -56,7 +53,7 @@ const TODO_DUE = 'todo_due'
 const TODO_COMPLETED = 'todo_completed'
 
 
-// month picker bug https://github.com/mui-org/material-ui/issues/28352
+
 
 interface TodoListProps {
     archived?: boolean;
@@ -136,54 +133,20 @@ export default function TodoList(props: TodoListProps) {
                 <Grid item>
                     <Grid container spacing={2} alignItems={'center'}>
                         <Grid item sx={{ mr: 2 }}>
-                            <DatePicker
+                            <ClearableDatePicker
                                 views={due ? ['month'] : ['year', 'month']}
                                 mask={YEAR_MONTH_MASK}
                                 inputFormat={YEAR_MONTH_FORMAT}
                                 label={'Selected due'}
                                 value={due}
-                                clearable={true}
                                 onChange={(newValue) => {
-                                    if (moment.isMoment(newValue)) {
-                                        const date = moment(newValue).format(YEAR_MONTH_FORMAT)
-                                        setDue(date)
+                                    setDue(newValue)
+                                    if (newValue !== null) {
+                                        LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
                                     } else {
-                                        setDue(newValue)
+                                        LocalStorage.removeItem(TODO_DUE)
                                     }
-                                    LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
-                                }}
-                                renderInput={({InputProps, ...params}) => {
-                                    return (
-                                        <TextField
-                                            {...params}
-                                            color={'primary'}
-                                            margin="normal"
-                                            fullWidth
-                                            label={'Due'}
-                                            InputProps={{
-                                                endAdornment: <>
-                                                    {
-                                                        <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={() => {
-                                                                    setDue(null)
-                                                                    LocalStorage.removeItem(TODO_DUE)
-                                                                }}
-                                                                edge="end"
-                                                                disabled={!due}
-                                                            >
-                                                                <CloseIcon />
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    }
-                                                    {
-                                                        InputProps?.endAdornment
-                                                    }
-                                                </>
-                                            }}
-                                        />
-                                    )
+
                                 }}
                             />
                         </Grid>
