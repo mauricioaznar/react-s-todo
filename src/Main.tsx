@@ -11,7 +11,7 @@ import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {createTheme} from "@mui/material";
 import ColorModeContext from "./services/color-mode-context";
-import {amber, deepOrange, grey} from "@mui/material/colors";
+import {amber, blue, deepOrange, grey} from "@mui/material/colors";
 import BigLoader from "./components/BigLoader";
 
 
@@ -80,6 +80,7 @@ const Main = () => {
                                 white: deepOrange[500]
                             },
                             primary: amber,
+                            secondary: blue,
                             divider: amber[100],
                             background: {
                                 default: deepOrange[500],
@@ -93,6 +94,7 @@ const Main = () => {
                         : {
                             // palette values for dark mode
                             primary: deepOrange,
+                            secondary: blue,
                             divider: deepOrange[700],
                             background: {
                                 default:  deepOrange[500],
@@ -113,7 +115,20 @@ const Main = () => {
                     h5: displayFont,
                     h6: displayFont,
 
-                }
+                },
+                components: {
+                    // Name of the component
+                    MuiTableCell: {
+                        styleOverrides: {
+                            // Name of the slot
+                            root: {
+                                // Some CSS
+                                borderBottom: '1px solid transparent',
+                                borderBottomColor: blue.A400
+                            },
+                        },
+                    },
+                },
             })
         }
 ,
