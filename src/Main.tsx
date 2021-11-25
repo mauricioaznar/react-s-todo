@@ -69,42 +69,31 @@ const Main = () => {
                     'sans-serif'
                 ].join(',')
             }
+            const primary = mode === 'light' ? `#D98014` : `#E0AC84`
+            const secondary = mode === 'light' ? `#9937A6` : `#AC8466`
+            const divider = mode === 'light' ? `#D98014` : `#E6D7CC`
+            const backgroundPrimary = mode === 'light' ? `#5FA0D9` : `#614A39`
+            const backgroundPaper = mode === 'light' ? `#9ABBD9` : `#615B56`
+            const textPrimary = mode === 'light' ? grey["900"] : grey['50']
+            const textSecondary = mode === 'light' ? grey['500'] : grey['50']
             return createTheme({
                 palette: {
                     mode,
-                    ...(mode === 'light'
-                        ? {
-                            // palette values for light mode
-                            common: {
-                                black: deepOrange[500],
-                                white: deepOrange[500]
-                            },
-                            primary: amber,
-                            secondary: blue,
-                            divider: amber[100],
-                            background: {
-                                default: deepOrange[500],
-                                paper: deepOrange[900],
-                            },
-                            text: {
-                                primary: grey[900],
-                                secondary: grey[800],
-                            },
-                        }
-                        : {
-                            // palette values for dark mode
-                            primary: deepOrange,
-                            secondary: blue,
-                            divider: deepOrange[700],
-                            background: {
-                                default:  deepOrange[500],
-                                paper: deepOrange[900],
-                            },
-                            text: {
-                                primary: '#fff',
-                                secondary: grey[500],
-                            },
-                        }),
+                    primary: {
+                        main: primary
+                    },
+                    secondary: {
+                        main: secondary
+                    },
+                    divider: divider,
+                    background: {
+                        default: backgroundPrimary,
+                        paper: backgroundPaper,
+                    },
+                    text: {
+                        primary: textPrimary,
+                        secondary: textSecondary,
+                    },
                 },
                 typography: {
                     ...sansFont,
@@ -124,14 +113,29 @@ const Main = () => {
                             root: {
                                 // Some CSS
                                 borderBottom: '1px solid transparent',
-                                borderBottomColor: blue.A400
+                                borderBottomColor: divider
                             },
                         },
                     },
+                    MuiDrawer: {
+                        styleOverrides: {
+                            paper: {
+                                backgroundColor: secondary,
+                                color: textPrimary
+                            }
+                        }
+                    },
+                    MuiAppBar: {
+                        styleOverrides: {
+                            root: {
+                                backgroundColor: secondary,
+                                color: textPrimary
+                            }
+                        }
+                    }
                 },
             })
-        }
-,
+        },
         [mode],
     );
 

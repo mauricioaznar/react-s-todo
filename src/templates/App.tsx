@@ -83,6 +83,7 @@ const drawerWidth: number = 240;
 export default function App() {
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
+
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
