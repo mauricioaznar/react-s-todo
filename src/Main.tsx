@@ -11,7 +11,7 @@ import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {createTheme} from "@mui/material";
 import ColorModeContext from "./services/color-mode-context";
-import {amber, blue, deepOrange, grey} from "@mui/material/colors";
+import {grey} from "@mui/material/colors";
 import BigLoader from "./components/BigLoader";
 
 
