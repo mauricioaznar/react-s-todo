@@ -8,8 +8,8 @@ import {useApolloClient} from "@apollo/client";
 import Box from '@mui/material/Box';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import ModeNightIcon from '@mui/icons-material/ModeNight';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
@@ -29,6 +29,7 @@ import {
     ListItemIcon,
     ListItemText,
     Paper,
+    SvgIcon,
     Toolbar,
     Typography,
     useTheme
@@ -126,6 +127,14 @@ export default function App() {
                     >
                         <MenuIcon/>
                     </IconButton>
+                    {
+                        themeVariant ?
+                            <SvgIcon component={themeVariant.icon} sx={{
+                                mr: 2
+                            }} />
+                            : null
+                    }
+
                     <Typography
                         component="h1"
                         variant="h6"
@@ -133,7 +142,7 @@ export default function App() {
                         noWrap
                         sx={{flexGrow: 1}}
                     >
-                        Dashboard
+                        { themeVariant?.title }
                     </Typography>
                     <IconButton color="inherit" onClick={async () => {
                         await client.clearStore()
@@ -193,7 +202,7 @@ export default function App() {
                 <List style={{marginTop: `auto`}}>
                     <ListItem button={true} onClick={toggleThemeVariant}>
                         <ListItemIcon>
-                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                            {theme.palette.mode === 'dark' ? <ModeNightIcon /> : <WbSunnyIcon />}
                         </ListItemIcon>
                         <ListItemText>
                             {themeVariant?.title}

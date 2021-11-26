@@ -1,6 +1,12 @@
 import React from 'react'
 import {grey} from "@mui/material/colors";
-import {createTheme, Theme} from "@mui/material";
+import IcecreamIcon from '@mui/icons-material/Icecream';
+import ParkIcon from '@mui/icons-material/Park';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import ChildCareIcon from '@mui/icons-material/ChildCare';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import {createTheme, SvgIconTypeMap, Theme} from "@mui/material";
+import {OverridableComponent} from "@mui/material/OverridableComponent";
 
 export interface ThemeVariant {
     name: string;
@@ -11,6 +17,7 @@ export interface ThemeVariant {
     backgroundSecondary: string;
     mode: 'light' | 'dark';
     divider: string;
+    icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {muiName: string}
 }
 
 
@@ -27,8 +34,9 @@ const themes: ThemeVariant[] = [
         backgroundPrimary: `#5FA0D9`,
         backgroundSecondary: `#9ABBD9`,
         mode: 'light',
-        name: 'gum',
-        title: 'Gum'
+        name: 'ice_cream',
+        title: 'Ice Cream',
+        icon: IcecreamIcon
     },
     {
         primary: `#E0AC84`,
@@ -37,8 +45,9 @@ const themes: ThemeVariant[] = [
         backgroundPrimary: `#614A39`,
         backgroundSecondary: `#615B56`,
         mode: 'dark',
-        name: 'wood',
-        title: 'Wood'
+        name: 'forest',
+        title: 'Forest',
+        icon: ParkIcon
     },
     {
         primary: `#6F92BF`,
@@ -48,17 +57,30 @@ const themes: ThemeVariant[] = [
         backgroundSecondary: `#457ABF`,
         mode: 'dark',
         name: 'gaming',
-        title: 'Gaming'
+        title: 'Gaming',
+        icon: SportsEsportsIcon
     },
     {
         primary: `#F2CB05`,
         secondary: `#73260A`,
-        divider: `#F27405`,
+        divider: `#151340`,
         backgroundPrimary: `#151340`,
         backgroundSecondary: `#2B308C`,
         mode: 'dark',
         name: 'dwarves',
-        title: 'Dwarves'
+        title: 'Dwarves',
+        icon: ChildCareIcon
+    },
+    {
+        primary: `#91A646`,
+        secondary: `#F2B705`,
+        divider: `#D97904`,
+        backgroundPrimary: `#590202`,
+        backgroundSecondary: `#D91818`,
+        mode: 'light',
+        name: 'fast_food',
+        title: 'Fast Food',
+        icon: FastfoodIcon
     }
 ]
 
@@ -116,8 +138,8 @@ export const useThemeVariant: () => { themeVariantContextValue: ThemeVariantCont
             }
             const { mode: modeColor, primary, secondary, divider, backgroundPrimary, backgroundSecondary } = themeVariant
 
-            const textPrimary = modeColor === 'light' ? grey["900"] : grey['50']
-            const textSecondary = modeColor === 'light' ? grey['500'] : grey['50']
+            const textPrimary = modeColor === 'light' ? `#000000` : grey['50']
+            const textSecondary = modeColor === 'light' ? grey['900'] : grey['400']
 
             return createTheme({
                 palette: {
