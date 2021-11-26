@@ -29,7 +29,7 @@
             before: $before,
             due: $due,
             order: $order,
-            orderBy: $orderBy
+            orderBy: $orderBy,
         ) {
             page {
                 edges {

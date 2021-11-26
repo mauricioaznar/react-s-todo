@@ -53,15 +53,13 @@ const TODO_DUE = 'todo_due'
 const TODO_COMPLETED = 'todo_completed'
 
 
-
-
 interface TodoListProps {
     archived?: boolean;
 }
 
 export default function TodoList(props: TodoListProps) {
 
-    const { archived = false } = props
+    const {archived = false} = props
 
     const history = useHistory()
 
@@ -71,17 +69,17 @@ export default function TodoList(props: TodoListProps) {
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
 
-    const { limit, after, before, setBefore, setAfter, resetGraphqlPagination } = useGraphqlPagination({
+    const {limit, after, before, setBefore, setAfter, resetGraphqlPagination} = useGraphqlPagination({
         afterKey: TODO_AFTER,
         beforeKey: TODO_BEFORE,
         limitKey: TODO_LIMIT,
         limit: 10
     })
 
-    const { loading, data, error } = useGetTodosQuery({
+    const {loading, data, error} = useGetTodosQuery({
         variables: {
             archived: archived,
-            completed: completed,
+            completed: archived ? null : completed,
             due: due,
             limit: limit,
             after: after,
@@ -132,7 +130,7 @@ export default function TodoList(props: TodoListProps) {
                 </Grid>
                 <Grid item>
                     <Grid container spacing={2} alignItems={'center'}>
-                        <Grid item sx={{ mr: 2 }}>
+                        <Grid item sx={{mr: 2}}>
                             <ClearableDatePicker
                                 views={due ? ['month'] : ['year', 'month']}
                                 mask={YEAR_MONTH_MASK}
@@ -158,7 +156,7 @@ export default function TodoList(props: TodoListProps) {
                                     setBefore(newCursor)
                                 }}
                             >
-                                <ArrowBackIosIcon fontSize={'medium'} />
+                                <ArrowBackIosIcon fontSize={'medium'}/>
                             </IconButton>
                         </Grid>
                         <Grid item>
@@ -169,33 +167,32 @@ export default function TodoList(props: TodoListProps) {
                                     setAfter(newCursor)
                                 }}
                             >
-                                <ArrowForwardIosIcon fontSize={'medium'} />
+                                <ArrowForwardIosIcon fontSize={'medium'}/>
                             </IconButton>
                         </Grid>
-                        <Grid item>
-                            <Tooltip title={'completed'}>
-                                <IconButton
-                                    sx={{ mr: 2 }}
-                                    onClick={() => {
-                                        const newCompleted = !completed
-                                        LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
-                                        setCompleted(newCompleted)
-                                        resetGraphqlPagination()
-                                    }}
-                                >
-                                    {
-                                        completed
-                                            ? <CheckBoxIcon fontSize={'medium'} />
-                                            : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
-                                    }
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
-                                <AddIcon/>
-                            </Fab>
-                        </Grid>
+                        {
+                            !archived
+                                ? <Grid item>
+                                    <Tooltip title={'completed'}>
+                                        <IconButton
+                                            sx={{mr: 2}}
+                                            onClick={() => {
+                                                const newCompleted = !completed
+                                                LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
+                                                setCompleted(newCompleted)
+                                                resetGraphqlPagination()
+                                            }}
+                                        >
+                                            {
+                                                completed
+                                                    ? <CheckBoxIcon fontSize={'medium'}/>
+                                                    : <CheckBoxOutlineBlankIcon fontSize={'medium'}/>
+                                            }
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
+                                : null
+                        }
                     </Grid>
                 </Grid>
             </Grid>
@@ -214,11 +211,22 @@ export default function TodoList(props: TodoListProps) {
             <MauSnackbar
                 message={error ? error.message : ''}
             />
+            <Fab
+
+                sx={{
+                    margin: 0,
+                    top: 'auto',
+                    right: 20,
+                    bottom: 20,
+                    position: 'fixed',
+                    left: 'auto'
+                }}
+                size={'large'} color="primary" aria-label="add" onClick={handleCreateClick}>
+                <AddIcon/>
+            </Fab>
         </Container>
     );
 }
-
-
 
 
 export interface EnhancedTodoTableProps<T> extends EnhancedTableProps<T> {
@@ -227,20 +235,20 @@ export interface EnhancedTodoTableProps<T> extends EnhancedTableProps<T> {
     edges: TodoEdges | undefined | null;
 }
 
-function EnhancedTodoTable (props: EnhancedTodoTableProps<FilterTodoColumn>) {
-    const { onRequestSort, order, orderBy, firstRender, loading, edges } = props
+function EnhancedTodoTable(props: EnhancedTodoTableProps<FilterTodoColumn>) {
+    const {onRequestSort, order, orderBy, firstRender, loading, edges} = props
 
 
     // enter and leave overlapping
     // https://github.com/pmndrs/react-spring/issues/1064
-    const transitions = useTransition( edges, {
+    const transitions = useTransition(edges, {
         keys: (item: unknown) => {
             const todo = item as TodoEdge
             return todo.node?._id!
         },
-        from: { opacity: 0, x: firstRender ? '0%' : '10%' },
-        enter: { opacity: 1, x: '0%', },
-        leave: { opacity: 0, x: '10%' },
+        from: {opacity: 0, x: firstRender ? '0%' : '10%'},
+        enter: {opacity: 1, x: '0%',},
+        leave: {opacity: 0, x: '10%'},
         order: ['enter', 'update', 'leave'],
         trail: 150,
         config: springConfig.gentle,
@@ -278,8 +286,8 @@ function EnhancedTodoTable (props: EnhancedTodoTableProps<FilterTodoColumn>) {
                     {
                         loading
                             ? <TableRow>
-                                <TableCell colSpan={5} align={'center'} sx={{ py: 4 }}>
-                                    <CircularProgress />
+                                <TableCell colSpan={5} align={'center'} sx={{py: 4}}>
+                                    <CircularProgress/>
                                 </TableCell>
                             </TableRow>
                             : transitions((styles: any, todo: any) => {
@@ -327,7 +335,7 @@ function TodoCells({todo}: { todo: TodoNode }) {
                 }
             })
         } catch (e) {
-            if (e instanceof  ApolloError) {
+            if (e instanceof ApolloError) {
                 setMessage(e.message)
             }
         }
@@ -349,8 +357,8 @@ function TodoCells({todo}: { todo: TodoNode }) {
                 >
                     {
                         todo.locked
-                            ? <LockRoundedIcon fontSize={'medium'} />
-                            : <LockOpenRoundedIcon fontSize={'medium'} />
+                            ? <LockRoundedIcon fontSize={'medium'}/>
+                            : <LockOpenRoundedIcon fontSize={'medium'}/>
                     }
                 </Box>
 
@@ -363,7 +371,7 @@ function TodoCells({todo}: { todo: TodoNode }) {
                     formatDate(todo.due)
                 }
             </TableCell>
-            <TableCell>{ todo.completed_percentage }</TableCell>
+            <TableCell>{todo.completed_percentage}</TableCell>
             <TableCell>
                 {todo.user?.username}
             </TableCell>
