@@ -69,7 +69,6 @@ const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFie
                         error={!!error}
                         helperText={helperText}
                         label={label}
-                        autoFocus
                     />
                 )
             }}

@@ -27,6 +27,10 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 
 // components
 import {GetTodosQuery, Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
@@ -75,7 +79,9 @@ export default function TodoForm() {
             due: todo?.due || '',
             archived: todo?.archived || false,
             locked: todo?.locked || false,
-            items: todo?.items || [],
+            items: todo?.items || [
+                {completed: false, description: ''}
+            ],
         }
     });
 
@@ -195,11 +201,15 @@ export default function TodoForm() {
                             control={control}
                             name={'locked'}
                             label={'Locked'}
+                            uncheckedIcon={LockOpenRoundedIcon}
+                            checkedIcon={LockRoundedIcon}
                         />
                         <MauCheckbox
                             control={control}
                             name={'archived'}
                             label={'Archived'}
+                            checkedIcon={ArchiveIcon}
+                            uncheckedIcon={UnarchiveOutlinedIcon}
                         />
 
 
@@ -229,7 +239,7 @@ export default function TodoForm() {
                                         >
                                             Items
                                         </Typography>
-                                        <Tooltip title="Filter list">
+                                        <Tooltip title="Create todo">
                                             <IconButton
                                                 aria-label="filter list"
                                                 onClick={() => {
@@ -251,9 +261,9 @@ export default function TodoForm() {
                                         >
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell>Description</TableCell>
-                                                    <TableCell>Completed</TableCell>
-                                                    <TableCell>&nbsp;</TableCell>
+                                                    <TableCell width={'60%'}>Description</TableCell>
+                                                    <TableCell width={'20%'}>Completed</TableCell>
+                                                    <TableCell width={'20%'}>&nbsp;</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody >

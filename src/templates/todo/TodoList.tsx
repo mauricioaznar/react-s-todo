@@ -14,7 +14,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {Box, CircularProgress, Fab, IconButton, Typography} from "@mui/material";
+import {Box, CircularProgress, Fab, IconButton, Tooltip, Typography} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -173,21 +173,23 @@ export default function TodoList(props: TodoListProps) {
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <IconButton
-                                sx={{ mr: 2 }}
-                                onClick={() => {
-                                    const newCompleted = !completed
-                                    LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
-                                    setCompleted(newCompleted)
-                                    resetGraphqlPagination()
-                                }}
-                            >
-                                {
-                                    completed
-                                        ? <CheckBoxIcon fontSize={'medium'} />
-                                        : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
-                                }
-                            </IconButton>
+                            <Tooltip title={'completed'}>
+                                <IconButton
+                                    sx={{ mr: 2 }}
+                                    onClick={() => {
+                                        const newCompleted = !completed
+                                        LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
+                                        setCompleted(newCompleted)
+                                        resetGraphqlPagination()
+                                    }}
+                                >
+                                    {
+                                        completed
+                                            ? <CheckBoxIcon fontSize={'medium'} />
+                                            : <CheckBoxOutlineBlankIcon fontSize={'medium'} />
+                                    }
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
                         <Grid item>
                             <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
