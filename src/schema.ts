@@ -88,7 +88,7 @@ export type Todo = {
   __typename?: 'Todo';
   _id: Scalars['String'];
   archived: Scalars['Boolean'];
-  completed_percentage?: Maybe<Scalars['Float']>;
+  completed_percentage?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   due: Scalars['String'];
   items: Array<TodoItem>;
@@ -709,7 +709,7 @@ export type GetTodosQueryVariables = Exact<{
 }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: number | null | undefined, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: string | null | undefined, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

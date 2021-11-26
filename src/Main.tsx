@@ -10,9 +10,53 @@ import {ThemeProvider} from "@mui/material/styles";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {createTheme} from "@mui/material";
-import ColorModeContext from "./services/color-mode-context";
+import {ThemesContext} from "./services/themes";
 import {grey} from "@mui/material/colors";
 import BigLoader from "./components/BigLoader";
+
+interface Theme {
+    name: string;
+    title: string;
+    primary: string;
+    secondary: string;
+    backgroundPrimary: string;
+    backgroundSecondary: string;
+    mode: 'light' | 'dark';
+    divider: string;
+}
+
+const themes: Theme[] = [
+    {
+        primary: `#D98014`,
+        secondary: `#9937A6`,
+        divider: `#D98014`,
+        backgroundPrimary: `#5FA0D9`,
+        backgroundSecondary: `#9ABBD9`,
+        mode: 'light',
+        name: 'gum',
+        title: 'Gum'
+    },
+    {
+        primary: `#E0AC84`,
+        secondary: `#AC8466`,
+        divider: `#E6D7CC`,
+        backgroundPrimary: `#614A39`,
+        backgroundSecondary: `#615B56`,
+        mode: 'dark',
+        name: 'wood',
+        title: 'Wood'
+    },
+    {
+        primary: `#6F92BF`,
+        secondary: `#334035`,
+        divider: `#261A18`,
+        backgroundPrimary: `#3B67BF`,
+        backgroundSecondary: `#457ABF`,
+        mode: 'dark',
+        name: 'gaming',
+        title: 'Gaming'
+    }
+]
 
 
 const Main = () => {
@@ -38,17 +82,27 @@ const Main = () => {
     }, [accessToken])
 
     // theme
-    const [mode, setMode] = React.useState<'light' | 'dark'>(
-        window.localStorage.getItem('dark_mode') === 'light' ? 'light' : 'dark'
+    const [mode, setMode] = React.useState<Theme>(
+        () => {
+            const themeName = window.localStorage.getItem('theme')
+            if (themeName) {
+                const theme = themes.find(t => themeName === t.name)
+                return theme || themes[0]
+            } else {
+                return themes[0]
+            }
+        }
     );
 
     const colorMode = React.useMemo(
         () => ({
             toggleColorMode: () => {
-                setMode((prevMode) => {
-                    const newMode = prevMode === 'light' ? 'dark' : 'light'
-                    window.localStorage.setItem('dark_mode', newMode)
-                    return newMode
+                setMode((prevTheme) => {
+                    const foundIndex = themes.findIndex(t => t.name === prevTheme.name)
+                    const index = foundIndex  === themes.length - 1 ? 0 : foundIndex + 1;
+                    const newTheme = themes[index]
+                    window.localStorage.setItem('theme', newTheme.name)
+                    return newTheme
                 });
             },
         }),
@@ -69,16 +123,14 @@ const Main = () => {
                     'sans-serif'
                 ].join(',')
             }
-            const primary = mode === 'light' ? `#D98014` : `#E0AC84`
-            const secondary = mode === 'light' ? `#9937A6` : `#AC8466`
-            const divider = mode === 'light' ? `#D98014` : `#E6D7CC`
-            const backgroundPrimary = mode === 'light' ? `#5FA0D9` : `#614A39`
-            const backgroundPaper = mode === 'light' ? `#9ABBD9` : `#615B56`
-            const textPrimary = mode === 'light' ? grey["900"] : grey['50']
-            const textSecondary = mode === 'light' ? grey['500'] : grey['50']
+            const { mode: modeColor, primary, secondary, divider, backgroundPrimary, backgroundSecondary } = mode
+
+            const textPrimary = modeColor === 'light' ? grey["900"] : grey['50']
+            const textSecondary = modeColor === 'light' ? grey['500'] : grey['50']
+
             return createTheme({
                 palette: {
-                    mode,
+                    mode: modeColor,
                     primary: {
                         main: primary
                     },
@@ -88,7 +140,7 @@ const Main = () => {
                     divider: divider,
                     background: {
                         default: backgroundPrimary,
-                        paper: backgroundPaper,
+                        paper: backgroundSecondary,
                     },
                     text: {
                         primary: textPrimary,
@@ -141,7 +193,7 @@ const Main = () => {
 
     return (
         <LocalizationProvider dateAdapter={DateAdapter}>
-            <ColorModeContext.Provider value={colorMode}>
+            <ThemesContext.Provider value={colorMode}>
                 <ThemeProvider theme={memoTheme}>
                     <CssBaseline/>
                     <SnackbarProvider maxSnack={6}>
@@ -154,7 +206,7 @@ const Main = () => {
                         }
                     </SnackbarProvider>
                 </ThemeProvider>
-            </ColorModeContext.Provider>
+            </ThemesContext.Provider>
         </LocalizationProvider>
     );
 };

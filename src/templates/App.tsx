@@ -43,7 +43,7 @@ import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
-import ColorModeContext from "../services/color-mode-context";
+import {ThemesContext} from "../services/themes";
 import TodoList from "./todo/TodoList";
 
 interface RouterLink {
@@ -82,7 +82,7 @@ const drawerWidth: number = 240;
 
 export default function App() {
     const theme = useTheme();
-    const colorMode = React.useContext(ColorModeContext);
+    const themeContext = React.useContext(ThemesContext);
 
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
@@ -191,7 +191,7 @@ export default function App() {
                 </List>
                 <Divider/>
                 <List style={{marginTop: `auto`}}>
-                    <ListItem button={true} onClick={colorMode.toggleColorMode}>
+                    <ListItem button={true} onClick={themeContext.toggleColorMode}>
                         <ListItemIcon>
                             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                         </ListItemIcon>

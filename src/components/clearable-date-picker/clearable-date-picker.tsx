@@ -1,5 +1,4 @@
 import {DatePicker} from "@mui/lab";
-import {YEAR_MONTH_FORMAT} from "../../helpers/format-date";
 import moment from "moment";
 import TextField from "@mui/material/TextField";
 import {IconButton, InputAdornment} from "@mui/material";
@@ -34,7 +33,7 @@ export default function ClearableDatePicker (props: EnhancedDatePickerProps) {
             disabled={disabled}
             onChange={(newValue) => {
                 if (moment.isMoment(newValue)) {
-                    const date = moment(newValue).format(YEAR_MONTH_FORMAT)
+                    const date = moment(newValue).format(inputFormat)
                     onChange(date)
                 } else {
                     onChange(newValue)
