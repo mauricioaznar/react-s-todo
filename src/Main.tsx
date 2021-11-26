@@ -55,6 +55,16 @@ const themes: Theme[] = [
         mode: 'dark',
         name: 'gaming',
         title: 'Gaming'
+    },
+    {
+        primary: `#F2CB05`,
+        secondary: `#73260A`,
+        divider: `#F27405`,
+        backgroundPrimary: `#151340`,
+        backgroundSecondary: `#2B308C`,
+        mode: 'dark',
+        name: 'dwarves',
+        title: 'Dwarves'
     }
 ]
 
