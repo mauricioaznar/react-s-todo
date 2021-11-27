@@ -14,7 +14,17 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {Box, CircularProgress, Fab, IconButton, Tooltip, Typography} from "@mui/material";
+import {
+    Box,
+    Button, Card,
+    CardActions,
+    CardContent,
+    CircularProgress,
+    Fab,
+    IconButton,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,6 +34,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 // local
 import {
@@ -40,7 +52,7 @@ import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/form
 import {TodoEdges, TodoNode} from "../../types/todo";
 import LocalStorage from "../../helpers/local-storage";
 import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
-import {EnhancedTableProps} from "../../components/enhanced-table/types";
+import {EnhancedContainerProps} from "../../components/enhanced-table/types";
 import EnhancedTableHead from "../../components/enhanced-table/enhanced-table-head";
 import ClearableDatePicker from "../../components/clearable-date-picker/clearable-date-picker";
 
@@ -65,7 +77,7 @@ export default function TodoList(props: TodoListProps) {
 
     const [order, setOrder] = React.useState<ColumnOrder>(ColumnOrder.Desc);
     const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
-
+    const [view, setView] = React.useState(true)
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
 
@@ -193,19 +205,46 @@ export default function TodoList(props: TodoListProps) {
                                 </Grid>
                                 : null
                         }
+                        <Grid item>
+                            <Tooltip title={'completed'}>
+                                <IconButton
+                                    sx={{mr: 2}}
+                                    onClick={() => {
+                                        setView(!view)
+                                    }}
+                                >
+                                    {
+                                        view
+                                            ? <ViewModuleIcon fontSize={'medium'}/>
+                                            : <ViewHeadlineIcon fontSize={'medium'}/>
+                                    }
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <EnhancedTodoTable
-                        edges={edges}
-                        onRequestSort={handleOrderBy}
-                        order={order}
-                        orderBy={orderBy}
-                        loading={loading}
-                        firstRender={firstRender}
-                    />
+                    {
+                        view
+                            ? <EnhancedTodoCards
+                                edges={edges}
+                                onRequestSort={handleOrderBy}
+                                order={order}
+                                orderBy={orderBy}
+                                loading={loading}
+                                firstRender={firstRender}
+                            />
+                            : <EnhancedTodoTable
+                                edges={edges}
+                                onRequestSort={handleOrderBy}
+                                order={order}
+                                orderBy={orderBy}
+                                loading={loading}
+                                firstRender={firstRender}
+                            />
+                    }
                 </Grid>
             </Grid>
             <MauSnackbar
@@ -229,13 +268,172 @@ export default function TodoList(props: TodoListProps) {
 }
 
 
-export interface EnhancedTodoTableProps<T> extends EnhancedTableProps<T> {
+export interface EnhancedTodoContainerProps<T> extends EnhancedContainerProps<T> {
     firstRender: boolean;
     loading: boolean;
     edges: TodoEdges | undefined | null;
 }
 
-function EnhancedTodoTable(props: EnhancedTodoTableProps<FilterTodoColumn>) {
+
+
+
+
+function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
+    const {loading, edges} = props
+
+    const transitions = useTransition(edges, {
+        keys: (item: unknown) => {
+            const todo = item as TodoEdge
+            return todo.node?._id!
+        },
+        from: {opacity: 0},
+        enter: {opacity: 1},
+        leave: {opacity: 0},
+        order: ['enter', 'update', 'leave'],
+        trail: 150,
+        config: springConfig.gentle,
+    })
+
+    const AnimatedGridItem = animated(Grid)
+
+    return <Grid container>
+        {
+            loading
+                ? <CircularProgress/>
+                : transitions((styles: any, todo: any) => {
+                    const todoItem = todo as { node: any }
+                    const todoNode = todoItem.node as TodoNode
+                    return (
+                        todo && <AnimatedGridItem
+                            style={styles}
+                            item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            sx={{
+                                px: { sm: 2, md: 4},
+                                py: { xs: 2, sm: 2, md: 0}
+                            }}
+                        >
+                            <TodoCard todo={todoNode}/>
+                        </AnimatedGridItem>
+                    )
+                })
+        }
+    </Grid>;
+}
+
+
+function TodoCard({todo}: { todo: TodoNode }) {
+
+    const {currentUser} = useTypedSelector(
+        (state) => state.auth
+    )
+
+    const [isDisabled, setIsDisabled] = useState(false)
+    const [message, setMessage] = useState('')
+    const [deleteTodoMutation] = useDeleteTodoMutation({
+        refetchQueries: [namedOperations.Query.GetTodos]
+    })
+    const history = useHistory()
+
+    function handleEditClick(todo: TodoNode) {
+        history.push('/todoForm', {todo})
+    }
+
+    // functions and flow control
+
+    async function handleDeleteClick(todo: TodoNode) {
+        setIsDisabled(true)
+        try {
+            await deleteTodoMutation({
+                variables: {
+                    id: todo._id
+                }
+            })
+        } catch (e) {
+            if (e instanceof ApolloError) {
+                setMessage(e.message)
+            }
+        }
+        setMessage('')
+        setIsDisabled(false)
+    }
+
+    return (
+
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Box
+                    sx={{
+                        '& > :not(style)': {
+                            m: 2,
+                        },
+                    }}
+                >
+                    {
+                        todo.locked
+                            ? <LockRoundedIcon fontSize={'medium'}/>
+                            : <LockOpenRoundedIcon fontSize={'medium'}/>
+                    }
+                </Box>
+                <Typography variant="h5" component="div">
+                    {todo.description}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    {
+                        formatDate(todo.due)
+                    }
+                </Typography>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'nowrap'
+                    }}
+                >
+
+                </Box>
+                <Typography variant="body2">
+                    {todo.completed_percentage}
+                    <br />
+                    {todo.user?.username}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                {
+                    currentUser?._id === todo.user?._id ? <Button
+                        size={'small'}
+                        onClick={() => {
+                            handleEditClick(todo)
+                        }}>
+                        Edit
+                    </Button> : null
+
+                }
+                {
+                    currentUser?._id === todo.user?._id ? <Button
+                        disabled={isDisabled}
+                        size={'small'}
+                        onClick={async () => {
+                            await handleDeleteClick(todo)
+                        }}>
+                        Delete
+                    </Button> : null
+                }
+            </CardActions>
+            <MauSnackbar
+                message={message}
+            />
+        </Card>
+    );
+}
+
+
+
+
+
+
+function EnhancedTodoTable(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
     const {onRequestSort, order, orderBy, firstRender, loading, edges} = props
 
 
