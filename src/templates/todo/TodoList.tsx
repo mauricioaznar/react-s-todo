@@ -2,7 +2,6 @@ import * as React from 'react'
 import {useState} from 'react'
 import {animated, config as springConfig, useTransition} from 'react-spring'
 import {useHistory} from 'react-router-dom'
-import {ApolloError} from "@apollo/client";
 
 // mui
 import CreateIcon from '@mui/icons-material/Create';
@@ -23,7 +22,8 @@ import {
     CardContent,
     CircularProgress,
     Fab,
-    IconButton, ListItem,
+    IconButton,
+    ListItem,
     ListItemIcon,
     Menu,
     MenuItem,
@@ -42,14 +42,7 @@ import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 // local
-import {
-    ColumnOrder,
-    FilterTodoColumn,
-    namedOperations,
-    TodoEdge,
-    useDeleteTodoMutation,
-    useGetTodosQuery
-} from "../../schema";
+import {ColumnOrder, FilterTodoColumn, TodoEdge, useGetTodosQuery} from "../../schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/format-date";
@@ -59,6 +52,9 @@ import {useGraphqlPagination} from "../../hooks/useGraphqlPagination";
 import {EnhancedContainerProps} from "../../components/enhanced-table/types";
 import EnhancedTableHead from "../../components/enhanced-table/enhanced-table-head";
 import ClearableDatePicker from "../../components/clearable-date-picker/clearable-date-picker";
+import {useMenu} from "../../hooks/useMenu";
+import {useDeleteTodo} from "./hooks/useDeleteTodo";
+import {useEditTodoClick} from "./hooks/useEditTodoClick";
 
 
 // constants
@@ -82,17 +78,10 @@ export default function TodoList({archived = false}: TodoListProps) {
     const [view, setView] = React.useState(true)
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
+    const [firstRender, setFirstRender] = useState(true)
 
+    const { handleClick, handleClose, open, anchorEl } = useMenu()
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
 
     const {limit, after, before, setBefore, setAfter, resetGraphqlPagination} = useGraphqlPagination({
@@ -117,8 +106,6 @@ export default function TodoList({archived = false}: TodoListProps) {
             setFirstRender(false)
         }
     })
-
-    const [firstRender, setFirstRender] = useState(true)
 
     const edges = data?.todos.page.edges
     const offset = data?.todos?.pageData?.offset || 0
@@ -178,7 +165,7 @@ export default function TodoList({archived = false}: TodoListProps) {
                                 <ArrowForwardIosIcon fontSize={'medium'}/>
                             </IconButton>
                         </Grid>
-
+                        {/* MENU */}
                         <Grid item>
                             <IconButton
                                 id="demo-positioned-button"
@@ -366,57 +353,22 @@ function TodoCard({todo}: { todo: TodoNode }) {
         (state) => state.auth
     )
 
-    const [isDisabled, setIsDisabled] = useState(false)
-    const [message, setMessage] = useState('')
-    const [deleteTodoMutation] = useDeleteTodoMutation({
-        refetchQueries: [namedOperations.Query.GetTodos]
-    })
-    const history = useHistory()
 
-    function handleEditClick(todo: TodoNode) {
-        history.push('/todoForm', {todo})
-    }
+    const { handleEditTodoClick } = useEditTodoClick()
 
-    // functions and flow control
+    const { message, isDisabled, handleDeleteClick  } = useDeleteTodo()
 
-    async function handleDeleteClick(todo: TodoNode) {
-        setIsDisabled(true)
-        try {
-            await deleteTodoMutation({
-                variables: {
-                    id: todo._id
-                }
-            })
-        } catch (e) {
-            if (e instanceof ApolloError) {
-                setMessage(e.message)
-            }
-        }
-        setMessage('')
-        setIsDisabled(false)
-    }
+
 
     return (
 
         <Card sx={{minWidth: 275}}>
             <CardContent>
-                <Box
-                    sx={{
-                        '& > :not(style)': {
-                            m: 2,
-                        },
-                    }}
-                >
-                    {
-                        todo.locked
-                            ? <LockRoundedIcon fontSize={'medium'}/>
-                            : <LockOpenRoundedIcon fontSize={'medium'}/>
-                    }
-                </Box>
                 <Typography variant="h5" component="div">
                     {todo.description}
                 </Typography>
                 <Typography sx={{mb: 1.5}} color="text.secondary">
+                    <span style={{ fontStyle: 'normal', fontWeight: 'bold'}}> due: </span>
                     {
                         formatDate(todo.due)
                     }
@@ -430,17 +382,22 @@ function TodoCard({todo}: { todo: TodoNode }) {
 
                 </Box>
                 <Typography variant="body2">
-                    {todo.completed_percentage}
-                    <br/>
-                    {todo.user?.username}
+                    <span style={{ fontStyle: 'normal', fontWeight: 'bold'}}> user: </span> {todo.user?.username}
                 </Typography>
+                <ul>
+                    {
+                        todo?.items.map(item => (
+                            <li style={{ textDecoration: item.completed ? 'line-through' : undefined }} key={item.description}>{item.description}</li>
+                        ))
+                    }
+                </ul>
             </CardContent>
-            <CardActions>
+            <CardActions style={{ display: 'flex', alignItems: 'center' }}>
                 {
                     currentUser?._id === todo.user?._id ? <Button
                         size={'small'}
                         onClick={() => {
-                            handleEditClick(todo)
+                            handleEditTodoClick(todo)
                         }}>
                         Edit
                     </Button> : null
@@ -456,6 +413,13 @@ function TodoCard({todo}: { todo: TodoNode }) {
                         Delete
                     </Button> : null
                 }
+                <Box style={{ flexGrow: 1, display: 'flex', justifyContent: 'end' }}>
+                    {
+                        todo.locked
+                            ? <LockRoundedIcon fontSize={'medium'}/>
+                            : <LockOpenRoundedIcon fontSize={'medium'}/>
+                    }
+                </Box>
             </CardActions>
             <MauSnackbar
                 message={message}
@@ -543,35 +507,10 @@ function TodoCells({todo}: { todo: TodoNode }) {
         (state) => state.auth
     )
 
-    const [isDisabled, setIsDisabled] = useState(false)
-    const [message, setMessage] = useState('')
-    const [deleteTodoMutation] = useDeleteTodoMutation({
-        refetchQueries: [namedOperations.Query.GetTodos]
-    })
-    const history = useHistory()
 
-    function handleEditClick(todo: TodoNode) {
-        history.push('/todoForm', {todo})
-    }
+    const { handleEditTodoClick } = useEditTodoClick()
 
-    // functions and flow control
-
-    async function handleDeleteClick(todo: TodoNode) {
-        setIsDisabled(true)
-        try {
-            await deleteTodoMutation({
-                variables: {
-                    id: todo._id
-                }
-            })
-        } catch (e) {
-            if (e instanceof ApolloError) {
-                setMessage(e.message)
-            }
-        }
-        setMessage('')
-        setIsDisabled(false)
-    }
+    const { message, isDisabled, handleDeleteClick  } = useDeleteTodo()
 
     return (
         <React.Fragment>
@@ -616,7 +555,7 @@ function TodoCells({todo}: { todo: TodoNode }) {
                         currentUser?._id === todo.user?._id ? <IconButton
                             size={'small'}
                             onClick={() => {
-                                handleEditClick(todo)
+                                handleEditTodoClick(todo)
                             }}>
                             <CreateIcon fontSize={'small'}/>
                         </IconButton> : null

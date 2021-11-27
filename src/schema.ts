@@ -32,7 +32,6 @@ export type QueryTodosArgs = {
   limit?: Maybe<Scalars['Float']>;
   order?: Maybe<ColumnOrder>;
   orderBy?: Maybe<FilterTodoColumn>;
-  pub?: Maybe<Scalars['Boolean']>;
 };
 
 export type Cat = {
