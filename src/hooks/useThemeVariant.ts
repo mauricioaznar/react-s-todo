@@ -50,7 +50,7 @@ const themes: ThemeVariant[] = [
         icon: ParkIcon
     },
     {
-        primary: `#6F92BF`,
+        primary: grey["50"],
         secondary: `#334035`,
         divider: `#261A18`,
         backgroundPrimary: `#3B67BF`,
