@@ -14,15 +14,19 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     Box,
-    Button, Card,
+    Button,
+    Card,
     CardActions,
     CardContent,
     CircularProgress,
     Fab,
-    IconButton,
-    Tooltip,
+    IconButton, ListItem,
+    ListItemIcon,
+    Menu,
+    MenuItem,
     Typography
 } from "@mui/material";
 import Table from '@mui/material/Table';
@@ -69,9 +73,7 @@ interface TodoListProps {
     archived?: boolean;
 }
 
-export default function TodoList(props: TodoListProps) {
-
-    const {archived = false} = props
+export default function TodoList({archived = false}: TodoListProps) {
 
     const history = useHistory()
 
@@ -80,6 +82,18 @@ export default function TodoList(props: TodoListProps) {
     const [view, setView] = React.useState(true)
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
+
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
 
     const {limit, after, before, setBefore, setAfter, resetGraphqlPagination} = useGraphqlPagination({
         afterKey: TODO_AFTER,
@@ -142,24 +156,6 @@ export default function TodoList(props: TodoListProps) {
                 </Grid>
                 <Grid item>
                     <Grid container spacing={2} alignItems={'center'}>
-                        <Grid item sx={{mr: 2}}>
-                            <ClearableDatePicker
-                                views={due ? ['month'] : ['year', 'month']}
-                                mask={YEAR_MONTH_MASK}
-                                inputFormat={YEAR_MONTH_FORMAT}
-                                label={'Selected due'}
-                                value={due}
-                                onChange={(newValue) => {
-                                    setDue(newValue)
-                                    if (newValue !== null) {
-                                        LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
-                                    } else {
-                                        LocalStorage.removeItem(TODO_DUE)
-                                    }
-
-                                }}
-                            />
-                        </Grid>
                         <Grid item>
                             <IconButton
                                 disabled={data?.todos?.pageData?.offset === 0}
@@ -182,12 +178,45 @@ export default function TodoList(props: TodoListProps) {
                                 <ArrowForwardIosIcon fontSize={'medium'}/>
                             </IconButton>
                         </Grid>
-                        {
-                            !archived
-                                ? <Grid item>
-                                    <Tooltip title={'completed'}>
-                                        <IconButton
-                                            sx={{mr: 2}}
+
+                        <Grid item>
+                            <IconButton
+                                id="demo-positioned-button"
+                                aria-controls="demo-positioned-menu"
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                            >
+                                <MoreVertIcon />
+                            </IconButton>
+                            <Menu
+                                id="demo-positioned-menu"
+                                aria-labelledby="demo-positioned-button"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                            >
+                                <ListItem>
+                                    <ClearableDatePicker
+                                        views={due ? ['month'] : ['year', 'month']}
+                                        mask={YEAR_MONTH_MASK}
+                                        inputFormat={YEAR_MONTH_FORMAT}
+                                        label={'Selected due'}
+                                        value={due}
+                                        onChange={(newValue) => {
+                                            setDue(newValue)
+                                            if (newValue !== null) {
+                                                LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT)
+                                            } else {
+                                                LocalStorage.removeItem(TODO_DUE)
+                                            }
+
+                                        }}
+                                    />
+                                </ListItem>
+                                {
+                                    !archived
+                                        ? <MenuItem
                                             onClick={() => {
                                                 const newCompleted = !completed
                                                 LocalStorage.saveBoolean(newCompleted, TODO_COMPLETED)
@@ -195,31 +224,41 @@ export default function TodoList(props: TodoListProps) {
                                                 resetGraphqlPagination()
                                             }}
                                         >
+                                            <ListItemIcon
+
+                                            >
+                                                {
+                                                    completed
+                                                        ? <CheckBoxIcon fontSize={'medium'}/>
+                                                        : <CheckBoxOutlineBlankIcon fontSize={'medium'}/>
+                                                }
+
+                                            </ListItemIcon>
                                             {
-                                                completed
-                                                    ? <CheckBoxIcon fontSize={'medium'}/>
-                                                    : <CheckBoxOutlineBlankIcon fontSize={'medium'}/>
+                                                completed ? 'Completed' : "Uncompleted"
                                             }
-                                        </IconButton>
-                                    </Tooltip>
-                                </Grid>
-                                : null
-                        }
-                        <Grid item>
-                            <Tooltip title={'completed'}>
-                                <IconButton
-                                    sx={{mr: 2}}
+                                        </MenuItem>
+                                        : null
+                                }
+                                <MenuItem
+                                    sx={{display: 'flex', alignItems: 'center'}}
                                     onClick={() => {
                                         setView(!view)
                                     }}
                                 >
+
+                                    <ListItemIcon>
+                                        {
+                                            view
+                                                ? <ViewModuleIcon fontSize={'medium'}/>
+                                                : <ViewHeadlineIcon fontSize={'medium'}/>
+                                        }
+                                    </ListItemIcon>
                                     {
-                                        view
-                                            ? <ViewModuleIcon fontSize={'medium'}/>
-                                            : <ViewHeadlineIcon fontSize={'medium'}/>
+                                        view ? 'Cards' : 'Table'
                                     }
-                                </IconButton>
-                            </Tooltip>
+                                </MenuItem>
+                            </Menu>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -275,9 +314,6 @@ export interface EnhancedTodoContainerProps<T> extends EnhancedContainerProps<T>
 }
 
 
-
-
-
 function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
     const {loading, edges} = props
 
@@ -311,8 +347,8 @@ function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) 
                             sm={6}
                             md={4}
                             sx={{
-                                px: { sm: 2, md: 4},
-                                py: { xs: 2, sm: 2, md: 0}
+                                px: {sm: 2, md: 4},
+                                py: {xs: 2, sm: 2, md: 0}
                             }}
                         >
                             <TodoCard todo={todoNode}/>
@@ -362,7 +398,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
 
     return (
 
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{minWidth: 275}}>
             <CardContent>
                 <Box
                     sx={{
@@ -380,7 +416,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
                 <Typography variant="h5" component="div">
                     {todo.description}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography sx={{mb: 1.5}} color="text.secondary">
                     {
                         formatDate(todo.due)
                     }
@@ -395,7 +431,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
                 </Box>
                 <Typography variant="body2">
                     {todo.completed_percentage}
-                    <br />
+                    <br/>
                     {todo.user?.username}
                 </Typography>
             </CardContent>
@@ -427,10 +463,6 @@ function TodoCard({todo}: { todo: TodoNode }) {
         </Card>
     );
 }
-
-
-
-
 
 
 function EnhancedTodoTable(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
