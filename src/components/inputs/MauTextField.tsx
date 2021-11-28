@@ -9,6 +9,7 @@ interface Rules {
     max?: number;
     maxLength?: number;
     minLength?: number;
+    email?: boolean;
     pattern?: RegExp;
 }
 
@@ -18,11 +19,18 @@ interface MauTextFieldProps extends MauInputProps {
     size?: "medium" | "small"
 }
 
+const validateEmail = (email:string) => {
+    return email.match(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    );
+}
+
 const getRuleMessage = ({
                             rule,
                             rules,
-                            fieldName
-                        }: { rule: keyof Rules, value: string, rules: Rules, fieldName: string }) => {
+                            fieldName,
+                            value
+                        }: { rule: keyof Rules | 'validate', value: string, rules: Rules, fieldName: string }) => {
 
     switch (rule) {
         case 'required': {
@@ -31,20 +39,45 @@ const getRuleMessage = ({
         case 'minLength': {
             return `${fieldName} must be bigger than ${rules[rule]}.`
         }
+        case 'validate': {
+            const rule = customValidate(value, rules)
+            return `${rule} is not a valid email.`
+        }
         default: {
             return ''
         }
     }
 }
 
+const customValidate: (val: string, rules: Rules) => keyof Rules | false = (val, rules) => {
+    let rule: keyof Rules | false = false
+    if (rules.email === true && !validateEmail(val)) {
+        rule = 'email'
+    }
+    return rule
+}
+
+
+const getReactHookFormRules = (rules: Rules) => {
+    const {email, ...rest} = rules
+
+    return {
+        ...rest,
+        validate: (val: string) => {
+            return customValidate(val, {email}) ===  false
+        }
+    }
+}
 
 
 const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFieldProps) => {
+
+
     return (
         <Controller
             control={control}
             name={name}
-            rules={rules}
+            rules={getReactHookFormRules(rules)}
             render={(ops) => {
                 const {field: {onChange, value}, fieldState: {error}} = ops
                 let helperText = ''
