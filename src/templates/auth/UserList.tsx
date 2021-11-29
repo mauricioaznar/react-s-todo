@@ -92,6 +92,10 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
     //     setDisabled(true)
     // }
 
+    const isUserCurrent = currentUser?._id === user?._id
+    const isAdmin = currentUser?.admin
+    const canAlter = isAdmin || isUserCurrent
+
     return (
         <TableRow
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -107,7 +111,7 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
                     }}
                 >
                     {
-                        currentUser?._id === user?._id ? <IconButton
+                         canAlter ? <IconButton
                             size={'small'}
                             onClick={() => {
                                 handleEditClick()
@@ -117,7 +121,7 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
 
                     }
                     {
-                        currentUser?._id === user?._id ? <IconButton
+                        canAlter ? <IconButton
                             size={'small'}
                             onClick={async () => {
                                 // await handleDeleteClick(todo)

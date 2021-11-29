@@ -52,6 +52,7 @@ export type Characteristics = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
+  admin: Scalars['Boolean'];
   username: Scalars['String'];
 };
 
@@ -157,7 +158,7 @@ export type MutationDeleteTodoArgs = {
 
 
 export type MutationLoginArgs = {
-  userInput: UserInput;
+  loginInput: LoginInput;
 };
 
 
@@ -204,6 +205,12 @@ export type TodoItemInput = {
 };
 
 export type UserInput = {
+  admin: Scalars['Boolean'];
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type LoginInput = {
   password: Scalars['String'];
   username: Scalars['String'];
 };
@@ -224,6 +231,7 @@ export const CurrentUserDocument = gql`
   currentUser {
     username
     _id
+    admin
   }
 }
     `;
@@ -259,6 +267,7 @@ export const GetUsersDocument = gql`
   users {
     _id
     username
+    admin
   }
 }
     `;
@@ -290,8 +299,8 @@ export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
 export const LoginDocument = gql`
-    mutation Login($userInput: userInput!) {
-  login(userInput: $userInput) {
+    mutation Login($loginInput: loginInput!) {
+  login(loginInput: $loginInput) {
     accessToken
   }
 }
@@ -311,7 +320,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      userInput: // value for 'userInput'
+ *      loginInput: // value for 'loginInput'
  *   },
  * });
  */
@@ -737,15 +746,15 @@ export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean }> };
 
 export type LoginMutationVariables = Exact<{
-  userInput: UserInput;
+  loginInput: LoginInput;
 }>;
 
 

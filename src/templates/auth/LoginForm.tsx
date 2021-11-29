@@ -36,7 +36,7 @@ export default function LogInForm() {
 
         try {
             const options = {
-                userInput: {
+                loginInput: {
                     username: username,
                     password: password
                 }

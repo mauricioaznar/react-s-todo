@@ -14,27 +14,38 @@ import {useHistory} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
+import MauCheckbox from "../../components/inputs/MauCheckbox";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 
 interface UserFormInputs {
     username: string,
     password: string,
+    admin: boolean,
 }
 
 export default function UserForm() {
+
+    const {currentUser} = useTypedSelector(
+        (state) => state.auth
+    )
 
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
-
     // @ts-ignore
     const user = history.location.state?.user as GetUsersQuery["users"][number] || undefined
+
+    const isUserCurrent = currentUser?._id === user?._id
+    const isAdmin = currentUser?.admin
+    const canAlter = isAdmin || isUserCurrent
 
     const {handleSubmit, control} = useForm<UserFormInputs>({
         defaultValues: {
             username:  user ? user.username : '',
             password: 'changeme',
+            admin: user ? user.admin : false,
         }
     });
 
@@ -58,16 +69,17 @@ export default function UserForm() {
     })
 
 
-    // eslint-disable-next-line no-undef
+
     const onSubmit = async (data: UserFormInputs) => {
-        const { username, password } = data
+        const { username, password, admin } = data
 
         setIsDisabled(true)
 
         const options = {
             userInput: {
                 username: username,
-                password: password
+                password: password,
+                admin: isAdmin ? admin : false
             }
         }
 
@@ -99,12 +111,13 @@ export default function UserForm() {
                 setMessage(e.message)
             }
         }
+
         setMessage('')
         setIsDisabled(false)
     };
 
     const onError = () => {
-        //
+
     }
 
     return (
@@ -149,8 +162,14 @@ export default function UserForm() {
                                     control={control}
                                     name="password"
                                 />
+
+                                {
+                                    isAdmin
+                                        ? <MauCheckbox control={control} name={'admin'} label={'admin'} />
+                                        : null
+                                }
                                 <Button
-                                    disabled={isDisabled}
+                                    disabled={isDisabled || !canAlter}
                                     type="submit"
                                     fullWidth
                                     variant="contained"
