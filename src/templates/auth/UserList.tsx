@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import AddIcon from "@mui/icons-material/Add"
 import {useHistory} from 'react-router-dom'
-import {Fab} from "@mui/material";
+import {Box, Fab, IconButton} from "@mui/material";
 import {GetUsersQuery, useGetUsersQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,6 +13,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 
 export default function UserList() {
@@ -50,6 +53,7 @@ export default function UserList() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Username</TableCell>
+                                    <TableCell width={'10%'}>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -70,13 +74,18 @@ export default function UserList() {
 
 
 function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
-    // const [isDisabled, setDisabled] = useState(false)
+    const {currentUser} = useTypedSelector(
+        (state) => state.auth
+    )
+
+    const history = useHistory()
+
     //
     // const history = useHistory()
     //
-    // function handleEditClick(User: GetUsersQuery["users"][number]) {
-    //     // history.push('/UserForm', {User})
-    // }
+    function handleEditClick() {
+        history.push('/SignInForm', {user})
+    }
     //
     //
     // async function onDelete(User: GetUsersQuery["users"][number]) {
@@ -89,6 +98,34 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
         >
             <TableCell>
                 {user.username}
+            </TableCell>
+            <TableCell>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'nowrap'
+                    }}
+                >
+                    {
+                        currentUser?._id === user?._id ? <IconButton
+                            size={'small'}
+                            onClick={() => {
+                                handleEditClick()
+                            }}>
+                            <CreateIcon fontSize={'small'}/>
+                        </IconButton> : null
+
+                    }
+                    {
+                        currentUser?._id === user?._id ? <IconButton
+                            size={'small'}
+                            onClick={async () => {
+                                // await handleDeleteClick(todo)
+                            }}>
+                            <DeleteIcon fontSize={'small'}/>
+                        </IconButton> : null
+                    }
+                </Box>
             </TableCell>
         </TableRow>
     );

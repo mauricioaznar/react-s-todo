@@ -39,7 +39,7 @@ import {
 // local
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
-import SignInForm from "./auth/SignInForm";
+import UserForm from "./auth/UserForm";
 import UserList from "./auth/UserList";
 import TodoForm from "./todo/TodoForm";
 import {Query, useTodoSubscription} from "../schema";
@@ -58,7 +58,7 @@ interface RouterLink {
 }
 
 const links: RouterLink[] = [
-    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <SignInForm />, title: 'Sign in'},
+    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <UserForm />, title: 'Sign in'},
     {icon: <PeopleAltIcon/>, name: 'UserList', path: '/users', component: <UserList />, navbar: true, title: 'Users'},
     {
         icon: <FormatListBulletedIcon/>,

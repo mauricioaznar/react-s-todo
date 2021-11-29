@@ -127,6 +127,7 @@ export type Mutation = {
   login: AccessToken;
   updateCat: Cat;
   updateTodo: Todo;
+  updateUser: User;
 };
 
 
@@ -171,6 +172,12 @@ export type MutationUpdateTodoArgs = {
   todoInput: TodoInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  _id: Scalars['String'];
+  userInput: UserInput;
+};
+
 export type CatInput = {
   breed: Scalars['String'];
   characteristics: CharacteristicsInput;
@@ -212,120 +219,6 @@ export type Subscription = {
 };
 
 
-export const GetCatsDocument = gql`
-    query GetCats {
-  cats {
-    _id
-    breed
-    characteristics {
-      color
-      coat
-      lifespan
-      size
-    }
-  }
-}
-    `;
-
-/**
- * __useGetCatsQuery__
- *
- * To run a query within a React component, call `useGetCatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCatsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCatsQuery(baseOptions?: Apollo.QueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
-      }
-export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
-        }
-export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
-export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
-export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
-export const GetTodosDocument = gql`
-    query GetTodos($archived: Boolean, $completed: Boolean, $limit: Float, $after: String, $before: String, $due: String, $orderBy: FilterTodoColumn, $order: ColumnOrder) {
-  todos(archived: $archived, completed: $completed, limit: $limit, after: $after, before: $before, due: $due, order: $order, orderBy: $orderBy) {
-    page {
-      edges {
-        cursor
-        node {
-          _id
-          description
-          due
-          locked
-          completed_percentage
-          archived
-          user {
-            _id
-            username
-          }
-          items {
-            description
-            completed
-          }
-        }
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-    }
-    pageData {
-      count
-      limit
-      offset
-    }
-  }
-}
-    `;
-
-/**
- * __useGetTodosQuery__
- *
- * To run a query within a React component, call `useGetTodosQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTodosQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTodosQuery({
- *   variables: {
- *      archived: // value for 'archived'
- *      completed: // value for 'completed'
- *      limit: // value for 'limit'
- *      after: // value for 'after'
- *      before: // value for 'before'
- *      due: // value for 'due'
- *      orderBy: // value for 'orderBy'
- *      order: // value for 'order'
- *   },
- * });
- */
-export function useGetTodosQuery(baseOptions?: Apollo.QueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
-      }
-export function useGetTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
-        }
-export type GetTodosQueryHookResult = ReturnType<typeof useGetTodosQuery>;
-export type GetTodosLazyQueryHookResult = ReturnType<typeof useGetTodosLazyQuery>;
-export type GetTodosQueryResult = Apollo.QueryResult<GetTodosQuery, GetTodosQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -463,6 +356,82 @@ export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignI
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($id: String!, $userInput: userInput!) {
+  updateUser(_id: $id, userInput: $userInput) {
+    username
+    _id
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      userInput: // value for 'userInput'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const GetCatsDocument = gql`
+    query GetCats {
+  cats {
+    _id
+    breed
+    characteristics {
+      color
+      coat
+      lifespan
+      size
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCatsQuery__
+ *
+ * To run a query within a React component, call `useGetCatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCatsQuery(baseOptions?: Apollo.QueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
+      }
+export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
+        }
+export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
+export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
+export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
 export const DeleteCatDocument = gql`
     mutation DeleteCat($id: String!) {
   deleteCat(_id: $id) {
@@ -563,6 +532,79 @@ export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
 export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
 export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
+export const GetTodosDocument = gql`
+    query GetTodos($archived: Boolean, $completed: Boolean, $limit: Float, $after: String, $before: String, $due: String, $orderBy: FilterTodoColumn, $order: ColumnOrder) {
+  todos(archived: $archived, completed: $completed, limit: $limit, after: $after, before: $before, due: $due, order: $order, orderBy: $orderBy) {
+    page {
+      edges {
+        cursor
+        node {
+          _id
+          description
+          due
+          locked
+          completed_percentage
+          archived
+          user {
+            _id
+            username
+          }
+          items {
+            description
+            completed
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+    pageData {
+      count
+      limit
+      offset
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTodosQuery__
+ *
+ * To run a query within a React component, call `useGetTodosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTodosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTodosQuery({
+ *   variables: {
+ *      archived: // value for 'archived'
+ *      completed: // value for 'completed'
+ *      limit: // value for 'limit'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      due: // value for 'due'
+ *      orderBy: // value for 'orderBy'
+ *      order: // value for 'order'
+ *   },
+ * });
+ */
+export function useGetTodosQuery(baseOptions?: Apollo.QueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
+      }
+export function useGetTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTodosQuery, GetTodosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTodosQuery, GetTodosQueryVariables>(GetTodosDocument, options);
+        }
+export type GetTodosQueryHookResult = ReturnType<typeof useGetTodosQuery>;
+export type GetTodosLazyQueryHookResult = ReturnType<typeof useGetTodosLazyQuery>;
+export type GetTodosQueryResult = Apollo.QueryResult<GetTodosQuery, GetTodosQueryVariables>;
 export const DeleteTodoDocument = gql`
     mutation DeleteTodo($id: String!) {
   deleteTodo(_id: $id) {
@@ -692,25 +734,6 @@ export function useTodoSubscription(baseOptions?: Apollo.SubscriptionHookOptions
       }
 export type TodoSubscriptionHookResult = ReturnType<typeof useTodoSubscription>;
 export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>;
-export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
-
-export type GetTodosQueryVariables = Exact<{
-  archived?: Maybe<Scalars['Boolean']>;
-  completed?: Maybe<Scalars['Boolean']>;
-  limit?: Maybe<Scalars['Float']>;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  due?: Maybe<Scalars['String']>;
-  orderBy?: Maybe<FilterTodoColumn>;
-  order?: Maybe<ColumnOrder>;
-}>;
-
-
-export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: string | null | undefined, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
-
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -735,6 +758,19 @@ export type SignInMutationVariables = Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', username: string, _id: string } };
 
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars['String'];
+  userInput: UserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', username: string, _id: string } };
+
+export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
+
 export type DeleteCatMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -756,6 +792,20 @@ export type CreateCatMutationVariables = Exact<{
 
 
 export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };
+
+export type GetTodosQueryVariables = Exact<{
+  archived?: Maybe<Scalars['Boolean']>;
+  completed?: Maybe<Scalars['Boolean']>;
+  limit?: Maybe<Scalars['Float']>;
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  due?: Maybe<Scalars['String']>;
+  orderBy?: Maybe<FilterTodoColumn>;
+  order?: Maybe<ColumnOrder>;
+}>;
+
+
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: string | null | undefined, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type DeleteTodoMutationVariables = Exact<{
   id: Scalars['String'];
@@ -786,14 +836,15 @@ export type TodoSubscription = { __typename?: 'Subscription', todo: { __typename
 
 export const namedOperations = {
   Query: {
-    GetCats: 'GetCats',
-    GetTodos: 'GetTodos',
     CurrentUser: 'CurrentUser',
-    GetUsers: 'GetUsers'
+    GetUsers: 'GetUsers',
+    GetCats: 'GetCats',
+    GetTodos: 'GetTodos'
   },
   Mutation: {
     Login: 'Login',
     SignIn: 'SignIn',
+    UpdateUser: 'UpdateUser',
     DeleteCat: 'DeleteCat',
     UpdateCat: 'UpdateCat',
     CreateCat: 'CreateCat',

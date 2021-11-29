@@ -69,10 +69,6 @@ export default function TodoForm() {
     // @ts-ignore
     const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
 
-
-    // todo
-    // extra make a function that maps custom validate function (email, isEvent, currency) to the rule object
-    // and all in an array
     const {handleSubmit, control} = useForm<TodoFormInputs>({
         defaultValues: {
             description: todo?.description || '',

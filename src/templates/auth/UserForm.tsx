@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Query, useSignInMutation} from "../../schema";
+import {GetUsersQuery, Query, useSignInMutation, useUpdateUserMutation} from "../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
@@ -21,22 +21,34 @@ interface UserFormInputs {
     password: string,
 }
 
-export default function SignInForm() {
+export default function UserForm() {
 
     const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
 
+    // @ts-ignore
+    const user = history.location.state?.user as GetUsersQuery["users"][number] || undefined
+
     const {handleSubmit, control} = useForm<UserFormInputs>({
         defaultValues: {
-            username:  '',
-            password: '',
+            username:  user ? user.username : '',
+            password: 'changeme',
         }
     });
 
 
     const [signinMutation] = useSignInMutation({
+        update(cache) {
+            cache.evict({
+                id: "ROOT_QUERY",
+                fieldName: nameof<Query>('users')
+            })
+        },
+    })
+
+    const [updateUserMutation] = useUpdateUserMutation({
         update(cache) {
             cache.evict({
                 id: "ROOT_QUERY",
@@ -52,27 +64,36 @@ export default function SignInForm() {
 
         setIsDisabled(true)
 
+        const options = {
+            userInput: {
+                username: username,
+                password: password
+            }
+        }
+
+
         try {
-            const options = {
-                userInput: {
-                    username: username,
-                    password: password
-                }
-            }
 
-            const res = await signinMutation(
-                {
-                    variables: {
-                        ...options
+            if (user) {
+                await updateUserMutation(
+                    {
+                        variables: {
+                            id: user._id,
+                            ...options
+                        }
                     }
-                }
-            )
-
-            if (res.data?.createUser?.username) {
-                history.push('/userList')
+                )
+            } else {
+                await signinMutation(
+                    {
+                        variables: {
+                            ...options
+                        }
+                    }
+                )
             }
 
-            setIsDisabled(false)
+            history.push('/users')
         } catch (e: unknown) {
             if (e instanceof ApolloError) {
                 setMessage(e.message)
@@ -115,7 +136,6 @@ export default function SignInForm() {
                                 <MauTextField
                                     rules={{
                                         required: true,
-                                        email: true
                                     }}
                                     label={'Username'}
                                     control={control}

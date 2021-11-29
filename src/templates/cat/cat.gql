@@ -1,0 +1,33 @@
+query GetCats {
+    cats {
+        _id
+        breed
+        characteristics {
+            color
+            coat
+            lifespan
+            size
+        }
+    }
+}
+
+mutation DeleteCat($id: String!) {
+    deleteCat(_id: $id) {
+        breed
+    }
+}
+
+mutation UpdateCat($id: String!, $catInput: CatInput!) {
+    updateCat(_id: $id, catInput: $catInput) {
+        breed
+    }
+}
+
+mutation CreateCat($catInput: CatInput!) {
+    createCat(catInput: $catInput) {
+        breed
+    }
+}
+
+
+

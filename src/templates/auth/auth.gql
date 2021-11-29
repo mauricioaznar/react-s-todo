@@ -1,0 +1,34 @@
+query CurrentUser {
+    currentUser {
+        username
+        _id
+    }
+}
+
+query GetUsers {
+    users {
+        _id
+        username
+    }
+}
+
+mutation Login($userInput: userInput!) {
+    login(userInput: $userInput) {
+        accessToken
+    }
+}
+
+mutation SignIn($userInput: userInput!) {
+    createUser(userInput: $userInput) {
+        username
+        _id
+    }
+}
+
+
+mutation UpdateUser($id: String!, $userInput: userInput!) {
+    updateUser(_id: $id, userInput: $userInput) {
+        username
+        _id
+    }
+}

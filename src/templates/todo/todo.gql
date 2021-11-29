@@ -1,0 +1,78 @@
+query GetTodos (
+    $archived: Boolean,
+    $completed: Boolean,
+    $limit: Float,
+    $after: String,
+    $before: String,
+    $due: String,
+    $orderBy: FilterTodoColumn,
+    $order: ColumnOrder,
+) {
+    todos (
+        archived: $archived,
+        completed: $completed,
+        limit: $limit,
+        after: $after,
+        before: $before,
+        due: $due,
+        order: $order,
+        orderBy: $orderBy,
+    ) {
+        page {
+            edges {
+                cursor
+                node {
+                    _id
+                    description
+                    due
+                    locked
+                    completed_percentage
+                    archived
+                    user {
+                        _id
+                        username
+                    }
+                    items {
+                        description
+                        completed
+                    }
+                }
+            }
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+            }
+        }
+        pageData {
+            count
+            limit
+            offset
+        }
+    }
+}
+
+mutation DeleteTodo($id: String!) {
+    deleteTodo(_id: $id) {
+        description
+    }
+}
+
+mutation UpdateTodo($id: String!, $todoInput: TodoInput!) {
+    updateTodo(_id: $id, todoInput: $todoInput) {
+        description
+    }
+}
+
+mutation CreateTodo($todoInput: TodoInput!) {
+    createTodo(todoInput: $todoInput) {
+        description
+    }
+}
+
+subscription Todo {
+    todo {
+        description
+    }
+}
