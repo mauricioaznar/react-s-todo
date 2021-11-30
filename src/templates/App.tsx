@@ -46,6 +46,7 @@ import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
 import {ThemeVariantContext} from "../hooks/useThemeVariant";
 import TodoList from "./todo/TodoList";
+import {FileUploadForm} from "./auth/FileUploadForm";
 
 interface RouterLink {
     title: string;
@@ -75,6 +76,14 @@ const links: RouterLink[] = [
         component: <TodoList archived={true} />,
         navbar: true,
         title: 'Archive'
+    },
+    {
+        icon: <FormatListBulletedIcon/>,
+        name: 'FileUpload',
+        path: '/fileUpload',
+        component: <FileUploadForm />,
+        navbar: true,
+        title: 'File Upload'
     },
     {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: <TodoForm />, title: 'todo'},
 ];

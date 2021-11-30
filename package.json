@@ -15,6 +15,7 @@
     "@types/react-dom": "latest",
     "apollo": "^2.33.6",
     "apollo-link-ws": "^1.0.20",
+    "apollo-upload-client": "^16.0.0",
     "graphql": "^14.7.0",
     "markdown-to-jsx": "^7.1.3",
     "moment": "^2.29.1",

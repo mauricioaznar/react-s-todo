@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import App from "./templates/App";
 import {useTypedSelector} from "./hooks/useTypedSelector";
 import LogInForm from "./templates/auth/LoginForm";
-import {useCurrentUserLazyQuery} from "./schema";
+import { useCurrentUserLazyQuery } from "./schema";
 import {useActions} from "./hooks/useActions";
 import CssBaseline from "@mui/material/CssBaseline";
 import {SnackbarProvider} from "notistack";

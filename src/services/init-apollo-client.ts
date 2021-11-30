@@ -7,6 +7,8 @@ import ApolloErrorSeparator from "../constants/apollo-error-separator";
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
+// @ts-ignore
+import { createUploadLink } from 'apollo-upload-client'
 
 
 
@@ -22,7 +24,7 @@ import apiUrl from "../constants/api-url";
 // }
 
 const httpProtocol = process.env.NODE_ENV === 'development' ? 'http' : 'https'
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
     uri: `${httpProtocol}://${apiUrl}/graphql`,
 });
 
