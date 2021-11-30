@@ -20,7 +20,6 @@ import {
     Card,
     CardActions,
     CardContent,
-    CircularProgress,
     Fab,
     IconButton,
     ListItem,
@@ -55,6 +54,7 @@ import ClearableDatePicker from "../../components/clearable-date-picker/clearabl
 import {useMenu} from "../../hooks/useMenu";
 import {useDeleteTodo} from "./hooks/useDeleteTodo";
 import {useEditTodoClick} from "./hooks/useEditTodoClick";
+import PageLoader from "../../components/loaders/PageLoader";
 
 
 // constants
@@ -63,6 +63,7 @@ const TODO_LIMIT = 'todo_limit'
 const TODO_BEFORE = 'todo_before'
 const TODO_DUE = 'todo_due'
 const TODO_COMPLETED = 'todo_completed'
+const TODO_VIEW = 'todo_view'
 
 
 interface TodoListProps {
@@ -75,13 +76,12 @@ export default function TodoList({archived = false}: TodoListProps) {
 
     const [order, setOrder] = React.useState<ColumnOrder>(ColumnOrder.Desc);
     const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
-    const [view, setView] = React.useState(true)
+    const [view, setView] = React.useState(LocalStorage.getBoolean(TODO_VIEW))
     const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED))
     const [due, setDue] = useState<string | null>(LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT))
     const [firstRender, setFirstRender] = useState(true)
 
-    const { handleClick, handleClose, open, anchorEl } = useMenu()
-
+    const {handleClick, handleClose, open, anchorEl} = useMenu()
 
 
     const {limit, after, before, setBefore, setAfter, resetGraphqlPagination} = useGraphqlPagination({
@@ -174,7 +174,7 @@ export default function TodoList({archived = false}: TodoListProps) {
                                 aria-expanded={open ? 'true' : undefined}
                                 onClick={handleClick}
                             >
-                                <MoreVertIcon />
+                                <MoreVertIcon/>
                             </IconButton>
                             <Menu
                                 id="demo-positioned-menu"
@@ -230,7 +230,9 @@ export default function TodoList({archived = false}: TodoListProps) {
                                 <MenuItem
                                     sx={{display: 'flex', alignItems: 'center'}}
                                     onClick={() => {
-                                        setView(!view)
+                                        const newView = !view
+                                        LocalStorage.saveBoolean(newView, TODO_VIEW)
+                                        setView(newView)
                                     }}
                                 >
 
@@ -250,29 +252,32 @@ export default function TodoList({archived = false}: TodoListProps) {
                     </Grid>
                 </Grid>
             </Grid>
+
+
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     {
-                        view
-                            ? <EnhancedTodoCards
-                                edges={edges}
-                                onRequestSort={handleOrderBy}
-                                order={order}
-                                orderBy={orderBy}
-                                loading={loading}
-                                firstRender={firstRender}
-                            />
-                            : <EnhancedTodoTable
-                                edges={edges}
-                                onRequestSort={handleOrderBy}
-                                order={order}
-                                orderBy={orderBy}
-                                loading={loading}
-                                firstRender={firstRender}
-                            />
+                        loading
+                            ? <PageLoader />
+                            : view
+                                ? <EnhancedTodoCards
+                                    edges={edges}
+                                    onRequestSort={handleOrderBy}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    firstRender={firstRender}
+                                />
+                                : <EnhancedTodoTable
+                                    edges={edges}
+                                    onRequestSort={handleOrderBy}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    firstRender={firstRender}
+                                />
                     }
                 </Grid>
             </Grid>
+
             <MauSnackbar
                 message={error ? error.message : ''}
             />
@@ -296,13 +301,12 @@ export default function TodoList({archived = false}: TodoListProps) {
 
 export interface EnhancedTodoContainerProps<T> extends EnhancedContainerProps<T> {
     firstRender: boolean;
-    loading: boolean;
     edges: TodoEdges | undefined | null;
 }
 
 
 function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
-    const {loading, edges} = props
+    const {edges} = props
 
     const transitions = useTransition(edges, {
         keys: (item: unknown) => {
@@ -321,27 +325,26 @@ function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) 
 
     return <Grid container>
         {
-            loading
-                ? <CircularProgress/>
-                : transitions((styles: any, todo: any) => {
-                    const todoItem = todo as { node: any }
-                    const todoNode = todoItem.node as TodoNode
-                    return (
-                        todo && <AnimatedGridItem
-                            style={styles}
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            sx={{
-                                px: {sm: 2, md: 4},
-                                py: {xs: 2, sm: 2, md: 0}
-                            }}
-                        >
-                            <TodoCard todo={todoNode}/>
-                        </AnimatedGridItem>
-                    )
-                })
+
+            transitions((styles: any, todo: any) => {
+                const todoItem = todo as { node: any }
+                const todoNode = todoItem.node as TodoNode
+                return (
+                    todo && <AnimatedGridItem
+                        style={styles}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        sx={{
+                            px: {sm: 2, md: 4},
+                            py: {xs: 2, sm: 2, md: 0}
+                        }}
+                    >
+                        <TodoCard todo={todoNode}/>
+                    </AnimatedGridItem>
+                )
+            })
         }
     </Grid>;
 }
@@ -354,10 +357,9 @@ function TodoCard({todo}: { todo: TodoNode }) {
     )
 
 
-    const { handleEditTodoClick } = useEditTodoClick()
+    const {handleEditTodoClick} = useEditTodoClick()
 
-    const { message, isDisabled, handleDeleteClick  } = useDeleteTodo()
-
+    const {message, isDisabled, handleDeleteClick} = useDeleteTodo()
 
 
     return (
@@ -368,7 +370,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
                     {todo.description}
                 </Typography>
                 <Typography sx={{mb: 1.5}} color="text.secondary">
-                    <span style={{ fontStyle: 'normal', fontWeight: 'bold'}}> due: </span>
+                    <span style={{fontStyle: 'normal', fontWeight: 'bold'}}> due: </span>
                     {
                         formatDate(todo.due)
                     }
@@ -382,17 +384,18 @@ function TodoCard({todo}: { todo: TodoNode }) {
 
                 </Box>
                 <Typography variant="body2">
-                    <span style={{ fontStyle: 'normal', fontWeight: 'bold'}}> user: </span> {todo.user?.username}
+                    <span style={{fontStyle: 'normal', fontWeight: 'bold'}}> user: </span> {todo.user?.username}
                 </Typography>
                 <ul>
                     {
                         todo?.items.map(item => (
-                            <li style={{ textDecoration: item.completed ? 'line-through' : undefined }} key={item.description}>{item.description}</li>
+                            <li style={{textDecoration: item.completed ? 'line-through' : undefined}}
+                                key={item.description}>{item.description}</li>
                         ))
                     }
                 </ul>
             </CardContent>
-            <CardActions style={{ display: 'flex', alignItems: 'center' }}>
+            <CardActions style={{display: 'flex', alignItems: 'center'}}>
                 {
                     currentUser?._id === todo.user?._id ? <Button
                         size={'small'}
@@ -413,7 +416,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
                         Delete
                     </Button> : null
                 }
-                <Box style={{ flexGrow: 1, display: 'flex', justifyContent: 'end' }}>
+                <Box style={{flexGrow: 1, display: 'flex', justifyContent: 'end'}}>
                     {
                         todo.locked
                             ? <LockRoundedIcon fontSize={'medium'}/>
@@ -430,7 +433,7 @@ function TodoCard({todo}: { todo: TodoNode }) {
 
 
 function EnhancedTodoTable(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
-    const {onRequestSort, order, orderBy, firstRender, loading, edges} = props
+    const {onRequestSort, order, orderBy, firstRender, edges} = props
 
 
     // enter and leave overlapping
@@ -478,21 +481,15 @@ function EnhancedTodoTable(props: EnhancedTodoContainerProps<FilterTodoColumn>) 
                 </TableHead>
                 <TableBody>
                     {
-                        loading
-                            ? <TableRow>
-                                <TableCell colSpan={5} align={'center'} sx={{py: 4}}>
-                                    <CircularProgress/>
-                                </TableCell>
-                            </TableRow>
-                            : transitions((styles: any, todo: any) => {
-                                const todoItem = todo as { node: any }
-                                const todoNode = todoItem.node as TodoNode
-                                return (
-                                    todo && <AnimatedTableRow style={styles}>
-                                        <TodoCells todo={todoNode}/>
-                                    </AnimatedTableRow>
-                                )
-                            })
+                        transitions((styles: any, todo: any) => {
+                            const todoItem = todo as { node: any }
+                            const todoNode = todoItem.node as TodoNode
+                            return (
+                                todo && <AnimatedTableRow style={styles}>
+                                    <TodoCells todo={todoNode}/>
+                                </AnimatedTableRow>
+                            )
+                        })
                     }
                 </TableBody>
             </Table>
@@ -508,9 +505,9 @@ function TodoCells({todo}: { todo: TodoNode }) {
     )
 
 
-    const { handleEditTodoClick } = useEditTodoClick()
+    const {handleEditTodoClick} = useEditTodoClick()
 
-    const { message, isDisabled, handleDeleteClick  } = useDeleteTodo()
+    const {message, isDisabled, handleDeleteClick} = useDeleteTodo()
 
     return (
         <React.Fragment>

@@ -1,4 +1,4 @@
-import {ApolloClient, createHttpLink, from, InMemoryCache, split} from "@apollo/client";
+import {ApolloClient, from, InMemoryCache, split} from "@apollo/client";
 import {setContext} from "@apollo/client/link/context";
 import {onError} from "@apollo/client/link/error";
 import {store} from "../state";
@@ -8,8 +8,7 @@ import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
 // @ts-ignore
-import { createUploadLink } from 'apollo-upload-client'
-
+import {createUploadLink} from 'apollo-upload-client'
 
 
 // const defaultOptions = {

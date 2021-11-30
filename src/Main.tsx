@@ -10,7 +10,7 @@ import {ThemeProvider} from "@mui/material/styles";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {ThemeVariantContext, useThemeVariant} from "./hooks/useThemeVariant";
-import BigLoader from "./components/BigLoader";
+import BigLoader from "./components/loaders/BigLoader";
 
 
 const Main = () => {
