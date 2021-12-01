@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {GetUsersQuery, Query, useSignInMutation, useUpdateUserMutation} from "../../schema";
+import {GetUsersQuery, Query, useSignInMutation, useUpdateUserMutation, useUploadFileMutation} from "../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
@@ -16,12 +16,14 @@ import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauCheckbox from "../../components/inputs/MauCheckbox";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
+import MauFile from "../../components/inputs/MauFile";
 
 
 interface UserFormInputs {
     username: string,
     password: string,
     admin: boolean,
+    file: File | null | undefined,
 }
 
 export default function UserForm() {
@@ -46,6 +48,7 @@ export default function UserForm() {
             username:  user ? user.username : '',
             password: 'changeme',
             admin: user ? user.admin : false,
+            file: null
         }
     });
 
@@ -68,10 +71,14 @@ export default function UserForm() {
         },
     })
 
+    const [uploadFileMutation] = useUploadFileMutation()
+
+
+
 
 
     const onSubmit = async (data: UserFormInputs) => {
-        const { username, password, admin } = data
+        const { username, password, admin, file } = data
 
         setIsDisabled(true)
 
@@ -86,8 +93,10 @@ export default function UserForm() {
 
         try {
 
+            let userId = undefined as undefined | string
+
             if (user) {
-                await updateUserMutation(
+                const {data} = await updateUserMutation(
                     {
                         variables: {
                             id: user._id,
@@ -95,14 +104,25 @@ export default function UserForm() {
                         }
                     }
                 )
+                userId = data?.updateUser._id
             } else {
-                await signinMutation(
+                const {data} = await signinMutation(
                     {
                         variables: {
                             ...options
                         }
                     }
                 )
+                userId = data?.createUser._id
+            }
+
+            if (file && userId) {
+                await uploadFileMutation({
+                    variables: {
+                        file,
+                        userId
+                    }
+                })
             }
 
             history.push('/users')
@@ -168,6 +188,14 @@ export default function UserForm() {
                                         ? <MauCheckbox control={control} name={'admin'} label={'admin'} />
                                         : null
                                 }
+                                <MauFile
+                                    rules={{
+                                        required: true,
+                                    }}
+                                    label={'Avatar'}
+                                    control={control}
+                                    name="file"
+                                />
                                 <Button
                                     disabled={isDisabled || !canAlter}
                                     type="submit"

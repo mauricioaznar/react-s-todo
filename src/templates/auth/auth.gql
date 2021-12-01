@@ -36,6 +36,6 @@ mutation UpdateUser($id: String!, $userInput: userInput!) {
 }
 
 
-mutation UploadFile($file: Upload!) {
-    uploadFile(file: $file)
+mutation UploadFile($file: Upload!, $userId: String!) {
+    uploadFile(file: $file, userId: $userId)
 }

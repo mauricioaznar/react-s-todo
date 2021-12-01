@@ -185,6 +185,7 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUploadFileArgs = {
   file: Scalars['Upload'];
+  userId: Scalars['String'];
 };
 
 export type CatInput = {
@@ -409,8 +410,8 @@ export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutati
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UploadFileDocument = gql`
-    mutation UploadFile($file: Upload!) {
-  uploadFile(file: $file)
+    mutation UploadFile($file: Upload!, $userId: String!) {
+  uploadFile(file: $file, userId: $userId)
 }
     `;
 export type UploadFileMutationFn = Apollo.MutationFunction<UploadFileMutation, UploadFileMutationVariables>;
@@ -429,6 +430,7 @@ export type UploadFileMutationFn = Apollo.MutationFunction<UploadFileMutation, U
  * const [uploadFileMutation, { data, loading, error }] = useUploadFileMutation({
  *   variables: {
  *      file: // value for 'file'
+ *      userId: // value for 'userId'
  *   },
  * });
  */
@@ -816,6 +818,7 @@ export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __type
 
 export type UploadFileMutationVariables = Exact<{
   file: Scalars['Upload'];
+  userId: Scalars['String'];
 }>;
 
 
