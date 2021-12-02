@@ -3,6 +3,7 @@ query CurrentUser {
         username
         _id
         admin
+        avatar
     }
 }
 
@@ -11,6 +12,7 @@ query GetUsers {
         _id
         username
         admin
+        avatar
     }
 }
 

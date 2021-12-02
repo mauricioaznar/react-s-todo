@@ -55,6 +55,7 @@ export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
   admin: Scalars['Boolean'];
+  avatar: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -241,6 +242,7 @@ export const CurrentUserDocument = gql`
     username
     _id
     admin
+    avatar
   }
 }
     `;
@@ -277,6 +279,7 @@ export const GetUsersDocument = gql`
     _id
     username
     admin
+    avatar
   }
 }
     `;
@@ -787,12 +790,12 @@ export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean, avatar: string } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean, avatar: string }> };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;

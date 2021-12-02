@@ -23,7 +23,7 @@ interface UserFormInputs {
     username: string,
     password: string,
     admin: boolean,
-    file: File | null | undefined,
+    avatar: File | null | undefined,
 }
 
 export default function UserForm() {
@@ -48,7 +48,7 @@ export default function UserForm() {
             username:  user ? user.username : '',
             password: 'changeme',
             admin: user ? user.admin : false,
-            file: null
+            avatar: null
         }
     });
 
@@ -78,7 +78,7 @@ export default function UserForm() {
 
 
     const onSubmit = async (data: UserFormInputs) => {
-        const { username, password, admin, file } = data
+        const { username, password, admin, avatar } = data
 
         setIsDisabled(true)
 
@@ -86,7 +86,7 @@ export default function UserForm() {
             userInput: {
                 username: username,
                 password: password,
-                admin: isAdmin ? admin : false
+                admin: isAdmin ? admin : false,
             }
         }
 
@@ -116,10 +116,10 @@ export default function UserForm() {
                 userId = data?.createUser._id
             }
 
-            if (file && userId) {
+            if (avatar && userId) {
                 await uploadFileMutation({
                     variables: {
-                        file,
+                        file: avatar,
                         userId
                     }
                 })
@@ -194,7 +194,7 @@ export default function UserForm() {
                                     }}
                                     label={'Avatar'}
                                     control={control}
-                                    name="file"
+                                    name="avatar"
                                 />
                                 <Button
                                     disabled={isDisabled || !canAlter}
