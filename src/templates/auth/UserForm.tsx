@@ -169,6 +169,7 @@ export default function UserForm() {
                                 <MauTextField
                                     rules={{
                                         required: true,
+                                        email: true
                                     }}
                                     label={'Username'}
                                     control={control}

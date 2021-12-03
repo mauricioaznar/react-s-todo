@@ -11,6 +11,7 @@ interface Rules {
     minLength?: number;
     email?: boolean;
     pattern?: RegExp;
+    invalid?: null | string;
 }
 
 
@@ -41,7 +42,11 @@ const getRuleMessage = ({
         }
         case 'validate': {
             const rule = customValidate(value, rules)
-            return `${rule} is not a valid email.`
+            if (rule === 'email') {
+                return `${rule} is not a valid email.`
+            } else {
+                return rules.invalid
+            }
         }
         default: {
             return ''
@@ -49,22 +54,25 @@ const getRuleMessage = ({
     }
 }
 
-const customValidate: (val: string, rules: Rules) => keyof Rules | false = (val, rules) => {
-    let rule: keyof Rules | false = false
+const customValidate: (val: string, rules: Rules) => keyof Rules | null = (val, rules) => {
+    let rule: keyof Rules | null = null
     if (rules.email === true && !validateEmail(val)) {
         rule = 'email'
+    }
+    if (rules.invalid !== null) {
+        rule = 'invalid'
     }
     return rule
 }
 
 
 const getReactHookFormRules = (rules: Rules) => {
-    const {email, ...rest} = rules
+    const {email, invalid, ...rest} = rules
 
     return {
         ...rest,
-        validate: (val: string) => {
-            return customValidate(val, {email}) ===  false
+        validate: async (val: string) => {
+            return customValidate(val, {email, invalid}) ===  null
         }
     }
 }
