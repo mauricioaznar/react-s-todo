@@ -16,6 +16,10 @@ query GetUsers {
     }
 }
 
+query IsUserOccupied ($username: String!){
+    isUserOccupied(username: $username)
+}
+
 mutation Login($loginInput: loginInput!) {
     login(loginInput: $loginInput) {
         accessToken

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Controller} from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import {MauInputProps} from "./common/MauInputProps";
@@ -41,11 +41,13 @@ const getRuleMessage = ({
             return `${fieldName} must be bigger than ${rules[rule]}.`
         }
         case 'validate': {
-            const rule = customValidate(value, rules)
-            if (rule === 'email') {
+            const customRule = customValidate(value, rules)
+            if (customRule === 'email') {
                 return `${rule} is not a valid email.`
-            } else {
+            } else if(customRule === 'invalid' && typeof rules.invalid === 'string'){
                 return rules.invalid
+            } else {
+                return ''
             }
         }
         default: {
@@ -57,35 +59,35 @@ const getRuleMessage = ({
 const customValidate: (val: string, rules: Rules) => keyof Rules | null = (val, rules) => {
     let rule: keyof Rules | null = null
     if (rules.email === true && !validateEmail(val)) {
+        console.log('asdfasdf')
         rule = 'email'
     }
-    if (rules.invalid !== null) {
+    if (rules.invalid !== null && rules.invalid !== undefined) {
+        console.log(rules.invalid)
         rule = 'invalid'
     }
     return rule
 }
 
 
-const getReactHookFormRules = (rules: Rules) => {
-    const {email, invalid, ...rest} = rules
-
-    return {
-        ...rest,
-        validate: async (val: string) => {
-            return customValidate(val, {email, invalid}) ===  null
-        }
-    }
-}
-
 
 const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFieldProps) => {
+    const {email, invalid, ...rest} = rules
 
 
     return (
         <Controller
             control={control}
             name={name}
-            rules={getReactHookFormRules(rules)}
+            rules={
+                {
+                    ...rest,
+                    validate: function (val: string) {
+                        return customValidate(val, {email, invalid}) === null
+                    }
+                }
+            }
+
             render={(ops) => {
                 const {field: {onChange, value}, fieldState: {error}} = ops
                 let helperText = ''

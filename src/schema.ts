@@ -20,8 +20,14 @@ export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
   currentUser: User;
+  isUserOccupied: Scalars['Boolean'];
   todos: TodoResponse;
   users: Array<User>;
+};
+
+
+export type QueryIsUserOccupiedArgs = {
+  username: Scalars['String'];
 };
 
 
@@ -55,7 +61,7 @@ export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
   admin: Scalars['Boolean'];
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -310,6 +316,39 @@ export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
+export const IsUserOccupiedDocument = gql`
+    query IsUserOccupied($username: String!) {
+  isUserOccupied(username: $username)
+}
+    `;
+
+/**
+ * __useIsUserOccupiedQuery__
+ *
+ * To run a query within a React component, call `useIsUserOccupiedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsUserOccupiedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsUserOccupiedQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useIsUserOccupiedQuery(baseOptions: Apollo.QueryHookOptions<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>(IsUserOccupiedDocument, options);
+      }
+export function useIsUserOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>(IsUserOccupiedDocument, options);
+        }
+export type IsUserOccupiedQueryHookResult = ReturnType<typeof useIsUserOccupiedQuery>;
+export type IsUserOccupiedLazyQueryHookResult = ReturnType<typeof useIsUserOccupiedLazyQuery>;
+export type IsUserOccupiedQueryResult = Apollo.QueryResult<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($loginInput: loginInput!) {
   login(loginInput: $loginInput) {
@@ -790,12 +829,19 @@ export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean, avatar: string } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean, avatar?: string | null | undefined } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean, avatar: string }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean, avatar?: string | null | undefined }> };
+
+export type IsUserOccupiedQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type IsUserOccupiedQuery = { __typename?: 'Query', isUserOccupied: boolean };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
@@ -899,6 +945,7 @@ export const namedOperations = {
   Query: {
     CurrentUser: 'CurrentUser',
     GetUsers: 'GetUsers',
+    IsUserOccupied: 'IsUserOccupied',
     GetCats: 'GetCats',
     GetTodos: 'GetTodos'
   },

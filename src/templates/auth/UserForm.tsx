@@ -6,7 +6,14 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {GetUsersQuery, Query, useSignInMutation, useUpdateUserMutation, useUploadFileMutation} from "../../schema";
+import {
+    GetUsersQuery,
+    Query,
+    useIsUserOccupiedQuery,
+    useSignInMutation,
+    useUpdateUserMutation,
+    useUploadFileMutation
+} from "../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
@@ -43,7 +50,7 @@ export default function UserForm() {
     const isAdmin = currentUser?.admin
     const canAlter = isAdmin || isUserCurrent
 
-    const {handleSubmit, control} = useForm<UserFormInputs>({
+    const {handleSubmit, control, watch} = useForm<UserFormInputs>({
         defaultValues: {
             username:  user ? user.username : '',
             password: 'changeme',
@@ -52,6 +59,14 @@ export default function UserForm() {
         }
     });
 
+    const username = watch('username')
+
+    const  { data: isUserOccupiedResult } = useIsUserOccupiedQuery({
+        variables: {
+            username
+        },
+        skip: !!user
+    })
 
     const [signinMutation] = useSignInMutation({
         update(cache) {
@@ -169,7 +184,7 @@ export default function UserForm() {
                                 <MauTextField
                                     rules={{
                                         required: true,
-                                        email: true
+                                        invalid: isUserOccupiedResult?.isUserOccupied ? 'User is already in use' : null
                                     }}
                                     label={'Username'}
                                     control={control}
