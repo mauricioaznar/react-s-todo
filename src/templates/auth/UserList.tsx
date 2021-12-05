@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import AddIcon from "@mui/icons-material/Add"
 import {useHistory} from 'react-router-dom'
-import {Box, Fab, IconButton} from "@mui/material";
+import {Avatar, Box, Fab, IconButton} from "@mui/material";
 import {GetUsersQuery, useGetUsersQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -53,6 +53,7 @@ export default function UserList() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Username</TableCell>
+                                    <TableCell>Avatar</TableCell>
                                     <TableCell width={'10%'}>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -102,6 +103,18 @@ function UserRow({user}: { user: GetUsersQuery["users"][number] }) {
         >
             <TableCell>
                 {user.username}
+            </TableCell>
+            <TableCell>
+                {
+                    user.avatar ?
+
+                        <Avatar
+                            alt={'user image from ' + user.username}
+                            src={user.avatar}
+                        />
+
+                        : null
+                }
             </TableCell>
             <TableCell>
                 <Box
