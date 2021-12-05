@@ -65,9 +65,9 @@ export default function UserForm() {
         variables: {
             username
         },
-        skip: !!user,
-        onCompleted: async function () {
-            if (username !== '') {
+        skip: user.username === username,
+        onCompleted: async function (data) {
+            if (data?.isUserOccupied) {
                 await trigger('username')
             }
         }
