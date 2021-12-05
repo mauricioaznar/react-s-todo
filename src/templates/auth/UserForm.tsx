@@ -50,7 +50,7 @@ export default function UserForm() {
     const isAdmin = currentUser?.admin
     const canAlter = isAdmin || isUserCurrent
 
-    const {handleSubmit, control, watch} = useForm<UserFormInputs>({
+    const {handleSubmit, control, watch, trigger} = useForm<UserFormInputs>({
         defaultValues: {
             username:  user ? user.username : '',
             password: 'changeme',
@@ -65,7 +65,12 @@ export default function UserForm() {
         variables: {
             username
         },
-        skip: !!user
+        skip: !!user,
+        onCompleted: async function () {
+            if (username !== '') {
+                await trigger('username')
+            }
+        }
     })
 
     const [signinMutation] = useSignInMutation({
@@ -108,7 +113,7 @@ export default function UserForm() {
 
         try {
 
-            let userId = undefined as undefined | string
+            let userId: string | undefined
 
             if (user) {
                 const {data} = await updateUserMutation(
@@ -206,7 +211,7 @@ export default function UserForm() {
                                 }
                                 <MauFile
                                     rules={{
-                                        required: true,
+                                        required: user ? !user.avatar : true,
                                     }}
                                     label={'Avatar'}
                                     control={control}

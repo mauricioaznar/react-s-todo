@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React from 'react'
 import {Controller} from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import {MauInputProps} from "./common/MauInputProps";
@@ -59,11 +59,9 @@ const getRuleMessage = ({
 const customValidate: (val: string, rules: Rules) => keyof Rules | null = (val, rules) => {
     let rule: keyof Rules | null = null
     if (rules.email === true && !validateEmail(val)) {
-        console.log('asdfasdf')
         rule = 'email'
     }
     if (rules.invalid !== null && rules.invalid !== undefined) {
-        console.log(rules.invalid)
         rule = 'invalid'
     }
     return rule
