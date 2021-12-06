@@ -8,7 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useForm} from "react-hook-form";
 import {ApolloError} from "@apollo/client";
 import MauFile from "../../../components/inputs/MauFile";
-import {useUploadCatPhotosMutation, useUploadFileMutation} from "../../../schema";
+import {useUploadCatPhotosMutation} from "../../../schema";
+import MauSnackbar from "../../../components/MauSnackbar";
 
 
 interface CatPhotosDialogProps {
@@ -32,7 +33,7 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
         }
     });
 
-    const [ uploadCatPhotos ] = useUploadCatPhotosMutation()
+    const [ uploadCatPhotos, {error} ] = useUploadCatPhotosMutation()
 
 
     const onSubmit = async (data: CatPhotosForm) => {
@@ -75,6 +76,7 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
                         <MauFile
                             rules={{
                                 required: true,
+                                filesize: 1000
                             }}
                             multiple
                             label={'Photos'}
@@ -91,6 +93,7 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
                         </Button>
                     </DialogActions>
                 </form>
+                <MauSnackbar message={error?.message || ''} />
             </Dialog>
 
     )

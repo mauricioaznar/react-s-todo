@@ -1,4 +1,4 @@
-import {ApolloClient, from, InMemoryCache, split} from "@apollo/client";
+import {ApolloClient, from, InMemoryCache, ServerError, split} from "@apollo/client";
 import {setContext} from "@apollo/client/link/context";
 import {onError} from "@apollo/client/link/error";
 import {store} from "../state";
@@ -39,8 +39,11 @@ const authLink = setContext(async (_, {headers}) => {
 
 
 const errorLink = onError(({graphQLErrors, networkError, operation, forward}) => {
+
     if (graphQLErrors) {
+
         for (let err of graphQLErrors) {
+
             if (err.extensions?.code === 'UNAUTHENTICATED') {
                 // Apollo Server sets code to UNAUTHENTICATED
                 // when an AuthenticationError is thrown in a resolver
@@ -61,6 +64,7 @@ const errorLink = onError(({graphQLErrors, networkError, operation, forward}) =>
                 if (Array.isArray(err.message)) {
                     err.message = err.message.join(ApolloErrorSeparator)
                 }
+
             }
 
         }
@@ -69,7 +73,10 @@ const errorLink = onError(({graphQLErrors, networkError, operation, forward}) =>
     // To retry on network errors, we recommend the RetryLink
     // instead of the onError link. This just logs the error.
     if (networkError) {
-        //
+        if (networkError.name === 'ServerError') {
+            const serverError = networkError as ServerError
+            networkError.message = serverError.result.message
+        }
     }
 })
 
