@@ -30,4 +30,12 @@ mutation CreateCat($catInput: CatInput!) {
 }
 
 
+mutation UploadFile($file: Upload!, $userId: String!) {
+    uploadFile(file: $file, userId: $userId)
+}
+
+
+mutation UploadCatPhotos($files: [Upload!]!) {
+    uploadCatPhotos(files: $files)
+}
 

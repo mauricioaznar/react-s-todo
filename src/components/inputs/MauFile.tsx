@@ -23,6 +23,7 @@ const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
 
     const getFilename = (value: any) => {
         if (value && multiple) {
+            console.log(value)
             const fileArray = value as File[]
             return fileArray.map((v, index) => (<span key={index}>{v.name}</span>))
         } else if (value && !multiple) {
@@ -53,7 +54,7 @@ const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
                                          files
                                      }
                                  }: any) => {
-                                    const newValue = multiple ? files : files[0]
+                                    const newValue = multiple ? [...files] : files[0]
                                     onChange(newValue)
                                 }}
                         />

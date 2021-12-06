@@ -5,6 +5,7 @@ import * as React from 'react'
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from '@mui/icons-material/Delete';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 
 // components
@@ -21,6 +22,7 @@ import Paper from '@mui/material/Paper';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import {useState} from "react";
+import CatPhotosDialog from "./components/CatPhotosDialog";
 
 
 export default function CatList() {
@@ -85,6 +87,17 @@ export default function CatList() {
 function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
     const [isDisabled, setDisabled] = useState(false)
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
     const [deleteCatMutation] = useDeleteCatMutation({
         refetchQueries: [namedOperations.Query.GetCats]
     })
@@ -104,43 +117,54 @@ function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
             }
         })
     }
-
+    
     return (
-        <TableRow
-            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-        >
-            <TableCell>
-                {cat.breed}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.color}
-            </TableCell>
-            <TableCell>{cat.characteristics.coat}</TableCell>
-            <TableCell>
+        <>
+            <TableRow
+                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+            >
+                <TableCell>
+                    {cat.breed}
+                </TableCell>
+                <TableCell>
+                    {cat.characteristics.color}
+                </TableCell>
+                <TableCell>{cat.characteristics.coat}</TableCell>
+                <TableCell>
 
-                {cat.characteristics.lifespan}
-            </TableCell>
-            <TableCell>
-                {cat.characteristics.size}
-            </TableCell>
-            <TableCell>
-                <IconButton
-                    size={'small'}
-                    onClick={() => {
-                        handleEditClick(cat)
-                    }}>
-                    <CreateIcon fontSize={'small'}/>
-                </IconButton>
-                <IconButton
-                    disabled={isDisabled}
-                    size={'small'}
-                    onClick={() => {
-                        onDelete(cat)
-                    }}>
-                    <DeleteIcon fontSize={'small'}/>
-                </IconButton>
-            </TableCell>
-        </TableRow>
+                    {cat.characteristics.lifespan}
+                </TableCell>
+                <TableCell>
+                    {cat.characteristics.size}
+                </TableCell>
+                <TableCell>
+                    <IconButton
+                        size={'small'}
+                        onClick={() => {
+                            handleEditClick(cat)
+                        }}>
+                        <CreateIcon fontSize={'small'}/>
+                    </IconButton>
+                    <IconButton
+                        disabled={isDisabled}
+                        size={'small'}
+                        onClick={() => {
+                            onDelete(cat)
+                        }}>
+                        <DeleteIcon fontSize={'small'}/>
+                    </IconButton>
+                    <IconButton
+                        disabled={isDisabled}
+                        size={'small'}
+                        onClick={() => {
+                            handleClickOpen()
+                        }}>
+                        <FileUploadIcon fontSize={'small'}/>
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+            <CatPhotosDialog handleClose={handleClose} open={open} />
+        </>
     );
 }
 

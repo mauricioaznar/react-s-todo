@@ -16,6 +16,8 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PetsIcon from '@mui/icons-material/Pets';
+import InputIcon from '@mui/icons-material/Input';
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/SwipeableDrawer';
 import {
@@ -46,6 +48,8 @@ import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
 import {ThemeVariantContext} from "../hooks/useThemeVariant";
 import TodoList from "./todo/TodoList";
+import CatList from "./cat/CatList";
+import CatForm from "./cat/CatForm";
 
 interface RouterLink {
     title: string;
@@ -58,6 +62,8 @@ interface RouterLink {
 }
 
 const links: RouterLink[] = [
+    {icon: <PetsIcon/>, name: 'CatList', path: '/', component: <CatList />, exact: true, navbar: true, title: 'Cats'},
+    {icon: <InputIcon/>, name: 'CatForm', path: '/catForm', component: <CatForm />, title: 'Cat'},
     {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <UserForm />, title: 'Sign in'},
     {icon: <PeopleAltIcon/>, name: 'UserList', path: '/users', component: <UserList />, navbar: true, title: 'Users'},
     {
