@@ -20,14 +20,30 @@ mutation DeleteCat($id: String!) {
     }
 }
 
-mutation UpdateCat($id: String!, $catInput: CatInput!) {
-    updateCat(_id: $id, catInput: $catInput) {
+mutation UpdateCat(
+    $id: String!,
+    $catInput: CatInput!
+    $files: [Upload!]!
+    $filenames: [String!]!
+) {
+    updateCat(
+        _id: $id,
+        catInput: $catInput,
+        filenames: $filenames,
+        files: $files
+    ) {
         breed
     }
 }
 
-mutation CreateCat($catInput: CatInput!) {
-    createCat(catInput: $catInput) {
+mutation CreateCat(
+    $catInput: CatInput!
+    $files: [Upload!]!
+) {
+    createCat(
+        catInput: $catInput
+        files: $files
+    ) {
         breed
     }
 }
