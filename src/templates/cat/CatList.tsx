@@ -117,8 +117,6 @@ function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
         })
     }
 
-    console.log(cat.files)
-
     return (
         <>
             <TableRow

@@ -48,7 +48,6 @@ export type Cat = {
   breed: Scalars['String'];
   characteristics: Characteristics;
   filenames: Array<Scalars['String']>;
-  files: Array<Scalars['String']>;
 };
 
 export type Characteristics = {
@@ -501,7 +500,6 @@ export const GetCatsDocument = gql`
     _id
     breed
     filenames
-    files
     characteristics {
       color
       coat
@@ -925,7 +923,7 @@ export type UploadFileMutation = { __typename?: 'Mutation', uploadFile: boolean 
 export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, filenames: Array<string>, files: Array<string>, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
+export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, filenames: Array<string>, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
 
 export type DeleteCatMutationVariables = Exact<{
   id: Scalars['String'];

@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
+import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
@@ -12,6 +13,7 @@ import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauFile from "../../components/inputs/MauFile";
+import {Badge, IconButton, styled} from "@mui/material";
 
 
 interface CatFormInputs {
@@ -23,7 +25,6 @@ interface CatFormInputs {
     files: File[] | null
 }
 
-
 export default function CatForm() {
 
     const history = useHistory()
@@ -32,6 +33,7 @@ export default function CatForm() {
     // @ts-ignore
     const cat = history.location.state?.cat as GetCatsQuery["cats"][number] || undefined
 
+    const [filenames, setFilenames] = useState(cat?.filenames || [])
 
     const {handleSubmit, control} = useForm<CatFormInputs>({
         defaultValues: {
@@ -39,7 +41,8 @@ export default function CatForm() {
             breed: cat?.breed || '',
             coat: cat?.characteristics.coat || '',
             lifespan: cat?.characteristics.lifespan || '',
-            size: cat?.characteristics.size || ''
+            size: cat?.characteristics.size || '',
+            files: []
         }
     });
 
@@ -64,52 +67,61 @@ export default function CatForm() {
     // eslint-disable-next-line no-undef
     const onSubmit = async (data: CatFormInputs) => {
 
-        const { files, breed, coat, lifespan, size, color } = data
-        setIsDisabled(true)
+        try {
+            const { files, breed, coat, lifespan, size, color } = data
 
-        const options = {
-            catInput: {
-                breed: breed,
-                characteristics: {
-                    coat: coat,
-                    lifespan: lifespan,
-                    size: size,
-                    color: color
-                }
-            },
-            files: files
-        }
+            console.log(files)
 
-        let errors
+            setIsDisabled(true)
 
-        if (cat) {
-            const res = await updateCatMutation(
-                {
-                    variables: {
-                        id: cat._id,
-                        ...options,
-                        filenames: []
+            const options = {
+                catInput: {
+                    breed: breed,
+                    characteristics: {
+                        coat: coat,
+                        lifespan: lifespan,
+                        size: size,
+                        color: color
                     }
-                }
-            )
-            errors = !res.errors || res.errors.length === 0
-        } else {
-            const res = await createCatMutation({
-                variables: {
-                    ...options
-                }
-            })
-            errors = !res.errors || res.errors.length === 0
-        }
+                },
+                files: files
+            }
+
+            let errors
+
+            if (cat) {
+                const res = await updateCatMutation(
+                    {
+                        variables: {
+                            id: cat._id,
+                            ...options,
+                            filenames: filenames
+                        }
+                    }
+                )
+                errors = !res.errors || res.errors.length === 0
+            } else {
+                const res = await createCatMutation({
+                    variables: {
+                        ...options
+                    }
+                })
+                errors = !res.errors || res.errors.length === 0
+            }
 
 
-        if (errors) {
-            history.push('/')
+            if (errors) {
+                history.push('/')
+            }
+        } catch (e) {
+            console.log(e)
         }
     };
 
-    const onError = () => {
+    const onError = () => {}
 
+    const removeFilename = (filename: string) => {
+        setFilenames(filenames.filter(f => {return f !== filename}))
     }
 
     return (
@@ -173,7 +185,7 @@ export default function CatForm() {
                             />
                             <MauFile
                                 rules={{
-                                    required: true,
+                                    required: !cat || cat?.filenames.length === 0,
                                     multiple: true,
                                     filesize: 4000000
                                 }}
@@ -181,6 +193,34 @@ export default function CatForm() {
                                 control={control}
                                 name="files"
                             />
+                            <Box>
+                                {
+                                    cat ?
+                                        filenames.map(f => (
+
+                                            <Badge
+                                                key={f}
+                                                overlap="circular"
+                                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                                badgeContent={
+                                                    <IconButton
+                                                        sx={{
+                                                            width: '30px',
+                                                            height: '30px'
+                                                        }}
+                                                        onClick={() => {
+                                                            removeFilename(f)
+                                                        }}
+                                                    >
+                                                        <CloseIcon />
+                                                    </IconButton>
+                                                }
+                                            >
+                                                <Avatar alt="Travis Howard" src={f} />
+                                            </Badge>
+                                        )) : null
+                                }
+                            </Box>
                             <Button
                                 disabled={isDisabled}
                                 type="submit"

@@ -55,11 +55,11 @@ const customValidate: (val: any, rules: Rules) => keyof Rules | null = (val, rul
         const size = rules.filesize
         if (val !== null) {
             if (rules.multiple && rules.filesize) {
-                const fileArray = val as File[]
-                return fileArray.some(f => f.size > size) ? 'filesize' : null
+                const fileArray = val as File[] | null
+                return fileArray && fileArray.some(f => f.size > size) ? 'filesize' : null
             } else {
-                const fileConst = val as File
-                return fileConst.size > size ? 'filesize' : null
+                const fileConst = val as File | null
+                return fileConst && fileConst.size > size ? 'filesize' : null
             }
 
         }
@@ -131,7 +131,9 @@ const MauFile = ({control, label, name, rules}: MauFileProps) => {
                                              files
                                          }
                                      }: any) => {
-                                        const newValue = multiple ? [...files] : files[0]
+                                        const newValue = multiple
+                                            ? (files ? [...files] : [])
+                                            : (files ? files[0] : null)
                                         onChange(newValue)
                                     }}
                             />

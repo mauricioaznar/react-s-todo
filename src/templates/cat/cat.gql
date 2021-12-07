@@ -3,13 +3,11 @@ query GetCats {
         _id
         breed
         filenames
-        files
         characteristics {
             color
             coat
             lifespan
             size
-
         }
     }
 }
