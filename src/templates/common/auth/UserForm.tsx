@@ -13,17 +13,17 @@ import {
     useSignInMutation,
     useUpdateUserMutation,
     useUploadFileMutation
-} from "../../schema";
+} from "../../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
-import MauSnackbar from "../../components/MauSnackbar";
+import MauSnackbar from "../../../components/MauSnackbar";
 import {useHistory} from "react-router-dom";
-import {nameof} from "../../helpers/nameof";
+import {nameof} from "../../../helpers/nameof";
 import {useForm} from "react-hook-form";
-import MauTextField from "../../components/inputs/MauTextField";
-import MauCheckbox from "../../components/inputs/MauCheckbox";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import MauFile from "../../components/inputs/MauFile";
+import MauTextField from "../../../components/inputs/MauTextField";
+import MauCheckbox from "../../../components/inputs/MauCheckbox";
+import {useTypedSelector} from "../../../hooks/useTypedSelector";
+import MauFile from "../../../components/inputs/MauFile";
 
 
 interface UserFormInputs {

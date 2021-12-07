@@ -10,7 +10,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 // components
 import {useHistory} from 'react-router-dom'
-import {Fab, IconButton} from "@mui/material";
+import {Fab, IconButton, Typography} from "@mui/material";
 import {GetCatsQuery, namedOperations, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -40,11 +40,12 @@ export default function CatList() {
 
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
-            <Grid container alignItems={'center'}>
+            <Grid container alignItems={'center'} mb={2}>
                 <Grid item xs>
-                    <h2>
-                        Cats
-                    </h2>
+                    {
+                        <Typography variant={'h4'}>Cats</Typography>
+
+                    }
                 </Grid>
                 <Grid item>
                     <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>

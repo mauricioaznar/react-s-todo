@@ -13,7 +13,7 @@ import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauFile from "../../components/inputs/MauFile";
-import {Badge, IconButton, styled} from "@mui/material";
+import {Badge, IconButton} from "@mui/material";
 
 
 interface CatFormInputs {
@@ -70,8 +70,6 @@ export default function CatForm() {
         try {
             const { files, breed, coat, lifespan, size, color } = data
 
-            console.log(files)
-
             setIsDisabled(true)
 
             const options = {
@@ -114,7 +112,7 @@ export default function CatForm() {
                 history.push('/')
             }
         } catch (e) {
-            console.log(e)
+            //
         }
     };
 

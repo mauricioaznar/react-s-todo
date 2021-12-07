@@ -2,8 +2,8 @@ import * as React from 'react'
 
 import AddIcon from "@mui/icons-material/Add"
 import {useHistory} from 'react-router-dom'
-import {Avatar, Box, Fab, IconButton} from "@mui/material";
-import {GetUsersQuery, useGetUsersQuery} from "../../schema";
+import {Avatar, Box, Fab, IconButton, Typography} from "@mui/material";
+import {GetUsersQuery, useGetUsersQuery} from "../../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,7 +15,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {useTypedSelector} from "../../../hooks/useTypedSelector";
 
 
 export default function UserList() {
@@ -34,11 +34,12 @@ export default function UserList() {
 
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
-            <Grid container alignItems={'center'}>
+            <Grid container alignItems={'center'} mb={2}>
                 <Grid item xs>
-                    <h2>
-                        Users
-                    </h2>
+                    {
+                        <Typography variant={'h4'}>Users</Typography>
+
+                    }
                 </Grid>
                 <Grid item>
                     <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>

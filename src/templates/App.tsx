@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {ReactElement} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import {useMemo} from 'react';
+import {Route, Switch} from 'react-router-dom';
 import {animated, Spring} from 'react-spring'
 import {useApolloClient} from "@apollo/client";
 
@@ -11,13 +11,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
 import CopyrightIcon from '@mui/icons-material/Copyright';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MenuIcon from '@mui/icons-material/Menu';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PetsIcon from '@mui/icons-material/Pets';
-import InputIcon from '@mui/icons-material/Input';
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/SwipeableDrawer';
 import {
@@ -41,61 +35,26 @@ import {
 // local
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
-import UserForm from "./auth/UserForm";
-import UserList from "./auth/UserList";
-import TodoForm from "./todo/TodoForm";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
-import {ThemeVariantContext} from "../hooks/useThemeVariant";
-import TodoList from "./todo/TodoList";
-import CatList from "./cat/CatList";
-import CatForm from "./cat/CatForm";
+import {AppVariantContext} from "../hooks/useAppVariant";
+import {commonLinks} from "../services/router-links";
 
-interface RouterLink {
-    title: string;
-    icon: ReactElement<any, any>,
-    name: string;
-    path: string;
-    component: ReactElement<any, any>;
-    exact?: boolean;
-    navbar?: boolean;
-}
-
-const links: RouterLink[] = [
-    {icon: <PetsIcon/>, name: 'CatList', path: '/', component: <CatList />, exact: true, navbar: true, title: 'Cats'},
-    {icon: <InputIcon/>, name: 'CatForm', path: '/catForm', component: <CatForm />, title: 'Cat'},
-    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <UserForm />, title: 'Sign in'},
-    {icon: <PeopleAltIcon/>, name: 'UserList', path: '/users', component: <UserList />, navbar: true, title: 'Users'},
-    {
-        icon: <FormatListBulletedIcon/>,
-        name: 'TodoList',
-        path: '/todos',
-        component: <TodoList archived={false} />,
-        navbar: true,
-        title: 'Todos'
-    },
-    {
-        icon: <FormatListBulletedIcon/>,
-        name: 'Archive',
-        path: '/archive',
-        component: <TodoList archived={true} />,
-        navbar: true,
-        title: 'Archive'
-    },
-    {icon: <PlaylistAddIcon/>, name: 'TodoForm', path: '/todoForm', component: <TodoForm />, title: 'todo'},
-];
 
 const drawerWidth: number = 240;
 
+
 export default function App() {
     const theme = useTheme();
-    const { toggleThemeVariant, themeVariant } = React.useContext(ThemeVariantContext);
+
+    const { toggleAppVariant, appVariant } = React.useContext(AppVariantContext);
 
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
     };
     const client = useApolloClient()
+
     const {logout} = useActions()
 
     useTodoSubscription(
@@ -109,6 +68,11 @@ export default function App() {
 
         }
     );
+
+    const links = useMemo(() => {
+            return commonLinks.concat(appVariant?.links || [])
+        }
+    , [ appVariant ])
 
 
     return (
@@ -134,21 +98,24 @@ export default function App() {
                         <MenuIcon/>
                     </IconButton>
                     {
-                        themeVariant ?
-                            <SvgIcon component={themeVariant.icon} sx={{
+                        appVariant ?
+                            <SvgIcon
+
+                                fontSize={'large'}
+                                component={appVariant.icon} sx={{
                                 mr: 2
                             }} />
                             : null
                     }
 
                     <Typography
-                        component="h1"
-                        variant="h6"
+                        component="h3"
+                        variant="h3"
                         color="inherit"
                         noWrap
                         sx={{flexGrow: 1}}
                     >
-                        { themeVariant?.title }
+                        { appVariant?.title }
                     </Typography>
                     <IconButton color="inherit" onClick={async () => {
                         await client.clearStore()
@@ -206,12 +173,12 @@ export default function App() {
                 </List>
                 <Divider/>
                 <List style={{marginTop: `auto`}}>
-                    <ListItem button={true} onClick={toggleThemeVariant}>
+                    <ListItem button={true} onClick={toggleAppVariant}>
                         <ListItemIcon>
                             {theme.palette.mode === 'dark' ? <ModeNightIcon /> : <WbSunnyIcon />}
                         </ListItemIcon>
                         <ListItemText>
-                            {themeVariant?.title}
+                            {appVariant?.title}
                         </ListItemText>
                     </ListItem>
                     <ListItem dense>
@@ -250,7 +217,13 @@ export default function App() {
                                 }}
                             >
                                 <Switch>
-                                    {links.map(({ name, path, component: Elem, exact}) => {
+                                    {links.map(
+                                        (
+                                            { name,
+                                                path,
+                                                component: Elem,
+                                                exact
+                                            }) => {
                                         return (
                                             <Route
                                                 key={name}
@@ -278,7 +251,7 @@ export default function App() {
                                             />
                                         )
                                     })}
-                                    <Redirect to={'/todos'} from={'/'}/>
+
                                 </Switch>
                             </Paper>
                         </Grid>

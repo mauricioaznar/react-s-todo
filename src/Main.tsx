@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import App from "./templates/App";
 import {useTypedSelector} from "./hooks/useTypedSelector";
-import LogInForm from "./templates/auth/LoginForm";
+import LogInForm from "./templates/common/auth/LoginForm";
 import { useCurrentUserLazyQuery } from "./schema";
 import {useActions} from "./hooks/useActions";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,7 +9,7 @@ import {SnackbarProvider} from "notistack";
 import {ThemeProvider} from "@mui/material/styles";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
-import {ThemeVariantContext, useThemeVariant} from "./hooks/useThemeVariant";
+import {AppVariantContext, useAppVariant} from "./hooks/useAppVariant";
 import BigLoader from "./components/loaders/BigLoader";
 
 
@@ -36,12 +36,12 @@ const Main = () => {
     }, [accessToken])
 
     // theme
-    const {theme, themeVariantContextValue} = useThemeVariant()
+    const {theme, appVariantContextValue} = useAppVariant()
 
 
     return (
         <LocalizationProvider dateAdapter={DateAdapter}>
-            <ThemeVariantContext.Provider value={themeVariantContextValue}>
+            <AppVariantContext.Provider value={appVariantContextValue}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline/>
                     <SnackbarProvider maxSnack={6}>
@@ -54,7 +54,7 @@ const Main = () => {
                         }
                     </SnackbarProvider>
                 </ThemeProvider>
-            </ThemeVariantContext.Provider>
+            </AppVariantContext.Provider>
         </LocalizationProvider>
     );
 };
