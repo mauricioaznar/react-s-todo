@@ -2,11 +2,14 @@ query GetCats {
     cats {
         _id
         breed
+        filenames
+        files
         characteristics {
             color
             coat
             lifespan
             size
+
         }
     }
 }
@@ -30,12 +33,7 @@ mutation CreateCat($catInput: CatInput!) {
 }
 
 
-mutation UploadFile($file: Upload!, $userId: String!) {
-    uploadFile(file: $file, userId: $userId)
-}
-
-
-mutation UploadCatPhotos($files: [Upload!]!) {
-    uploadCatPhotos(files: $files)
+mutation UploadCatPhotos($id: String!, $files: [Upload!]!) {
+    uploadCatPhotos(_id: $id, files: $files)
 }
 

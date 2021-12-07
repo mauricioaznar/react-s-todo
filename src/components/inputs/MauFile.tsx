@@ -1,17 +1,18 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {Controller} from "react-hook-form";
 import {MauInputProps} from "./common/MauInputProps";
-import {Box, Button, styled} from "@mui/material";
+import {Box, Button, FormHelperText, styled} from "@mui/material";
 
 interface Rules {
     required?: boolean;
     filesize?: number;
+    multiple?: boolean;
 }
 
 
 interface MauFileProps extends MauInputProps {
     rules: Rules,
-    multiple?: boolean;
+    label?: string;
 }
 
 
@@ -19,11 +20,60 @@ const Input = styled('input')({
     display: 'none',
 });
 
-const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
 
-    const {filesize, ...rest} = rules
+const getRuleMessage = ({
+                            rule,
+                            rules,
+                            fieldName,
+                            value
+                        }: { rule: keyof Rules | 'validate', value: string, rules: Rules, fieldName: string }) => {
 
-    const getFilename = (value: any) => {
+    switch (rule) {
+        case 'required': {
+            return `${fieldName} is required.`
+        }
+
+        case 'validate': {
+            const customRule = customValidate(value, rules)
+
+            if (customRule === 'filesize') {
+                return `${fieldName} exceeds ${rules.filesize}`
+            }
+
+            return ''
+
+        }
+        default: {
+            return ''
+        }
+    }
+}
+
+const customValidate: (val: any, rules: Rules) => keyof Rules | null = (val, rules) => {
+    let rule: keyof Rules | null = null
+    if (rules.filesize) {
+        const size = rules.filesize
+        if (val !== null) {
+            if (rules.multiple && rules.filesize) {
+                const fileArray = val as File[]
+                return fileArray.some(f => f.size > size) ? 'filesize' : null
+            } else {
+                const fileConst = val as File
+                return fileConst.size > size ? 'filesize' : null
+            }
+
+        }
+    }
+    return rule
+}
+
+
+const MauFile = ({control, label, name, rules}: MauFileProps) => {
+
+    const {filesize, multiple, ...rest} = rules
+
+
+    const getFilename = useCallback((value: any) => {
         if (value && multiple) {
             const fileArray = value as File[]
             const filenames = fileArray
@@ -38,7 +88,7 @@ const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
         } else {
             return null;
         }
-    }
+    }, [multiple])
 
     return (
         <Controller
@@ -48,28 +98,25 @@ const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
                 {
                     ...rest,
                     validate: function (value) {
-
-                        if (filesize) {
-                            if (value !== null) {
-                                if (multiple) {
-                                    const fileArray = value as File[]
-                                    return fileArray.some(f => f.size < filesize)
-                                } else {
-                                    const fileConst = value as File
-                                    return fileConst.size < filesize
-                                }
-
-                            }
-                        }
-
-                        return true
-
+                        return customValidate(value, { filesize, multiple }) === null
                     }
                 }
 
             }
             render={(ops) => {
                 const {field: {onChange, value}, fieldState: {error}} = ops
+
+                let helperText = ''
+                if (error) {
+                    const rule = error.type as keyof Rules
+                    helperText = getRuleMessage({
+                        rule: rule,
+                        fieldName: label || name,
+                        rules: rules,
+                        value: value
+                    })
+                }
+
                 return (
 
                     <Box sx={{ my: 2}}>
@@ -103,6 +150,17 @@ const MauFile = ({control, name, rules, multiple = false}: MauFileProps) => {
                             {
                                 getFilename(value)
                             }
+                            <Box sx={{ my: 0 }}>
+
+                                {
+                                    error ? (
+                                        <FormHelperText sx={{ fontSize: '0.8em' }} error={true} variant={'standard'}>
+                                            { helperText }
+                                        </FormHelperText>
+                                    ) : null
+                                }
+                            </Box>
+
                         </label>
                     </Box>
                 )

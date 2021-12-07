@@ -14,7 +14,8 @@ import MauSnackbar from "../../../components/MauSnackbar";
 
 interface CatPhotosDialogProps {
     handleClose: () => void,
-    open: boolean
+    open: boolean,
+    id: string,
 }
 
 
@@ -25,7 +26,7 @@ interface CatPhotosForm {
 
 export default function CatPhotosDialog (props: CatPhotosDialogProps) {
 
-    const {handleClose, open} = props
+    const {handleClose, open, id} = props
 
     const {handleSubmit, control} = useForm<CatPhotosForm>({
         defaultValues: {
@@ -46,7 +47,8 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
             if (files && files.length > 0) {
                 await uploadCatPhotos({
                     variables: {
-                        files
+                        files,
+                        id
                     }
                 })
             }
@@ -76,9 +78,10 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
                         <MauFile
                             rules={{
                                 required: true,
-                                filesize: 1000
+                                filesize: 4000000,
+                                multiple: true
                             }}
-                            multiple
+
                             label={'Photos'}
                             control={control}
                             name="files"

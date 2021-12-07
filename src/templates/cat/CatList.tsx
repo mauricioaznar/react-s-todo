@@ -116,7 +116,9 @@ function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
             }
         })
     }
-    
+
+    console.log(cat.files)
+
     return (
         <>
             <TableRow
@@ -162,7 +164,7 @@ function CatRow({cat}: { cat: GetCatsQuery["cats"][number] }) {
                     </IconButton>
                 </TableCell>
             </TableRow>
-            <CatPhotosDialog handleClose={handleClose} open={open} />
+            <CatPhotosDialog handleClose={handleClose} open={open} id={cat._id}/>
         </>
     );
 }
