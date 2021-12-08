@@ -48,7 +48,7 @@ export default function App() {
     const theme = useTheme();
     const history = useHistory()
 
-    const { toggleAppVariant, appVariant } = React.useContext(AppVariantContext);
+    const { toggleAppVariant, currAppVariant } = React.useContext(AppVariantContext);
 
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
@@ -71,9 +71,9 @@ export default function App() {
     );
 
     const links = useMemo(() => {
-            return commonLinks.concat(appVariant?.links || [])
+            return commonLinks.concat(currAppVariant?.links || [])
         }
-    , [ appVariant ])
+    , [ currAppVariant ])
 
 
     return (
@@ -99,7 +99,7 @@ export default function App() {
                         <MenuIcon/>
                     </IconButton>
                     {
-                        appVariant ?
+                        currAppVariant ?
                             <IconButton
                                 sx={{ mr: 2 }}
                                 onClick={ () => { history.push('/') }}
@@ -107,7 +107,7 @@ export default function App() {
                                 <SvgIcon
 
                                     fontSize={'large'}
-                                    component={appVariant.icon}
+                                    component={currAppVariant.icon}
                                 />
                             </IconButton>
                             : null
@@ -120,7 +120,7 @@ export default function App() {
                         noWrap
                         sx={{flexGrow: 1}}
                     >
-                        { appVariant?.title }
+                        { currAppVariant?.title }
                     </Typography>
                     <IconButton color="inherit" onClick={async () => {
                         await client.clearStore()
@@ -183,7 +183,7 @@ export default function App() {
                             {theme.palette.mode === 'dark' ? <ModeNightIcon /> : <WbSunnyIcon />}
                         </ListItemIcon>
                         <ListItemText>
-                            {appVariant?.title}
+                            {currAppVariant?.title}
                         </ListItemText>
                     </ListItem>
                     <ListItem dense>

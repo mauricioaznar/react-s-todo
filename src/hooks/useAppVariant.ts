@@ -9,7 +9,8 @@ import {useHistory} from "react-router-dom";
 interface AppVariantContextInterface {
     toggleAppVariant: () => void;
     selectAppVariant: (av: AppVariant) => void;
-    appVariant: AppVariant | null;
+    currAppVariant: AppVariant | null;
+    appVariants: AppVariant[]
 }
 
 
@@ -20,7 +21,8 @@ export const AppVariantContext = React.createContext<AppVariantContextInterface>
         toggleAppVariant: () => {
         },
         selectAppVariant: () => {},
-        appVariant: null
+        currAppVariant: null,
+        appVariants: []
     }
 );
 
@@ -30,7 +32,7 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
 
     const history = useHistory()
 
-    const [appVariant, setAppVariant] = React.useState<AppVariant>(
+    const [currAppVariant, setCurrAppVariant] = React.useState<AppVariant>(
         () => {
             const themeName = window.localStorage.getItem('appVariant')
             if (themeName) {
@@ -47,7 +49,7 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
         () => ({
             toggleAppVariant: () => {
                 history.push('/')
-                setAppVariant((prevTheme) => {
+                setCurrAppVariant((prevTheme) => {
                     const foundIndex = appVariants.findIndex(t => t.name === prevTheme.name)
                     const index = foundIndex === appVariants.length - 1 ? 0 : foundIndex + 1;
                     const newTheme = appVariants[index]
@@ -58,7 +60,7 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
             selectAppVariant: (av: AppVariant) => {
                 history.push('/')
                 window.localStorage.setItem('appVariant', av.name)
-                setAppVariant(av);
+                setCurrAppVariant(av);
             },
         }),
         [],
@@ -69,30 +71,30 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
 
             WebFont.load({
                 google: {
-                    families: [appVariant.primaryFont, appVariant.secondaryFont,  appVariant.textFont],
+                    families: [currAppVariant.primaryFont, currAppVariant.secondaryFont,  currAppVariant.textFont],
                 },
             })
 
             const primaryFont = {
                 fontFamily: [
-                    `"${appVariant.primaryFont}"`,
+                    `"${currAppVariant.primaryFont}"`,
                     'Roboto'
                 ].join(',')
             }
             const secondaryFont = {
                 fontFamily: [
-                    `"${appVariant.secondaryFont}"`,
+                    `"${currAppVariant.secondaryFont}"`,
                     'Roboto'
                 ].join(',')
             } 
             
             const textFont = {
                 fontFamily: [
-                    `"${appVariant.textFont}"`,
+                    `"${currAppVariant.textFont}"`,
                     'sans-serif'
                 ].join(',')
             }
-            const {mode: modeColor, primary, secondary, divider, backgroundPrimary, backgroundSecondary} = appVariant
+            const {mode: modeColor, primary, secondary, divider, backgroundPrimary, backgroundSecondary} = currAppVariant
 
             const textPrimary = modeColor === 'light' ? `#000000` : grey['50']
             const textSecondary = modeColor === 'light' ? grey['900'] : grey['400']
@@ -157,14 +159,15 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
                 },
             })
         },
-        [appVariant],
+        [currAppVariant],
     );
 
     return {
         appVariantContextValue: {
             toggleAppVariant,
             selectAppVariant,
-            appVariant
+            currAppVariant,
+            appVariants
         },
         theme
     }
