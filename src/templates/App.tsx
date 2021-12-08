@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useMemo} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, useHistory} from 'react-router-dom';
 import {animated, Spring} from 'react-spring'
 import {useApolloClient} from "@apollo/client";
 
@@ -46,6 +46,7 @@ const drawerWidth: number = 240;
 
 export default function App() {
     const theme = useTheme();
+    const history = useHistory()
 
     const { toggleAppVariant, appVariant } = React.useContext(AppVariantContext);
 
@@ -99,12 +100,16 @@ export default function App() {
                     </IconButton>
                     {
                         appVariant ?
-                            <SvgIcon
+                            <IconButton
+                                sx={{ mr: 2 }}
+                                onClick={ () => { history.push('/') }}
+                            >
+                                <SvgIcon
 
-                                fontSize={'large'}
-                                component={appVariant.icon} sx={{
-                                mr: 2
-                            }} />
+                                    fontSize={'large'}
+                                    component={appVariant.icon}
+                                />
+                            </IconButton>
                             : null
                     }
 

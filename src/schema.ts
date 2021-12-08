@@ -253,183 +253,6 @@ export type Subscription = {
 };
 
 
-export const GetCatsDocument = gql`
-    query GetCats {
-  cats {
-    _id
-    breed
-    filenames
-    characteristics {
-      color
-      coat
-      lifespan
-      size
-    }
-  }
-}
-    `;
-
-/**
- * __useGetCatsQuery__
- *
- * To run a query within a React component, call `useGetCatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCatsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCatsQuery(baseOptions?: Apollo.QueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
-      }
-export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
-        }
-export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
-export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
-export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
-export const DeleteCatDocument = gql`
-    mutation DeleteCat($id: String!) {
-  deleteCat(_id: $id) {
-    breed
-  }
-}
-    `;
-export type DeleteCatMutationFn = Apollo.MutationFunction<DeleteCatMutation, DeleteCatMutationVariables>;
-
-/**
- * __useDeleteCatMutation__
- *
- * To run a mutation, you first call `useDeleteCatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCatMutation, { data, loading, error }] = useDeleteCatMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCatMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCatMutation, DeleteCatMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCatMutation, DeleteCatMutationVariables>(DeleteCatDocument, options);
-      }
-export type DeleteCatMutationHookResult = ReturnType<typeof useDeleteCatMutation>;
-export type DeleteCatMutationResult = Apollo.MutationResult<DeleteCatMutation>;
-export type DeleteCatMutationOptions = Apollo.BaseMutationOptions<DeleteCatMutation, DeleteCatMutationVariables>;
-export const UpdateCatDocument = gql`
-    mutation UpdateCat($id: String!, $catInput: CatInput!, $files: [Upload!]!, $filenames: [String!]!) {
-  updateCat(_id: $id, catInput: $catInput, filenames: $filenames, files: $files) {
-    breed
-  }
-}
-    `;
-export type UpdateCatMutationFn = Apollo.MutationFunction<UpdateCatMutation, UpdateCatMutationVariables>;
-
-/**
- * __useUpdateCatMutation__
- *
- * To run a mutation, you first call `useUpdateCatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCatMutation, { data, loading, error }] = useUpdateCatMutation({
- *   variables: {
- *      id: // value for 'id'
- *      catInput: // value for 'catInput'
- *      files: // value for 'files'
- *      filenames: // value for 'filenames'
- *   },
- * });
- */
-export function useUpdateCatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCatMutation, UpdateCatMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateCatMutation, UpdateCatMutationVariables>(UpdateCatDocument, options);
-      }
-export type UpdateCatMutationHookResult = ReturnType<typeof useUpdateCatMutation>;
-export type UpdateCatMutationResult = Apollo.MutationResult<UpdateCatMutation>;
-export type UpdateCatMutationOptions = Apollo.BaseMutationOptions<UpdateCatMutation, UpdateCatMutationVariables>;
-export const CreateCatDocument = gql`
-    mutation CreateCat($catInput: CatInput!, $files: [Upload!]!) {
-  createCat(catInput: $catInput, files: $files) {
-    breed
-  }
-}
-    `;
-export type CreateCatMutationFn = Apollo.MutationFunction<CreateCatMutation, CreateCatMutationVariables>;
-
-/**
- * __useCreateCatMutation__
- *
- * To run a mutation, you first call `useCreateCatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCatMutation, { data, loading, error }] = useCreateCatMutation({
- *   variables: {
- *      catInput: // value for 'catInput'
- *      files: // value for 'files'
- *   },
- * });
- */
-export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<CreateCatMutation, CreateCatMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCatMutation, CreateCatMutationVariables>(CreateCatDocument, options);
-      }
-export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
-export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
-export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
-export const UploadCatPhotosDocument = gql`
-    mutation UploadCatPhotos($id: String!, $files: [Upload!]!) {
-  uploadCatPhotos(_id: $id, files: $files)
-}
-    `;
-export type UploadCatPhotosMutationFn = Apollo.MutationFunction<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>;
-
-/**
- * __useUploadCatPhotosMutation__
- *
- * To run a mutation, you first call `useUploadCatPhotosMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUploadCatPhotosMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [uploadCatPhotosMutation, { data, loading, error }] = useUploadCatPhotosMutation({
- *   variables: {
- *      id: // value for 'id'
- *      files: // value for 'files'
- *   },
- * });
- */
-export function useUploadCatPhotosMutation(baseOptions?: Apollo.MutationHookOptions<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>(UploadCatPhotosDocument, options);
-      }
-export type UploadCatPhotosMutationHookResult = ReturnType<typeof useUploadCatPhotosMutation>;
-export type UploadCatPhotosMutationResult = Apollo.MutationResult<UploadCatPhotosMutation>;
-export type UploadCatPhotosMutationOptions = Apollo.BaseMutationOptions<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -671,6 +494,183 @@ export function useUploadFileMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UploadFileMutationHookResult = ReturnType<typeof useUploadFileMutation>;
 export type UploadFileMutationResult = Apollo.MutationResult<UploadFileMutation>;
 export type UploadFileMutationOptions = Apollo.BaseMutationOptions<UploadFileMutation, UploadFileMutationVariables>;
+export const GetCatsDocument = gql`
+    query GetCats {
+  cats {
+    _id
+    breed
+    filenames
+    characteristics {
+      color
+      coat
+      lifespan
+      size
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCatsQuery__
+ *
+ * To run a query within a React component, call `useGetCatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCatsQuery(baseOptions?: Apollo.QueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
+      }
+export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCatsQuery, GetCatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCatsQuery, GetCatsQueryVariables>(GetCatsDocument, options);
+        }
+export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
+export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
+export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export const DeleteCatDocument = gql`
+    mutation DeleteCat($id: String!) {
+  deleteCat(_id: $id) {
+    breed
+  }
+}
+    `;
+export type DeleteCatMutationFn = Apollo.MutationFunction<DeleteCatMutation, DeleteCatMutationVariables>;
+
+/**
+ * __useDeleteCatMutation__
+ *
+ * To run a mutation, you first call `useDeleteCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCatMutation, { data, loading, error }] = useDeleteCatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCatMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCatMutation, DeleteCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCatMutation, DeleteCatMutationVariables>(DeleteCatDocument, options);
+      }
+export type DeleteCatMutationHookResult = ReturnType<typeof useDeleteCatMutation>;
+export type DeleteCatMutationResult = Apollo.MutationResult<DeleteCatMutation>;
+export type DeleteCatMutationOptions = Apollo.BaseMutationOptions<DeleteCatMutation, DeleteCatMutationVariables>;
+export const UpdateCatDocument = gql`
+    mutation UpdateCat($id: String!, $catInput: CatInput!, $files: [Upload!]!, $filenames: [String!]!) {
+  updateCat(_id: $id, catInput: $catInput, filenames: $filenames, files: $files) {
+    breed
+  }
+}
+    `;
+export type UpdateCatMutationFn = Apollo.MutationFunction<UpdateCatMutation, UpdateCatMutationVariables>;
+
+/**
+ * __useUpdateCatMutation__
+ *
+ * To run a mutation, you first call `useUpdateCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCatMutation, { data, loading, error }] = useUpdateCatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      catInput: // value for 'catInput'
+ *      files: // value for 'files'
+ *      filenames: // value for 'filenames'
+ *   },
+ * });
+ */
+export function useUpdateCatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCatMutation, UpdateCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCatMutation, UpdateCatMutationVariables>(UpdateCatDocument, options);
+      }
+export type UpdateCatMutationHookResult = ReturnType<typeof useUpdateCatMutation>;
+export type UpdateCatMutationResult = Apollo.MutationResult<UpdateCatMutation>;
+export type UpdateCatMutationOptions = Apollo.BaseMutationOptions<UpdateCatMutation, UpdateCatMutationVariables>;
+export const CreateCatDocument = gql`
+    mutation CreateCat($catInput: CatInput!, $files: [Upload!]!) {
+  createCat(catInput: $catInput, files: $files) {
+    breed
+  }
+}
+    `;
+export type CreateCatMutationFn = Apollo.MutationFunction<CreateCatMutation, CreateCatMutationVariables>;
+
+/**
+ * __useCreateCatMutation__
+ *
+ * To run a mutation, you first call `useCreateCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCatMutation, { data, loading, error }] = useCreateCatMutation({
+ *   variables: {
+ *      catInput: // value for 'catInput'
+ *      files: // value for 'files'
+ *   },
+ * });
+ */
+export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<CreateCatMutation, CreateCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCatMutation, CreateCatMutationVariables>(CreateCatDocument, options);
+      }
+export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
+export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
+export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
+export const UploadCatPhotosDocument = gql`
+    mutation UploadCatPhotos($id: String!, $files: [Upload!]!) {
+  uploadCatPhotos(_id: $id, files: $files)
+}
+    `;
+export type UploadCatPhotosMutationFn = Apollo.MutationFunction<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>;
+
+/**
+ * __useUploadCatPhotosMutation__
+ *
+ * To run a mutation, you first call `useUploadCatPhotosMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadCatPhotosMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadCatPhotosMutation, { data, loading, error }] = useUploadCatPhotosMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      files: // value for 'files'
+ *   },
+ * });
+ */
+export function useUploadCatPhotosMutation(baseOptions?: Apollo.MutationHookOptions<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>(UploadCatPhotosDocument, options);
+      }
+export type UploadCatPhotosMutationHookResult = ReturnType<typeof useUploadCatPhotosMutation>;
+export type UploadCatPhotosMutationResult = Apollo.MutationResult<UploadCatPhotosMutation>;
+export type UploadCatPhotosMutationOptions = Apollo.BaseMutationOptions<UploadCatPhotosMutation, UploadCatPhotosMutationVariables>;
 export const GetTodosDocument = gql`
     query GetTodos($archived: Boolean, $completed: Boolean, $limit: Float, $after: String, $before: String, $due: String, $orderBy: FilterTodoColumn, $order: ColumnOrder) {
   todos(archived: $archived, completed: $completed, limit: $limit, after: $after, before: $before, due: $due, order: $order, orderBy: $orderBy) {
@@ -873,44 +873,6 @@ export function useTodoSubscription(baseOptions?: Apollo.SubscriptionHookOptions
       }
 export type TodoSubscriptionHookResult = ReturnType<typeof useTodoSubscription>;
 export type TodoSubscriptionResult = Apollo.SubscriptionResult<TodoSubscription>;
-export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, filenames: Array<string>, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
-
-export type DeleteCatMutationVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-
-export type DeleteCatMutation = { __typename?: 'Mutation', deleteCat: { __typename?: 'Cat', breed: string } };
-
-export type UpdateCatMutationVariables = Exact<{
-  id: Scalars['String'];
-  catInput: CatInput;
-  files: Array<Scalars['Upload']> | Scalars['Upload'];
-  filenames: Array<Scalars['String']> | Scalars['String'];
-}>;
-
-
-export type UpdateCatMutation = { __typename?: 'Mutation', updateCat: { __typename?: 'Cat', breed: string } };
-
-export type CreateCatMutationVariables = Exact<{
-  catInput: CatInput;
-  files: Array<Scalars['Upload']> | Scalars['Upload'];
-}>;
-
-
-export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };
-
-export type UploadCatPhotosMutationVariables = Exact<{
-  id: Scalars['String'];
-  files: Array<Scalars['Upload']> | Scalars['Upload'];
-}>;
-
-
-export type UploadCatPhotosMutation = { __typename?: 'Mutation', uploadCatPhotos: boolean };
-
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -958,6 +920,44 @@ export type UploadFileMutationVariables = Exact<{
 
 export type UploadFileMutation = { __typename?: 'Mutation', uploadFile: boolean };
 
+export type GetCatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', _id: string, breed: string, filenames: Array<string>, characteristics: { __typename?: 'Characteristics', color: string, coat: string, lifespan: string, size: string } }> };
+
+export type DeleteCatMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteCatMutation = { __typename?: 'Mutation', deleteCat: { __typename?: 'Cat', breed: string } };
+
+export type UpdateCatMutationVariables = Exact<{
+  id: Scalars['String'];
+  catInput: CatInput;
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
+  filenames: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type UpdateCatMutation = { __typename?: 'Mutation', updateCat: { __typename?: 'Cat', breed: string } };
+
+export type CreateCatMutationVariables = Exact<{
+  catInput: CatInput;
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
+}>;
+
+
+export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', breed: string } };
+
+export type UploadCatPhotosMutationVariables = Exact<{
+  id: Scalars['String'];
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
+}>;
+
+
+export type UploadCatPhotosMutation = { __typename?: 'Mutation', uploadCatPhotos: boolean };
+
 export type GetTodosQueryVariables = Exact<{
   archived?: Maybe<Scalars['Boolean']>;
   completed?: Maybe<Scalars['Boolean']>;
@@ -1001,21 +1001,21 @@ export type TodoSubscription = { __typename?: 'Subscription', todo: { __typename
 
 export const namedOperations = {
   Query: {
-    GetCats: 'GetCats',
     CurrentUser: 'CurrentUser',
     GetUsers: 'GetUsers',
     IsUserOccupied: 'IsUserOccupied',
+    GetCats: 'GetCats',
     GetTodos: 'GetTodos'
   },
   Mutation: {
-    DeleteCat: 'DeleteCat',
-    UpdateCat: 'UpdateCat',
-    CreateCat: 'CreateCat',
-    UploadCatPhotos: 'UploadCatPhotos',
     Login: 'Login',
     SignIn: 'SignIn',
     UpdateUser: 'UpdateUser',
     UploadFile: 'UploadFile',
+    DeleteCat: 'DeleteCat',
+    UpdateCat: 'UpdateCat',
+    CreateCat: 'CreateCat',
+    UploadCatPhotos: 'UploadCatPhotos',
     DeleteTodo: 'DeleteTodo',
     UpdateTodo: 'UpdateTodo',
     CreateTodo: 'CreateTodo'

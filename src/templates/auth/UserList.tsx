@@ -3,7 +3,7 @@ import * as React from 'react'
 import AddIcon from "@mui/icons-material/Add"
 import {useHistory} from 'react-router-dom'
 import {Avatar, Box, Fab, IconButton, Typography} from "@mui/material";
-import {GetUsersQuery, useGetUsersQuery} from "../../../schema";
+import {GetUsersQuery, useGetUsersQuery} from "../../schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,7 +15,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useTypedSelector} from "../../../hooks/useTypedSelector";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 
 export default function UserList() {

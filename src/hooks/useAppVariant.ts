@@ -8,6 +8,7 @@ import {useHistory} from "react-router-dom";
 
 interface AppVariantContextInterface {
     toggleAppVariant: () => void;
+    selectAppVariant: (av: AppVariant) => void;
     appVariant: AppVariant | null;
 }
 
@@ -18,6 +19,7 @@ export const AppVariantContext = React.createContext<AppVariantContextInterface>
     {
         toggleAppVariant: () => {
         },
+        selectAppVariant: () => {},
         appVariant: null
     }
 );
@@ -41,7 +43,7 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
     );
 
 
-    const {toggleAppVariant} = React.useMemo(
+    const {toggleAppVariant, selectAppVariant} = React.useMemo(
         () => ({
             toggleAppVariant: () => {
                 history.push('/')
@@ -52,6 +54,11 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
                     window.localStorage.setItem('appVariant', newTheme.name)
                     return newTheme
                 });
+            },
+            selectAppVariant: (av: AppVariant) => {
+                history.push('/')
+                window.localStorage.setItem('appVariant', av.name)
+                setAppVariant(av);
             },
         }),
         [],
@@ -156,6 +163,7 @@ export const useAppVariant: () => { appVariantContextValue: AppVariantContextInt
     return {
         appVariantContextValue: {
             toggleAppVariant,
+            selectAppVariant,
             appVariant
         },
         theme

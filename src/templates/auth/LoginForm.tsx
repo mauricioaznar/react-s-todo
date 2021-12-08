@@ -7,11 +7,11 @@ import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {useLoginMutation} from "../../../schema";
+import {useLoginMutation} from "../../schema";
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
-import {useActions} from "../../../hooks/useActions";
-import MauSnackbar from "../../../components/MauSnackbar";
+import {useActions} from "../../hooks/useActions";
+import MauSnackbar from "../../components/MauSnackbar";
 
 
 // const theme = createTheme();

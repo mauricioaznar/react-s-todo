@@ -1,10 +1,10 @@
 import {ReactElement} from "react";
 import HomeIcon from "@mui/icons-material/Home";
-import Home from "../templates/common/home/Home";
+import Home from "../templates/home/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import UserForm from "../templates/common/auth/UserForm";
+import UserForm from "../templates/auth/UserForm";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import UserList from "../templates/common/auth/UserList";
+import UserList from "../templates/auth/UserList";
 import * as React from "react";
 
 export interface RouterLink {
