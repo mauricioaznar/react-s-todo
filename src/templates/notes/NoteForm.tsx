@@ -1,10 +1,11 @@
 import React from 'react'
-import {Button, TextField} from "@mui/material";
+import {Button} from "@mui/material";
 import * as yup from 'yup';
-import {Form, useFormik, Formik} from 'formik';
+import {Form, Formik} from 'formik';
 import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../schema";
 import {ApolloQueryResult, useApolloClient} from "@apollo/client";
 import FormikTextField from "../../components/inputs/formik/FormikTextField";
+import FormikFile from "../../components/inputs/formik/FormikFile";
 
 export default function NoteForm () {
     const client = useApolloClient()
@@ -25,6 +26,11 @@ export default function NoteForm () {
             .string()
             .min(8, 'Password should be of minimum 8 characters length')
             .required('Password is required'),
+        file: yup
+            .mixed()
+            .nullable()
+            .required('Pleasse provide a file')
+
     });
 
     return (
@@ -32,13 +38,16 @@ export default function NoteForm () {
             initialValues={{
                 email: 'foobar@example.com',
                 password: 'foobar',
+                file: ''
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 alert(JSON.stringify(values, null, 2));
             }}
         >
-            <Form>
+            <Form
+
+            >
                 <FormikTextField
                     name="email"
                     label="Email"
@@ -47,6 +56,10 @@ export default function NoteForm () {
                     label="Password"
                     name="password"
                     type={'password'}
+                />
+                <FormikFile
+                    name={'file'}
+                    label={'Upload file'}
                 />
                 <Button color="primary" variant="contained" fullWidth type="submit">
                     Submit
