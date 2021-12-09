@@ -20,10 +20,10 @@ import MauSnackbar from "../../components/MauSnackbar";
 import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
-import MauTextField from "../../components/inputs/MauTextField";
-import MauCheckbox from "../../components/inputs/MauCheckbox";
+import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";
+import ReactHookFormCheckbox from "../../components/inputs/react-hook-form/ReactHookFormCheckbox";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import MauFile from "../../components/inputs/MauFile";
+import ReactHookFormFile from "../../components/inputs/react-hook-form/ReactHookFormFile";
 
 
 interface UserFormInputs {
@@ -191,7 +191,7 @@ export default function UserForm() {
                         </Typography>
                         <Box sx={{mt: 1}}>
                             <form onSubmit={handleSubmit(onSubmit, onError)}>
-                                <MauTextField
+                                <ReactHookFormTextField
                                     rules={{
                                         required: true,
                                         invalid: isUserOccupiedResult?.isUserOccupied ? 'User is already in use' : null
@@ -200,7 +200,7 @@ export default function UserForm() {
                                     control={control}
                                     name="username"
                                 />
-                                <MauTextField
+                                <ReactHookFormTextField
                                     rules={{
                                         required: true,
                                     }}
@@ -211,10 +211,10 @@ export default function UserForm() {
 
                                 {
                                     isAdmin
-                                        ? <MauCheckbox control={control} name={'admin'} label={'admin'} />
+                                        ? <ReactHookFormCheckbox control={control} name={'admin'} label={'admin'} />
                                         : null
                                 }
-                                <MauFile
+                                <ReactHookFormFile
                                     rules={{
                                         required: user ? !user.avatar : true,
                                     }}

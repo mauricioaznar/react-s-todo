@@ -11,8 +11,8 @@ import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from ".
 import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
-import MauTextField from "../../components/inputs/MauTextField";
-import MauFile from "../../components/inputs/MauFile";
+import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";
+import ReactHookFormFile from "../../components/inputs/react-hook-form/ReactHookFormFile";
 import {Badge, IconButton} from "@mui/material";
 
 
@@ -144,7 +144,7 @@ export default function CatForm() {
                     </Typography>
                     <Box sx={{mt: 1}}>
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
-                            <MauTextField
+                            <ReactHookFormTextField
                                 rules={{
                                     required: true,
                                 }}
@@ -152,7 +152,7 @@ export default function CatForm() {
                                 control={control}
                                 name="coat"
                             />
-                            <MauTextField
+                            <ReactHookFormTextField
                                 rules={{
                                     required: true,
                                 }}
@@ -161,7 +161,7 @@ export default function CatForm() {
                                 name="breed"
                             />
 
-                            <MauTextField
+                            <ReactHookFormTextField
                                 rules={{
                                     required: true,
                                 }}
@@ -170,7 +170,7 @@ export default function CatForm() {
                                 name="lifespan"
                             />
 
-                            <MauTextField
+                            <ReactHookFormTextField
                                 rules={{
                                     required: true,
                                 }}
@@ -178,7 +178,7 @@ export default function CatForm() {
                                 control={control}
                                 name="size"
                             />
-                            <MauTextField
+                            <ReactHookFormTextField
                                 rules={{
                                     required: true,
                                 }}
@@ -186,7 +186,7 @@ export default function CatForm() {
                                 control={control}
                                 name="color"
                             />
-                            <MauFile
+                            <ReactHookFormFile
                                 rules={{
                                     required: !cat || cat?.filenames.length === 0,
                                     multiple: true,

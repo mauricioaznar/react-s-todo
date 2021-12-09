@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {useForm} from "react-hook-form";
 import {ApolloError} from "@apollo/client";
-import MauFile from "../../../components/inputs/MauFile";
+import ReactHookFormFile from "../../../components/inputs/react-hook-form/ReactHookFormFile";
 import {useUploadCatPhotosMutation} from "../../../schema";
 import MauSnackbar from "../../../components/MauSnackbar";
 
@@ -75,7 +75,7 @@ export default function CatPhotosDialog (props: CatPhotosDialogProps) {
                             To subscribe to this website, please enter your email address here. We
                             will send updates occasionally.
                         </DialogContentText>
-                        <MauFile
+                        <ReactHookFormFile
                             rules={{
                                 required: true,
                                 filesize: 4000000,

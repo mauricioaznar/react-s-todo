@@ -36,9 +36,9 @@ import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import {Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
 import {nameof} from "../../helpers/nameof";
 import MauSnackbar from "../../components/MauSnackbar";
-import MauTextField from "../../components/inputs/MauTextField";
-import MauDatePicker from "../../components/inputs/MauDatePicker";
-import MauCheckbox from "../../components/inputs/MauCheckbox";
+import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";
+import ReactHookFormDatePicker from "../../components/inputs/react-hook-form/ReactHookFormDatePicker";
+import ReactHookFormCheckbox from "../../components/inputs/react-hook-form/ReactHookFormCheckbox";
 import {TodoNode} from "../../types/todo";
 
 interface TodoItem {
@@ -178,7 +178,7 @@ export default function TodoForm() {
                 </Typography>
                 <Box sx={{mt: 1}}>
                     <form onSubmit={handleSubmit(onSubmit, onError)}>
-                        <MauTextField
+                        <ReactHookFormTextField
                             rules={{
                                 required: true,
                                 minLength: 4
@@ -187,7 +187,7 @@ export default function TodoForm() {
                             control={control}
                             name="description"
                         />
-                        <MauDatePicker
+                        <ReactHookFormDatePicker
                             rules={{
                                 required: true,
                             }}
@@ -195,14 +195,14 @@ export default function TodoForm() {
                             control={control}
                             name="due"
                         />
-                        <MauCheckbox
+                        <ReactHookFormCheckbox
                             control={control}
                             name={'locked'}
                             label={'Locked'}
                             uncheckedIcon={LockOpenRoundedIcon}
                             checkedIcon={LockRoundedIcon}
                         />
-                        <MauCheckbox
+                        <ReactHookFormCheckbox
                             control={control}
                             name={'archived'}
                             label={'Archived'}
@@ -268,7 +268,7 @@ export default function TodoForm() {
                                                 {fields.map((field, index) => (
                                                     <TableRow key={index} >
                                                         <TableCell>
-                                                            <MauTextField
+                                                            <ReactHookFormTextField
                                                                 size={"small"}
                                                                 rules={{
                                                                     required: true,
@@ -279,7 +279,7 @@ export default function TodoForm() {
                                                             />
                                                         </TableCell>
                                                         <TableCell>
-                                                            <MauCheckbox
+                                                            <ReactHookFormCheckbox
                                                                 control={control}
                                                                 name={`items.${index}.completed`}
                                                             />

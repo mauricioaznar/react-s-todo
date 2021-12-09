@@ -68,7 +68,7 @@ const customValidate: (val: any, rules: Rules) => keyof Rules | null = (val, rul
 }
 
 
-const MauFile = ({control, label, name, rules}: MauFileProps) => {
+const ReactHookFormFile = ({control, label, name, rules}: MauFileProps) => {
 
     const {filesize, multiple, ...rest} = rules
 
@@ -171,4 +171,4 @@ const MauFile = ({control, label, name, rules}: MauFileProps) => {
     )
 }
 
-export default MauFile
+export default ReactHookFormFile

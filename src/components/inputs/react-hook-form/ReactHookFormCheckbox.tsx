@@ -14,7 +14,7 @@ interface MauCheckboxProps extends MauInputProps {
 }
 
 
-const MauCheckbox = ({ control, name, label, checkedIcon, uncheckedIcon }: MauCheckboxProps) => {
+const ReactHookFormCheckbox = ({ control, name, label, checkedIcon, uncheckedIcon }: MauCheckboxProps) => {
     const CheckedIcon = checkedIcon || CheckBoxIcon
     const UncheckedIcon = uncheckedIcon || CheckBoxOutlineBlankIcon
     return (
@@ -48,4 +48,4 @@ const MauCheckbox = ({ control, name, label, checkedIcon, uncheckedIcon }: MauCh
     )
 }
 
-export default MauCheckbox
+export default ReactHookFormCheckbox

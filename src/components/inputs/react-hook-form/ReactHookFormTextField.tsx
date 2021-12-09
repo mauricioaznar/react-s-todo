@@ -69,7 +69,7 @@ const customValidate: (val: string, rules: Rules) => keyof Rules | null = (val, 
 
 
 
-const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFieldProps) => {
+const ReactHookFormTextField = ({control, name, label, rules, size = "medium"}: MauTextFieldProps) => {
     const {email, invalid, ...rest} = rules
 
 
@@ -85,7 +85,7 @@ const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFie
                     }
                 }
             }
-
+ 
             render={(ops) => {
                 const {field: {onChange, value}, fieldState: {error}} = ops
                 let helperText = ''
@@ -117,4 +117,4 @@ const MauTextField = ({control, name, label, rules, size = "medium"}: MauTextFie
     )
 }
 
-export default MauTextField
+export default ReactHookFormTextField

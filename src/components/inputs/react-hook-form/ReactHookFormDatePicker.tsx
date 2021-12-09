@@ -1,8 +1,8 @@
 import React from 'react'
 import {Controller} from "react-hook-form";
 import {MauInputProps} from "./common/MauInputProps";
-import {DATE_FORMAT, DATE_MASK} from "../../helpers/format-date";
-import ClearableDatePicker from "../clearable-date-picker/clearable-date-picker";
+import {DATE_FORMAT, DATE_MASK} from "../../../helpers/format-date";
+import ClearableDatePicker from "../../clearable-date-picker/clearable-date-picker";
 
 interface Rules {
     required?: boolean;
@@ -30,7 +30,7 @@ const getRuleMessage = ({
 
 
 
-const MauDatePicker = ({control, name, label, rules, disabled}: MauDatePickerProps) => {
+const ReactHookFormDatePicker = ({control, name, label, rules, disabled}: MauDatePickerProps) => {
     return (
         <Controller
             control={control}
@@ -68,4 +68,4 @@ const MauDatePicker = ({control, name, label, rules, disabled}: MauDatePickerPro
     )
 }
 
-export default MauDatePicker
+export default ReactHookFormDatePicker
