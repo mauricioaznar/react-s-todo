@@ -144,7 +144,7 @@ export default function TodoForm() {
                 })
             }
 
-            history.push('/todoList')
+            history.push('/todos')
 
         } catch (e) {
             if (e instanceof ApolloError) {
