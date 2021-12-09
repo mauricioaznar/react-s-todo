@@ -290,6 +290,9 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export function refetchCurrentUserQuery(variables?: CurrentUserQueryVariables) {
+      return { query: CurrentUserDocument, variables: variables }
+    }
 export const GetUsersDocument = gql`
     query GetUsers {
   users {
@@ -327,6 +330,9 @@ export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
+export function refetchGetUsersQuery(variables?: GetUsersQueryVariables) {
+      return { query: GetUsersDocument, variables: variables }
+    }
 export const IsUserOccupiedDocument = gql`
     query IsUserOccupied($username: String!) {
   isUserOccupied(username: $username)
@@ -360,6 +366,9 @@ export function useIsUserOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type IsUserOccupiedQueryHookResult = ReturnType<typeof useIsUserOccupiedQuery>;
 export type IsUserOccupiedLazyQueryHookResult = ReturnType<typeof useIsUserOccupiedLazyQuery>;
 export type IsUserOccupiedQueryResult = Apollo.QueryResult<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>;
+export function refetchIsUserOccupiedQuery(variables?: IsUserOccupiedQueryVariables) {
+      return { query: IsUserOccupiedDocument, variables: variables }
+    }
 export const LoginDocument = gql`
     mutation Login($loginInput: loginInput!) {
   login(loginInput: $loginInput) {
@@ -536,6 +545,9 @@ export function useGetCatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCatsQueryHookResult = ReturnType<typeof useGetCatsQuery>;
 export type GetCatsLazyQueryHookResult = ReturnType<typeof useGetCatsLazyQuery>;
 export type GetCatsQueryResult = Apollo.QueryResult<GetCatsQuery, GetCatsQueryVariables>;
+export function refetchGetCatsQuery(variables?: GetCatsQueryVariables) {
+      return { query: GetCatsDocument, variables: variables }
+    }
 export const DeleteCatDocument = gql`
     mutation DeleteCat($id: String!) {
   deleteCat(_id: $id) {
@@ -744,6 +756,9 @@ export function useGetTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetTodosQueryHookResult = ReturnType<typeof useGetTodosQuery>;
 export type GetTodosLazyQueryHookResult = ReturnType<typeof useGetTodosLazyQuery>;
 export type GetTodosQueryResult = Apollo.QueryResult<GetTodosQuery, GetTodosQueryVariables>;
+export function refetchGetTodosQuery(variables?: GetTodosQueryVariables) {
+      return { query: GetTodosDocument, variables: variables }
+    }
 export const DeleteTodoDocument = gql`
     mutation DeleteTodo($id: String!) {
   deleteTodo(_id: $id) {

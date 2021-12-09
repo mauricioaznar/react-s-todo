@@ -11,6 +11,9 @@ generates:
       withHOC: false
       withComponent: false
       withHooks: true
+      withMutationFn: true
+      withRefetchFn: true
+      withResultType: true
   schema.graphql:
     plugins:
       - schema-ast

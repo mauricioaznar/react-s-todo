@@ -13,6 +13,7 @@ import TodoList from "../templates/todo/TodoList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import TodoForm from "../templates/todo/TodoForm";
 import * as React from "react";
+import NoteForm from "../templates/notes/NoteForm";
 
 
 export interface AppVariant {
@@ -46,7 +47,16 @@ export const appVariants: AppVariant[] = [
         primaryFont: 'Smooch',
         secondaryFont: 'Cinzel Decorative',
         textFont: 'Antic Slab',
-        links: []
+        links: [
+            {
+                icon: <PetsIcon/>,
+                name: 'NoteForm',
+                path: '/note',
+                component: <NoteForm />,
+                navbar: true,
+                title: 'Note form'
+            },
+        ]
     },
     {
         primary: `#E0AC84`,
@@ -68,7 +78,6 @@ export const appVariants: AppVariant[] = [
                 name: 'CatList',
                 path: '/cats',
                 component: <CatList/>,
-                exact: true,
                 navbar: true,
                 title: 'Cats'
             },
