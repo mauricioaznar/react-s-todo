@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {ApolloError} from "@apollo/client";
 import {useFieldArray, useForm} from "react-hook-form";
 
@@ -33,17 +33,15 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 
 // components
-import {GetTodosQuery, Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
+import {Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
 import {nameof} from "../../helpers/nameof";
 import MauSnackbar from "../../components/MauSnackbar";
 import MauTextField from "../../components/inputs/MauTextField";
 import MauDatePicker from "../../components/inputs/MauDatePicker";
 import MauCheckbox from "../../components/inputs/MauCheckbox";
-
-
+import {TodoNode} from "../../types/todo";
 
 interface TodoItem {
-
     description: string;
     completed: boolean;
 
@@ -58,16 +56,20 @@ interface TodoFormInputs {
     items: TodoItem[]
 }
 
+interface TodoFormLocationProps {
+    todo?: TodoNode
+}
+
 
 export default function TodoForm() {
 
-    const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
-    // todo check with react router typescript
-    // @ts-ignore
-    const todo = history.location.state?.todo as GetTodosQuery["todos"][number] || undefined
+    const history = useHistory()
+
+    const location = useLocation<TodoFormLocationProps>()
+    const todo = location.state?.todo
 
     const {handleSubmit, control} = useForm<TodoFormInputs>({
         defaultValues: {

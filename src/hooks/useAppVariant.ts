@@ -27,7 +27,13 @@ export const AppVariantContext = React.createContext<AppVariantContextInterface>
 );
 
 
-export const useAppVariant: () => { appVariantContextValue: AppVariantContextInterface, theme: Theme } = () => {
+export const useAppVariantContext: () => AppVariantContextInterface = () => {
+    return React.useContext(AppVariantContext);
+}
+
+
+
+export const useAppVariantCreator: () => { appVariantContextValue: AppVariantContextInterface, theme: Theme } = () => {
 
 
     const history = useHistory()

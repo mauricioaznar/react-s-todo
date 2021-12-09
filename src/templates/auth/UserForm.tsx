@@ -17,7 +17,7 @@ import {
 import {Grid} from "@mui/material";
 import {ApolloError} from "@apollo/client";
 import MauSnackbar from "../../components/MauSnackbar";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
@@ -33,18 +33,23 @@ interface UserFormInputs {
     avatar: File | null | undefined,
 }
 
+interface UseFormLocationProps {
+    user?: GetUsersQuery["users"][number]
+}
+
 export default function UserForm() {
 
     const {currentUser} = useTypedSelector(
         (state) => state.auth
     )
 
-    const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
-    // @ts-ignore
-    const user = history.location.state?.user as GetUsersQuery["users"][number] || undefined
+    const history = useHistory()
+
+    const location = useLocation<UseFormLocationProps>()
+    const user = location.state?.user
 
     const isUserCurrent = currentUser?._id === user?._id
     const isAdmin = currentUser?.admin

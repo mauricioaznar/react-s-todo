@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";
 import MauTextField from "../../components/inputs/MauTextField";
@@ -25,13 +25,18 @@ interface CatFormInputs {
     files: File[] | null
 }
 
+interface CatFormLocationProps {
+    cat: GetCatsQuery["cats"][number]
+}
+
 export default function CatForm() {
 
-    const history = useHistory()
     const [isDisabled, setIsDisabled] = useState(false)
 
-    // @ts-ignore
-    const cat = history.location.state?.cat as GetCatsQuery["cats"][number] || undefined
+    const history = useHistory()
+
+    const location = useLocation<CatFormLocationProps>()
+    const cat = location.state?.cat
 
     const [filenames, setFilenames] = useState(cat?.filenames || [])
 

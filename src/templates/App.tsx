@@ -37,7 +37,7 @@ import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
-import {AppVariantContext} from "../hooks/useAppVariant";
+import {useAppVariantContext} from "../hooks/useAppVariant";
 import {commonLinks} from "../services/router-links";
 
 
@@ -48,12 +48,13 @@ export default function App() {
     const theme = useTheme();
     const history = useHistory()
 
-    const { toggleAppVariant, currAppVariant } = React.useContext(AppVariantContext);
+    const { toggleAppVariant, currAppVariant } = useAppVariantContext();
 
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
     const client = useApolloClient()
 
     const {logout} = useActions()
@@ -72,8 +73,8 @@ export default function App() {
 
     const links = useMemo(() => {
             return commonLinks.concat(currAppVariant?.links || [])
-        }
-    , [ currAppVariant ])
+        }, [ currAppVariant ]
+    )
 
 
     return (

@@ -2,13 +2,13 @@ import React from 'react'
 import Grid from "@mui/material/Grid";
 import {Card, CardActions, CardContent, CardHeader, IconButton, Typography} from "@mui/material";
 import Container from "@mui/material/Container";
-import {AppVariantContext} from "../../hooks/useAppVariant";
+import {useAppVariantContext} from "../../hooks/useAppVariant";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 export default function Home () {
 
-    const { currAppVariant, selectAppVariant, appVariants } = React.useContext(AppVariantContext);
+    const { currAppVariant, selectAppVariant, appVariants } = useAppVariantContext()
 
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>

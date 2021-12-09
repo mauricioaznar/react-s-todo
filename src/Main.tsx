@@ -9,7 +9,7 @@ import {SnackbarProvider} from "notistack";
 import {ThemeProvider} from "@mui/material/styles";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
-import {AppVariantContext, useAppVariant} from "./hooks/useAppVariant";
+import {AppVariantContext, useAppVariantCreator} from "./hooks/useAppVariant";
 import BigLoader from "./components/loaders/BigLoader";
 
 
@@ -36,7 +36,7 @@ const Main = () => {
     }, [accessToken])
 
     // theme
-    const {theme, appVariantContextValue} = useAppVariant()
+    const {theme, appVariantContextValue} = useAppVariantCreator()
 
 
     return (
