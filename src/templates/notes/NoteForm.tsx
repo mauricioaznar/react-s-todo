@@ -32,10 +32,14 @@ export default function NoteForm () {
             .string()
             .nullable()
             .required('Pleasse provide a file'),
+        files:  yup
+            .mixed()
+            .nullable()
+            .required('Pleasse provide a date'),
         date:  yup
             .mixed()
             .nullable()
-            .required('Pleasse provide a date')
+            .required('Pleasse provide a file')
     });
 
     return (
@@ -43,8 +47,9 @@ export default function NoteForm () {
             initialValues={{
                 email: 'foobar@example.com',
                 password: 'foobar',
-                file: '',
-                date: '',
+                file: null,
+                files: null,
+                date: null,
                 checkbox: false
             }}
             validationSchema={validationSchema}
@@ -71,6 +76,12 @@ export default function NoteForm () {
                 <FormikFile
                     name={'file'}
                     label={'Upload file'}
+                />
+
+                <FormikFile
+                    name={'files'}
+                    label={'Upload files'}
+                    multiple={true}
                 />
                 <FormikCheckbox
                     name={'checkbox'}

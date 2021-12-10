@@ -48,10 +48,14 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
                         files
                     }}: any) => {
                         const newValue = multiple
-                            ? (files ? [...files] : [])
-                            : (files ? files[0] : null)
+                            ? (files && files.length > 0 ? [...files] : null)
+                            : (files && files.length > 0 ? files[0] : null)
+
+                        console.log(files)
+                        console.log(newValue)
+
                         fieldHelperProps.setTouched(true, false)
-                        fieldHelperProps.setValue(newValue, false)
+                        fieldHelperProps.setValue(newValue, true)
                     }}
                     name={formikProps.name}
                 />
@@ -59,12 +63,12 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
                     sx={{ mr: 1 }}
                     variant="contained"
                     component="span"
-                    color={formikMeta.error ? `error` : undefined}
+                    color={formikMeta.touched && formikMeta.error ? `error` : undefined}
                 >
                     {
-                        !formikMeta.error
-                            ? label
-                            : `Error`
+                        formikMeta.touched && formikMeta.error
+                            ? `Error`
+                            : label
                     }
                 </Button>
                 {
@@ -73,7 +77,7 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
                 <Box sx={{ my: 0 }}>
 
                     {
-                        formikMeta.error ? (
+                        formikMeta.touched && formikMeta.error ? (
                             <FormHelperText sx={{ fontSize: '0.8em' }} error={true} variant={'standard'}>
                                 { formikMeta.error }
                             </FormHelperText>

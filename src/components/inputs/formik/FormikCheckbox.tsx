@@ -28,10 +28,7 @@ const ReactHookFormCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: Form
                     justifyContent: "flex-start"
                 }}
                 checked={formikProps.value}
-                onChange={() => {
-                    fieldHelperProps.setValue(!formikProps.value, true)
-                }}
-                value={formikProps.value}
+
                 control={
                     <Checkbox
                         checkedIcon={<CheckedIcon />}
@@ -39,6 +36,13 @@ const ReactHookFormCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: Form
                     />
                 }
                 label={label || ''}
+                {
+                    ...formikProps
+                }
+                onChange={() => {
+                    fieldHelperProps.setValue(!formikProps.value, true)
+                }}
+                value={formikProps.value}
             />
         </FormGroup>
     )

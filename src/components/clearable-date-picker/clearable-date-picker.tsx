@@ -28,6 +28,7 @@ export default function ClearableDatePicker (props: EnhancedDatePickerProps) {
             mask={mask}
             inputFormat={inputFormat}
             label={label}
+
             value={value}
             clearable={true}
             disabled={disabled}

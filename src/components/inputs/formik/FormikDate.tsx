@@ -25,7 +25,7 @@ const ReactHookFormDatePicker = ({  name, label }: FormikDateProps) => {
                 fieldHelperProps.setValue(val, true)
             }}
             value={formikProps.value}
-            error={!!formikMeta.error}
+            error={formikMeta.touched && !!formikMeta.error}
             helperText={formikMeta.touched ? formikMeta.error : ''}
         />
     )
