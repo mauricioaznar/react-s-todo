@@ -40,6 +40,7 @@ const ReactHookFormCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: Form
                     ...formikProps
                 }
                 onChange={() => {
+                    fieldHelperProps.setTouched(true, false)
                     fieldHelperProps.setValue(!formikProps.value, true)
                 }}
                 value={formikProps.value}
