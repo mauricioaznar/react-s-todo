@@ -51,9 +51,6 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
                             ? (files && files.length > 0 ? [...files] : null)
                             : (files && files.length > 0 ? files[0] : null)
 
-                        console.log(files)
-                        console.log(newValue)
-
                         fieldHelperProps.setTouched(true, false)
                         fieldHelperProps.setValue(newValue, true)
                     }}

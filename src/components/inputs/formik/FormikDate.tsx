@@ -22,6 +22,7 @@ const ReactHookFormDatePicker = ({  name, label }: FormikDateProps) => {
             inputFormat={DATE_FORMAT}
             label={label}
             onChange={(val) => {
+                fieldHelperProps.setTouched(true, false)
                 fieldHelperProps.setValue(val, true)
             }}
             value={formikProps.value}
