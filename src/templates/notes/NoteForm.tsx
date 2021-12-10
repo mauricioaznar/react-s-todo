@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button} from "@mui/material";
+import {Button, TableCell, TableRow} from "@mui/material";
 import * as yup from 'yup';
 import {Form, Formik} from 'formik';
 import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../schema";
@@ -10,6 +10,7 @@ import FormikDate from "../../components/inputs/formik/FormikDate";
 import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
 import FormikRadio from "../../components/inputs/formik/FormikRadio";
 import FormikAutocomplete from "../../components/inputs/formik/FormikAutocomplete";
+import FormikArray from "../../components/inputs/formik/FormikArray";
 
 export default function NoteForm () {
     const client = useApolloClient()
@@ -52,12 +53,14 @@ export default function NoteForm () {
             .required('Pleasse provide a autocomplete'),
         array: yup
             .array()
+            .min(1, 'array required minimum 1 item')
             .of(
                 yup
                     .object()
                     .shape({
                         description: yup
-                            .string().required('description is required'),
+                            .string()
+                            .required('description is required'),
                     })
             )
             .required('Required')
@@ -89,7 +92,7 @@ export default function NoteForm () {
                 checkbox: false,
                 radio: items[0].value,
                 autocomplete: items[0].value,
-                array: []
+                array: [ { description: '12341234' }]
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -139,6 +142,33 @@ export default function NoteForm () {
                     itemValue={'value'}
                     name={'autocomplete'}
                     label={'Autocomplete'}
+                />
+
+                <FormikArray
+                    renderHeader={
+                        () => {
+                            return <TableRow>
+                                <TableCell width={'70%'}>Description</TableCell>
+                                <TableCell />
+                            </TableRow>
+                        }
+                    }
+                    renderRow={(i, index) => {
+                        return <TableRow key={index}>
+                            <TableCell>
+                                <FormikTextField
+                                    name={`array[${index}].description`}
+                                    label="Desscription"
+                                />
+                            </TableCell>
+                            <TableCell />
+                        </TableRow>
+                    }}
+                    defaultItem={{
+                        description: ''
+                    }}
+                    name={'array'}
+                    label={'Array'}
                 />
 
                 <Button color="primary" variant="contained" fullWidth type="submit">

@@ -64,7 +64,7 @@ export default function FormikRadio<T>({ name, label, items, itemValue, itemText
             </RadioGroup>
             {
                 hasError? (
-                    <FormHelperText sx={{ fontSize: '0.8em' }} error={true} variant={'standard'}>
+                    <FormHelperText sx={{ fontSize: '0.8rem' }} error={true} variant={'standard'}>
                         { formikMeta.error }
                     </FormHelperText>
                 ) : null

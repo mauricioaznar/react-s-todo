@@ -14,7 +14,7 @@ interface FormikCheckboxProps extends FormikDefaultProps {
 }
 
 
-const ReactHookFormCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: FormikCheckboxProps) => {
+const FormikCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: FormikCheckboxProps) => {
     const CheckedIcon = checkedIcon || CheckBoxIcon
     const UncheckedIcon = uncheckedIcon || CheckBoxOutlineBlankIcon
 
@@ -49,4 +49,4 @@ const ReactHookFormCheckbox = ({ name, label, checkedIcon, uncheckedIcon }: Form
     )
 }
 
-export default ReactHookFormCheckbox
+export default FormikCheckbox

@@ -156,7 +156,7 @@ const ReactHookFormFile = ({control, label, name, rules}: MauFileProps) => {
 
                                 {
                                     error ? (
-                                        <FormHelperText sx={{ fontSize: '0.8em' }} error={true} variant={'standard'}>
+                                        <FormHelperText sx={{ fontSize: '0.8rem' }} error={true} variant={'standard'}>
                                             { helperText }
                                         </FormHelperText>
                                     ) : null
