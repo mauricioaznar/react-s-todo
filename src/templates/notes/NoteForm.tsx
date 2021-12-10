@@ -8,6 +8,8 @@ import FormikTextField from "../../components/inputs/formik/FormikTextField";
 import FormikFile from "../../components/inputs/formik/FormikFile";
 import FormikDate from "../../components/inputs/formik/FormikDate";
 import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
+import FormikRadio from "../../components/inputs/formik/FormikRadio";
+import FormikAutocomplete from "../../components/inputs/formik/FormikAutocomplete";
 
 export default function NoteForm () {
     const client = useApolloClient()
@@ -39,8 +41,31 @@ export default function NoteForm () {
         date:  yup
             .mixed()
             .nullable()
-            .required('Pleasse provide a file')
+            .required('Pleasse provide a file'),
+        radio:  yup
+            .mixed()
+            .nullable()
+            .required('Pleasse provide a radio'),
+        autocomplete:  yup
+            .mixed()
+            .nullable()
+            .required('Pleasse provide a autocomplete'),
     });
+
+    const items = [
+        {
+            text: 'text 1',
+            value: 'value 1'
+        },
+        {
+            text: 'text 2',
+            value: 'value 2'
+        },
+        {
+            text: 'text 3',
+            value: 'value 3'
+        },
+    ]
 
     return (
         <Formik
@@ -50,10 +75,13 @@ export default function NoteForm () {
                 file: null,
                 files: null,
                 date: null,
-                checkbox: false
+                checkbox: false,
+                radio: null,
+                autocomplete: items[0],
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+
                 alert(JSON.stringify(values, null, 2));
             }}
         >
@@ -86,6 +114,22 @@ export default function NoteForm () {
                 <FormikCheckbox
                     name={'checkbox'}
                     label={'Checkbox'}
+                />
+                <FormikRadio
+                    items={items}
+                    itemValue={'value'}
+                    itemText={'text'}
+                    itemId={'value'}
+                    name={'radio'}
+                    label={'Radio'}
+                />
+                <FormikAutocomplete
+                    items={items}
+                    itemValue={'value'}
+                    itemText={'text'}
+                    itemId={'value'}
+                    name={'autocomplete'}
+                    label={'Autocomplete'}
                 />
 
                 <Button color="primary" variant="contained" fullWidth type="submit">
