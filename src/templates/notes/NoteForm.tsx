@@ -50,6 +50,17 @@ export default function NoteForm () {
             .mixed()
             .nullable()
             .required('Pleasse provide a autocomplete'),
+        array: yup
+            .array()
+            .of(
+                yup
+                    .object()
+                    .shape({
+                        description: yup
+                            .string().required('description is required'),
+                    })
+            )
+            .required('Required')
     });
 
     const items = [
@@ -71,17 +82,17 @@ export default function NoteForm () {
         <Formik
             initialValues={{
                 email: 'foobar@example.com',
-                password: 'foobar',
+                password: 'foobar43243',
                 file: null,
                 files: null,
-                date: null,
+                date: '2021-01-01',
                 checkbox: false,
-                radio: null,
-                autocomplete: items[0],
+                radio: items[0].value,
+                autocomplete: items[0].value,
+                array: []
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-
                 alert(JSON.stringify(values, null, 2));
             }}
         >
@@ -117,15 +128,15 @@ export default function NoteForm () {
                 />
                 <FormikRadio
                     items={items}
-                    itemValue={'value'}
                     itemText={'text'}
+                    itemValue={'value'}
                     name={'radio'}
                     label={'Radio'}
                 />
                 <FormikAutocomplete
                     items={items}
-                    itemValue={'value'}
                     itemText={'text'}
+                    itemValue={'value'}
                     name={'autocomplete'}
                     label={'Autocomplete'}
                 />

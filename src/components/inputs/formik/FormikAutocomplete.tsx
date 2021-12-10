@@ -6,27 +6,42 @@ import {useState} from "react";
 
 interface FormikAutocompleteProps<T> extends FormikDefaultProps {
     items: T[];
-    itemValue: keyof T;
     itemText: keyof T;
+    itemValue: keyof T;
+    returnObject?: boolean;
 }
 
-export default function FormikAutocomplete<T>({ name, label, items, itemValue, itemText }: FormikAutocompleteProps<T>) {
+export default function FormikAutocomplete<T>({ name, label, items, itemValue, itemText, returnObject = false }: FormikAutocompleteProps<T>) {
+
+
 
     const [, formikMeta, fieldHelperProps] = useField(name)
-    const [autocompleteValue, setAutocompleteValue] = useState(formikMeta.initialValue)
+    const [autocompleteValue, setAutocompleteValue] =  useState(() => {
+        return returnObject
+            ? formikMeta.initialValue
+            : items.find(i => {
+                return i[itemValue] === formikMeta.initialValue
+            })
+    })
 
     const hasError = Boolean(formikMeta.touched && formikMeta.error)
 
     return (
         <Autocomplete
             isOptionEqualToValue={(option, value) => {
-                return option[itemValue] === value[itemValue]
+                if (returnObject) {
+                    return option === value
+                } else {
+                    return option[itemValue] === value[itemValue]
+                }
+
             }}
             value={autocompleteValue}
-            onChange={(event: any, newValue: any) => {
+            onChange={(event: any, val: any) => {
+                const newValue = returnObject ? val : val[itemValue]
                 fieldHelperProps.setTouched(true, false)
-                fieldHelperProps.setValue(newValue[itemValue], true);
-                setAutocompleteValue(newValue)
+                fieldHelperProps.setValue(newValue, true);
+                setAutocompleteValue(val)
             }}
 
             getOptionLabel={
