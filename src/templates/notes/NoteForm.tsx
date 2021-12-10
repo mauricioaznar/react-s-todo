@@ -6,6 +6,8 @@ import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../schema";
 import {ApolloQueryResult, useApolloClient} from "@apollo/client";
 import FormikTextField from "../../components/inputs/formik/FormikTextField";
 import FormikFile from "../../components/inputs/formik/FormikFile";
+import FormikDate from "../../components/inputs/formik/FormikDate";
+import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
 
 export default function NoteForm () {
     const client = useApolloClient()
@@ -27,10 +29,13 @@ export default function NoteForm () {
             .min(8, 'Password should be of minimum 8 characters length')
             .required('Password is required'),
         file: yup
+            .string()
+            .nullable()
+            .required('Pleasse provide a file'),
+        date:  yup
             .mixed()
             .nullable()
-            .required('Pleasse provide a file')
-
+            .required('Pleasse provide a date')
     });
 
     return (
@@ -38,7 +43,9 @@ export default function NoteForm () {
             initialValues={{
                 email: 'foobar@example.com',
                 password: 'foobar',
-                file: ''
+                file: '',
+                date: '',
+                checkbox: false
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -48,6 +55,10 @@ export default function NoteForm () {
             <Form
 
             >
+                <FormikDate
+                    name={'date'}
+                    label={'Date'}
+                />
                 <FormikTextField
                     name="email"
                     label="Email"
@@ -61,6 +72,11 @@ export default function NoteForm () {
                     name={'file'}
                     label={'Upload file'}
                 />
+                <FormikCheckbox
+                    name={'checkbox'}
+                    label={'Checkbox'}
+                />
+
                 <Button color="primary" variant="contained" fullWidth type="submit">
                     Submit
                 </Button>

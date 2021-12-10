@@ -39,7 +39,7 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
     }, [multiple])
 
     return (
-        <Box sx={{ my: 2}}>
+        <Box sx={{ mt: 2, mb: 3}}>
             <label>
                 <Input
                     multiple={multiple}
@@ -51,7 +51,7 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
                             ? (files ? [...files] : [])
                             : (files ? files[0] : null)
                         fieldHelperProps.setTouched(true, false)
-                        fieldHelperProps.setValue(newValue, true)
+                        fieldHelperProps.setValue(newValue, false)
                     }}
                     name={formikProps.name}
                 />
