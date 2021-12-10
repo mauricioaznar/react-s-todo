@@ -8,7 +8,6 @@ interface FormikAutocompleteProps<T> extends FormikDefaultProps {
     items: T[];
     itemValue: keyof T;
     itemText: keyof T;
-    itemId: keyof T;
 }
 
 export default function FormikAutocomplete<T>({ name, label, items, itemValue, itemText }: FormikAutocompleteProps<T>) {

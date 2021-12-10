@@ -119,7 +119,6 @@ export default function NoteForm () {
                     items={items}
                     itemValue={'value'}
                     itemText={'text'}
-                    itemId={'value'}
                     name={'radio'}
                     label={'Radio'}
                 />
@@ -127,7 +126,6 @@ export default function NoteForm () {
                     items={items}
                     itemValue={'value'}
                     itemText={'text'}
-                    itemId={'value'}
                     name={'autocomplete'}
                     label={'Autocomplete'}
                 />

@@ -12,10 +12,9 @@ interface FormikRadioProps<T> extends FormikDefaultProps {
     items: T[];
     itemValue: keyof T;
     itemText: keyof T;
-    itemId: keyof T;
 }
 
-export default function FormikRadio<T>({ name, label, items, itemValue, itemText, itemId }: FormikRadioProps<T>) {
+export default function FormikRadio<T>({ name, label, items, itemValue, itemText }: FormikRadioProps<T>) {
 
     const [formikProps, formikMeta, fieldHelperProps] = useField(name)
 
@@ -37,7 +36,7 @@ export default function FormikRadio<T>({ name, label, items, itemValue, itemText
             >
                 {
                     items.map((item, index) => {
-                        const itemKey = item[itemId]
+                        const itemKey = item[itemValue]
                         const key = typeof itemKey === 'string' || typeof itemKey === 'number'
                             ? itemKey
                             : index;
