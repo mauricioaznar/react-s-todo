@@ -2,14 +2,13 @@ import React, {useEffect} from 'react';
 import App from "./templates/App";
 import {useTypedSelector} from "./hooks/useTypedSelector";
 import LogInForm from "./templates/auth/LoginForm";
-import { useCurrentUserLazyQuery } from "./schema";
+import {useCurrentUserLazyQuery} from "./schema";
 import {useActions} from "./hooks/useActions";
 import CssBaseline from "@mui/material/CssBaseline";
 import {SnackbarProvider} from "notistack";
-import {ThemeProvider} from "@mui/material/styles";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
-import {AppVariantContext, useAppVariantCreator} from "./hooks/useAppVariant";
+import {AppVariant} from "./hooks/app-variants/useAppVariant";
 import BigLoader from "./components/loaders/BigLoader";
 
 
@@ -36,25 +35,22 @@ const Main = () => {
     }, [accessToken])
 
     // theme
-    const {theme, appVariantContextValue} = useAppVariantCreator()
 
 
     return (
         <LocalizationProvider dateAdapter={DateAdapter}>
-            <AppVariantContext.Provider value={appVariantContextValue}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline/>
-                    <SnackbarProvider maxSnack={6}>
-                        {
-                            loading
-                                ? <BigLoader/>
-                                : accessToken
-                                    ? <App/>
-                                    : <LogInForm/>
-                        }
-                    </SnackbarProvider>
-                </ThemeProvider>
-            </AppVariantContext.Provider>
+            <AppVariant>
+                <CssBaseline/>
+                <SnackbarProvider maxSnack={6}>
+                    {
+                        loading
+                            ? <BigLoader/>
+                            : accessToken
+                                ? <App/>
+                                : <LogInForm/>
+                    }
+                </SnackbarProvider>
+            </AppVariant>
         </LocalizationProvider>
     );
 };

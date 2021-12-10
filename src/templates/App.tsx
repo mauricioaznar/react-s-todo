@@ -37,7 +37,7 @@ import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
 import {Query, useTodoSubscription} from "../schema";
 import {nameof} from "../helpers/nameof";
-import {useAppVariantContext} from "../hooks/useAppVariant";
+import {useAppVariant} from "../hooks/app-variants/useAppVariant";
 import {commonLinks} from "../services/router-links";
 
 
@@ -48,7 +48,7 @@ export default function App() {
     const theme = useTheme();
     const history = useHistory()
 
-    const { toggleAppVariant, currAppVariant } = useAppVariantContext();
+    const { toggleAppVariant, currAppVariant } = useAppVariant();
 
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {

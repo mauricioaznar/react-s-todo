@@ -3,20 +3,20 @@ import ParkIcon from "@mui/icons-material/Park";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
 import {SvgIconTypeMap} from "@mui/material";
-import {RouterLink} from "./router-links";
+import {RouterLink} from "../../services/router-links";
 import PetsIcon from "@mui/icons-material/Pets";
-import CatList from "../templates/cat/CatList";
+import CatList from "../../templates/cat/CatList";
 import InputIcon from "@mui/icons-material/Input";
-import CatForm from "../templates/cat/CatForm";
+import CatForm from "../../templates/cat/CatForm";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import TodoList from "../templates/todo/TodoList";
+import TodoList from "../../templates/todo/TodoList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import TodoForm from "../templates/todo/TodoForm";
+import TodoForm from "../../templates/todo/TodoForm";
 import * as React from "react";
-import NoteForm from "../templates/notes/NoteForm";
+import NoteForm from "../../templates/notes/NoteForm";
 
 
-export interface AppVariant {
+export interface AppVariantType {
     name: string;
     title: string;
     primary: string;
@@ -33,7 +33,7 @@ export interface AppVariant {
 }
 
 
-export const appVariants: AppVariant[] = [
+export const appVariants: AppVariantType[] = [
     {
         primary: `#D98014`,
         secondary: `#9937A6`,

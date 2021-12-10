@@ -1,22 +1,19 @@
 import React from 'react'
 import {grey} from "@mui/material/colors";
-import {createTheme, Theme} from "@mui/material";
+import {createTheme, ThemeProvider} from "@mui/material";
 import WebFont from 'webfontloader'
-import {AppVariant, appVariants} from "../services/app-variants";
+import {appVariants, AppVariantType} from "./app-variants";
 import {useHistory} from "react-router-dom";
 
 
 interface AppVariantContextInterface {
     toggleAppVariant: () => void;
-    selectAppVariant: (av: AppVariant) => void;
-    currAppVariant: AppVariant | null;
-    appVariants: AppVariant[]
+    selectAppVariant: (av: AppVariantType) => void;
+    currAppVariant: AppVariantType | null;
+    appVariants: AppVariantType[]
 }
 
-
-
-
-export const AppVariantContext = React.createContext<AppVariantContextInterface>(
+const AppVariantContext = React.createContext<AppVariantContextInterface>(
     {
         toggleAppVariant: () => {
         },
@@ -27,18 +24,19 @@ export const AppVariantContext = React.createContext<AppVariantContextInterface>
 );
 
 
-export const useAppVariantContext: () => AppVariantContextInterface = () => {
+export const useAppVariant: () => AppVariantContextInterface = () => {
     return React.useContext(AppVariantContext);
 }
 
+interface AppVariantProps {
+    children: React.ReactNode
+}
 
-
-export const useAppVariantCreator: () => { appVariantContextValue: AppVariantContextInterface, theme: Theme } = () => {
-
+export const AppVariant = (props: AppVariantProps) => {
 
     const history = useHistory()
 
-    const [currAppVariant, setCurrAppVariant] = React.useState<AppVariant>(
+    const [currAppVariant, setCurrAppVariant] = React.useState<AppVariantType>(
         () => {
             const themeName = window.localStorage.getItem('appVariant')
             if (themeName) {
@@ -63,7 +61,7 @@ export const useAppVariantCreator: () => { appVariantContextValue: AppVariantCon
                     return newTheme
                 });
             },
-            selectAppVariant: (av: AppVariant) => {
+            selectAppVariant: (av: AppVariantType) => {
                 history.push('/')
                 window.localStorage.setItem('appVariant', av.name)
                 setCurrAppVariant(av);
@@ -92,8 +90,8 @@ export const useAppVariantCreator: () => { appVariantContextValue: AppVariantCon
                     `"${currAppVariant.secondaryFont}"`,
                     'Roboto'
                 ].join(',')
-            } 
-            
+            }
+
             const textFont = {
                 fontFamily: [
                     `"${currAppVariant.textFont}"`,
@@ -168,13 +166,21 @@ export const useAppVariantCreator: () => { appVariantContextValue: AppVariantCon
         [currAppVariant],
     );
 
-    return {
-        appVariantContextValue: {
-            toggleAppVariant,
-            selectAppVariant,
-            currAppVariant,
-            appVariants
-        },
-        theme
-    }
+
+    return (
+        <AppVariantContext.Provider
+            value={
+                {
+                    toggleAppVariant,
+                    selectAppVariant,
+                    currAppVariant,
+                    appVariants
+                }
+            }
+        >
+            <ThemeProvider theme={theme}>
+                { props.children }
+            </ThemeProvider>
+        </ AppVariantContext.Provider >
+    )
 }

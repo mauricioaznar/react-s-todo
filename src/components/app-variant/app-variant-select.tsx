@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
-import {useAppVariantContext} from "../../hooks/useAppVariant";
+import {useAppVariant} from "../../hooks/app-variants/useAppVariant";
 import {Box, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
 
 
 export default function AppVariantSelect() {
-    const { selectAppVariant, appVariants, currAppVariant} = useAppVariantContext()
+    const { selectAppVariant, appVariants, currAppVariant} = useAppVariant()
     const [name, setName] = useState<string>(currAppVariant ? currAppVariant.name : '')
 
     return (
