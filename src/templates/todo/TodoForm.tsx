@@ -2,29 +2,15 @@ import * as React from 'react';
 import {useState} from 'react';
 import {useHistory, useLocation} from "react-router-dom";
 import {ApolloError} from "@apollo/client";
-import {useFieldArray, useForm} from "react-hook-form";
+import {Form, Formik} from 'formik';
 
 // mui
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import {
-    Grid,
-    IconButton,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Toolbar,
-    Tooltip
-} from "@mui/material";
+import {IconButton, TableCell, TableRow} from "@mui/material";
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -36,30 +22,17 @@ import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import {Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../services/schema";
 import {nameof} from "../../helpers/nameof";
 import MauSnackbar from "../../components/MauSnackbar";
-import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";
-import ReactHookFormDatePicker from "../../components/inputs/react-hook-form/ReactHookFormDatePicker";
-import ReactHookFormCheckbox from "../../components/inputs/react-hook-form/ReactHookFormCheckbox";
 import {TodoNode} from "../../types/todo";
-
-interface TodoItem {
-    description: string;
-    completed: boolean;
-
-}
-
-interface TodoFormInputs {
-    description: string,
-    due: string,
-    completed: boolean,
-    archived: boolean,
-    locked: boolean,
-    items: TodoItem[]
-}
+import * as yup from "yup";
+import FormikTextField from "../../components/inputs/formik/FormikTextField";
+import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
+import FormikDate from "../../components/inputs/formik/FormikDate";
+import FormikTable from "../../components/inputs/formik/FormikTable";
+import {Delete} from "@mui/icons-material";
 
 interface TodoFormLocationProps {
     todo?: TodoNode
 }
-
 
 export default function TodoForm() {
 
@@ -71,22 +44,6 @@ export default function TodoForm() {
     const location = useLocation<TodoFormLocationProps>()
     const todo = location.state?.todo
 
-    const {handleSubmit, control} = useForm<TodoFormInputs>({
-        defaultValues: {
-            description: todo?.description || '',
-            due: todo?.due || '',
-            archived: todo?.archived || false,
-            locked: todo?.locked || false,
-            items: todo?.items || [
-                {completed: false, description: ''}
-            ],
-        }
-    });
-
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "items"
-    });
 
     const [createTodoMutation] = useCreateTodoMutation({
         update(cache) {
@@ -106,60 +63,6 @@ export default function TodoForm() {
         },
     });
 
-    const onSubmit = async (data: TodoFormInputs) => {
-        const {description, due, locked, archived, items} = data
-
-        setIsDisabled(true)
-
-        const options = {
-            todoInput: {
-                description: description,
-                locked: locked,
-                archived: archived,
-                due: due ? due.toString() : '',
-                items: items.map( i => {
-                    return {
-                        description: i.description,
-                        completed: i.completed
-                    }
-                })
-            }
-        }
-
-        try {
-            if (todo) {
-                await updateTodoMutation(
-                    {
-                        variables: {
-                            id: todo._id,
-                            ...options
-                        }
-                    }
-                )
-            } else {
-                await createTodoMutation({
-                    variables: {
-                        ...options
-                    }
-                })
-            }
-
-            history.push('/todos')
-
-        } catch (e) {
-            if (e instanceof ApolloError) {
-                setMessage(e.message)
-            }
-        }
-
-        setMessage('')
-        setIsDisabled(false)
-    }
-
-    const onError = () => {
-        //
-    }
-
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline/>
@@ -177,143 +80,166 @@ export default function TodoForm() {
                     Todo
                 </Typography>
                 <Box sx={{mt: 1}}>
-                    <form onSubmit={handleSubmit(onSubmit, onError)}>
-                        <ReactHookFormTextField
-                            rules={{
-                                required: true,
-                                minLength: 4
-                            }}
-                            label={'Description'}
-                            control={control}
-                            name="description"
-                        />
-                        <ReactHookFormDatePicker
-                            rules={{
-                                required: true,
-                            }}
-                            label={'Due'}
-                            control={control}
-                            name="due"
-                        />
-                        <ReactHookFormCheckbox
-                            control={control}
-                            name={'locked'}
-                            label={'Locked'}
-                            uncheckedIcon={LockOpenRoundedIcon}
-                            checkedIcon={LockRoundedIcon}
-                        />
-                        <ReactHookFormCheckbox
-                            control={control}
-                            name={'archived'}
-                            label={'Archived'}
-                            checkedIcon={ArchiveIcon}
-                            uncheckedIcon={UnarchiveOutlinedIcon}
-                        />
+                    <Formik
+                        initialValues={{
+                            description: todo ? todo.description : '',
+                            due: todo ? todo.due : '',
+                            archived: todo ? todo.archived : false,
+                            locked: todo ? todo.locked : false,
+                            items: todo ? todo.items : [{description: '12341234', completed: false}]
+                        }}
+                        validationSchema={yup.object({
+                            description: yup
+                                .string()
+                                .required('Description is required'),
+                            due: yup
+                                .string()
+                                .required('Date is required'),
+                            file: yup
+                                .string()
+                                .nullable(),
+                            items: yup
+                                .array()
+                                .min(1, 'array required minimum 1 item')
+                                .of(
+                                    yup
+                                        .object()
+                                        .shape({
+                                            description: yup
+                                                .string()
+                                                .required('description is required'),
+                                            completed: yup
+                                                .boolean()
+                                        })
+                                )
+                                .required('Required')
 
+                        })}
+                        onSubmit={async (data) => {
+                            const {description, due, locked, archived, items} = data
 
-                        <Grid
-                            item
-                            sx={{
-                                mt: 2
-                            }}
-                            xs={12}
-                        >
-                            <Grid
-                                container
-                                direction={'column'}
+                            setIsDisabled(true)
+
+                            const options = {
+                                todoInput: {
+                                    description: description,
+                                    locked: locked,
+                                    archived: archived,
+                                    due: due ? due.toString() : '',
+                                    items: items.map(i => {
+                                        return {
+                                            description: i.description,
+                                            completed: i.completed
+                                        }
+                                    })
+                                }
+                            }
+
+                            try {
+                                if (todo) {
+                                    await updateTodoMutation(
+                                        {
+                                            variables: {
+                                                id: todo._id,
+                                                ...options
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    await createTodoMutation({
+                                        variables: {
+                                            ...options
+                                        }
+                                    })
+                                }
+
+                                history.push('/todos')
+
+                            } catch (e) {
+                                if (e instanceof ApolloError) {
+                                    setMessage(e.message)
+                                }
+                            }
+
+                            setMessage('')
+                            setIsDisabled(false)
+                        }}
+                    >
+                        <Form>
+                            <FormikTextField
+                                name="description"
+                                label="Description"
+                            />
+                            <FormikDate
+                                label={'Due'}
+                                name="due"
+                            />
+                            <FormikCheckbox
+                                name={'locked'}
+                                label={'Locked'}
+                                uncheckedIcon={LockOpenRoundedIcon}
+                                checkedIcon={LockRoundedIcon}
+                            />
+                            <FormikCheckbox
+                                name={'archived'}
+                                label={'Archived'}
+                                checkedIcon={ArchiveIcon}
+                                uncheckedIcon={UnarchiveOutlinedIcon}
+                            />
+
+ 
+                            <FormikTable
+                                renderHeader={
+                                    () => {
+                                        return <TableRow>
+                                            <TableCell width={'60%'}>Description</TableCell>
+                                            <TableCell width={'20%'}>Completed</TableCell>
+                                            <TableCell width={'20%'}>&nbsp;</TableCell>
+                                        </TableRow>
+                                    }
+                                }
+                                renderRow={
+                                    (i, index, deleteItem) => {
+                                        return <TableRow key={index}>
+                                            <TableCell>
+                                                <FormikTextField
+                                                    name={`items[${index}].description`}
+                                                    label="Description"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <FormikCheckbox
+                                                    name={`items[${index}].completed`}
+                                                    label="Completed"
+                                                />
+                                            </TableCell>
+                                            <TableCell align={'right'}>
+                                                <IconButton onClick={deleteItem}>
+                                                    <Delete/>
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    }}
+                                defaultItem={{
+                                    description: '',
+                                    completed: false
+                                }}
+                                name={'items'}
+                                label={'Items'}
+                            />
+
+                            <Button
+                                disabled={isDisabled}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
                             >
-                                <Grid
-                                    item
-                                    xs={12}
-                                >
-                                    <Toolbar
-                                      disableGutters
-                                    >
-                                        <Typography
-                                            sx={{
-                                                flexGrow: 1
-                                            }}
-                                            variant="h6"
-                                        >
-                                            Items
-                                        </Typography>
-                                        <Tooltip title="Create todo">
-                                            <IconButton
-                                                aria-label="filter list"
-                                                onClick={() => {
-                                                    append({
-                                                        description: "",
-                                                        completed: false,
-                                                    })
-                                                }}
-                                            >
-                                                <AddIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Toolbar>
-                                    <TableContainer component={Paper}>
-                                        <Table
+                                Submit
+                            </Button>
+                        </Form>
+                    </Formik>
 
-                                            size={"small"}
-                                            aria-label="credit notes table"
-                                        >
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell width={'60%'}>Description</TableCell>
-                                                    <TableCell width={'20%'}>Completed</TableCell>
-                                                    <TableCell width={'20%'}>&nbsp;</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody >
-                                                {fields.map((field, index) => (
-                                                    <TableRow key={index} >
-                                                        <TableCell>
-                                                            <ReactHookFormTextField
-                                                                size={"small"}
-                                                                rules={{
-                                                                    required: true,
-                                                                    minLength: 4
-                                                                }}
-                                                                control={control}
-                                                                name={`items.${index}.description`}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <ReactHookFormCheckbox
-                                                                control={control}
-                                                                name={`items.${index}.completed`}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <IconButton
-                                                                aria-label="filter list"
-                                                                onClick={() => {
-                                                                    remove(index)
-                                                                }}
-                                                            >
-                                                                <DeleteOutlineIcon />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                    </TableRow>
-
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                        <Button
-                            disabled={isDisabled}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Submit
-                        </Button>
-                    </form>
                 </Box>
             </Box>
             <MauSnackbar

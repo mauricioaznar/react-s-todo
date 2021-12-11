@@ -25,7 +25,7 @@ interface FormikArrayProps<T> extends FormikDefaultProps {
 }
 
 
-function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: FormikArrayProps<T>){
+function FormikTable<T>({ name, label, renderRow, renderHeader, defaultItem }: FormikArrayProps<T>){
 
     const [formikProps, formikMeta ,fieldHelperProps] = useField(name)
 
@@ -126,4 +126,4 @@ function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: F
     )
 }
 
-export default FormikArray
+export default FormikTable

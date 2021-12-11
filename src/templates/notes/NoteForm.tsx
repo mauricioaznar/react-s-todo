@@ -10,7 +10,7 @@ import FormikDate from "../../components/inputs/formik/FormikDate";
 import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
 import FormikRadio from "../../components/inputs/formik/FormikRadio";
 import FormikAutocomplete from "../../components/inputs/formik/FormikAutocomplete";
-import FormikArray from "../../components/inputs/formik/FormikArray";
+import FormikTable from "../../components/inputs/formik/FormikTable";
 import {Delete} from "@mui/icons-material";
 
 export default function NoteForm () {
@@ -145,7 +145,7 @@ export default function NoteForm () {
                     label={'Autocomplete'}
                 />
 
-                <FormikArray
+                <FormikTable
                     renderHeader={
                         () => {
                             return <TableRow>
