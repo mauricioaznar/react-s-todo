@@ -86,7 +86,7 @@ export default function TodoForm() {
                             due: todo ? todo.due : '',
                             archived: todo ? todo.archived : false,
                             locked: todo ? todo.locked : false,
-                            items: todo ? todo.items : [{description: '12341234', completed: false}]
+                            items: todo ? todo.items : [{description: '', completed: false}]
                         }}
                         validationSchema={yup.object({
                             description: yup
@@ -100,7 +100,7 @@ export default function TodoForm() {
                                 .nullable(),
                             items: yup
                                 .array()
-                                .min(1, 'array required minimum 1 item')
+                                .min(1, 'items required minimum 1 item')
                                 .of(
                                     yup
                                         .object()
@@ -187,7 +187,7 @@ export default function TodoForm() {
                                 uncheckedIcon={UnarchiveOutlinedIcon}
                             />
 
- 
+
                             <FormikTable
                                 renderHeader={
                                     () => {
