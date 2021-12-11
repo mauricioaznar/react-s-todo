@@ -38,7 +38,7 @@ export default function FormikAutocomplete<T>({ name, label, items, itemValue, i
             }}
             value={autocompleteValue}
             onChange={(event: any, val: any) => {
-                const newValue = returnObject ? val : val[itemValue]
+                const newValue = val ? (returnObject ? val : val[itemValue]) : null
                 fieldHelperProps.setTouched(true, false)
                 fieldHelperProps.setValue(newValue, true);
                 setAutocompleteValue(val)

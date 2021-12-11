@@ -19,7 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 
 interface FormikArrayProps<T> extends FormikDefaultProps {
-    renderRow: (item: T, index: number) => React.ReactNode;
+    renderRow: (item: T, index: number, deleteItem: () => void) => React.ReactNode;
     renderHeader: () => React.ReactNode;
     defaultItem: T;
 }
@@ -31,15 +31,19 @@ function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: F
 
     const items = formikProps.value as T[]
 
-    const append = () => {
-        fieldHelperProps.setValue(items.concat([{...defaultItem}]))
+    const appendItem = () => {
+        fieldHelperProps.setTouched(true, false)
+        fieldHelperProps.setValue(items.concat([{...defaultItem}]), true)
     }
+
+
 
     return (
         <Grid
             item
             sx={{
-                mt: 2
+                mt: 2,
+                mb: 3
             }}
             xs={12}
         >
@@ -59,7 +63,7 @@ function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: F
                         }}>
                             <Typography
 
-                                variant="h6"
+                                variant={'body1'}
                             >
                                 { label }
                             </Typography>
@@ -76,7 +80,7 @@ function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: F
                             <IconButton
                                 aria-label="filter list"
                                 onClick={() => {
-                                   append()
+                                   appendItem()
                                 }}
                             >
                                 <AddIcon />
@@ -84,26 +88,38 @@ function FormikArray<T>({ name, label, renderRow, renderHeader, defaultItem }: F
                         </Tooltip>
                     </Toolbar>
 
-                    <TableContainer component={Paper}>
-                        <Table
+                    {
+                        items.length > 0 ?
+                            <TableContainer component={Paper}>
+                                <Table
 
-                            size={"small"}
-                            aria-label="credit notes table"
-                        >
-                            <TableHead>
-                                {
-                                    renderHeader()
-                                }
-                            </TableHead>
-                            <TableBody >
-                                {
-                                    items.map((i, index) => {
-                                        return renderRow(i, index)
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    size={"small"}
+                                    aria-label="credit notes table"
+                                >
+                                    <TableHead>
+                                        {
+                                            renderHeader()
+                                        }
+                                    </TableHead>
+                                    <TableBody >
+                                        {
+                                            items.map((i, index) => {
+                                                const deleteItem = (item: T) => {
+                                                    fieldHelperProps.setTouched(true, false)
+                                                    fieldHelperProps.setValue(items.filter(i => {
+                                                        return i !== item
+                                                    }), true)
+                                                }
+
+
+                                                return renderRow(i, index, () => { deleteItem(i) })
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            : null
+                    }
                 </Grid>
             </Grid>
         </Grid>

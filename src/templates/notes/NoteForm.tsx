@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, TableCell, TableRow} from "@mui/material";
+import {Button, IconButton, TableCell, TableRow} from "@mui/material";
 import * as yup from 'yup';
 import {Form, Formik} from 'formik';
 import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../schema";
@@ -11,6 +11,7 @@ import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
 import FormikRadio from "../../components/inputs/formik/FormikRadio";
 import FormikAutocomplete from "../../components/inputs/formik/FormikAutocomplete";
 import FormikArray from "../../components/inputs/formik/FormikArray";
+import {Delete} from "@mui/icons-material";
 
 export default function NoteForm () {
     const client = useApolloClient()
@@ -149,11 +150,11 @@ export default function NoteForm () {
                         () => {
                             return <TableRow>
                                 <TableCell width={'70%'}>Description</TableCell>
-                                <TableCell />
+                                <TableCell align={'right'}>Actions</TableCell>
                             </TableRow>
                         }
                     }
-                    renderRow={(i, index) => {
+                    renderRow={(i, index, deleteItem) => {
                         return <TableRow key={index}>
                             <TableCell>
                                 <FormikTextField
@@ -161,7 +162,12 @@ export default function NoteForm () {
                                     label="Desscription"
                                 />
                             </TableCell>
-                            <TableCell />
+                            <TableCell align={'right'}>
+                                <IconButton onClick={deleteItem} >
+                                    <Delete />
+                                </IconButton>
+
+                            </TableCell>
                         </TableRow>
                     }}
                     defaultItem={{
