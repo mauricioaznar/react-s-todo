@@ -1,37 +1,36 @@
 import * as React from 'react';
 import {useState} from 'react';
+import {Form, Formik} from 'formik';
+import {ApolloError, useApolloClient} from "@apollo/client";
+import * as yup from "yup";
+
+// mui
+import {Grid} from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+
+
+// local
 import {
     GetUsersQuery,
     Query,
-    useIsUserOccupiedQuery,
     useSignInMutation,
     useUpdateUserMutation,
     useUploadFileMutation
-} from "../../schema";
-import {Grid} from "@mui/material";
-import {ApolloError} from "@apollo/client";
+} from "../../services/schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
-import {useForm} from "react-hook-form";
-import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";
-import ReactHookFormCheckbox from "../../components/inputs/react-hook-form/ReactHookFormCheckbox";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import ReactHookFormFile from "../../components/inputs/react-hook-form/ReactHookFormFile";
+import FormikTextField from "../../components/inputs/formik/FormikTextField";
+import FormikFile from "../../components/inputs/formik/FormikFile";
+import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
+import {queryDerivativeIsUserOccupied} from "../../services/schema-derivative";
 
-
-interface UserFormInputs {
-    username: string,
-    password: string,
-    admin: boolean,
-    avatar: File | null | undefined,
-}
 
 interface UseFormLocationProps {
     user?: GetUsersQuery["users"][number]
@@ -46,8 +45,9 @@ export default function UserForm() {
     const [isDisabled, setIsDisabled] = useState(false)
     const [message, setMessage] = useState('')
 
-    const history = useHistory()
+    const client = useApolloClient()
 
+    const history = useHistory()
     const location = useLocation<UseFormLocationProps>()
     const user = location.state?.user
 
@@ -55,28 +55,7 @@ export default function UserForm() {
     const isAdmin = currentUser?.admin
     const canAlter = isAdmin || isUserCurrent
 
-    const {handleSubmit, control, watch, trigger} = useForm<UserFormInputs>({
-        defaultValues: {
-            username:  user ? user.username : '',
-            password: 'changeme',
-            admin: user ? user.admin : false,
-            avatar: null
-        }
-    });
 
-    const username = watch('username')
-
-    const  { data: isUserOccupiedResult } = useIsUserOccupiedQuery({
-        variables: {
-            username
-        },
-        skip: user?.username === username,
-        onCompleted: async function (data) {
-            if (data?.isUserOccupied) {
-                await trigger('username')
-            }
-        }
-    })
 
     const [signinMutation] = useSignInMutation({
         update(cache) {
@@ -98,72 +77,6 @@ export default function UserForm() {
 
     const [uploadFileMutation] = useUploadFileMutation()
 
-
-
-
-
-    const onSubmit = async (data: UserFormInputs) => {
-        const { username, password, admin, avatar } = data
-
-        setIsDisabled(true)
-
-        const options = {
-            userInput: {
-                username: username,
-                password: password,
-                admin: isAdmin ? admin : false,
-            }
-        }
-
-
-        try {
-
-            let userId: string | undefined
-
-            if (user) {
-                const {data} = await updateUserMutation(
-                    {
-                        variables: {
-                            id: user._id,
-                            ...options
-                        }
-                    }
-                )
-                userId = data?.updateUser._id
-            } else {
-                const {data} = await signinMutation(
-                    {
-                        variables: {
-                            ...options
-                        }
-                    }
-                )
-                userId = data?.createUser._id
-            }
-
-            if (avatar && userId) {
-                await uploadFileMutation({
-                    variables: {
-                        file: avatar,
-                        userId
-                    }
-                })
-            }
-
-            history.push('/users')
-        } catch (e: unknown) {
-            if (e instanceof ApolloError) {
-                setMessage(e.message)
-            }
-        }
-
-        setMessage('')
-        setIsDisabled(false)
-    };
-
-    const onError = () => {
-
-    }
 
     return (
         <Grid
@@ -190,48 +103,131 @@ export default function UserForm() {
                             User form
                         </Typography>
                         <Box sx={{mt: 1}}>
-                            <form onSubmit={handleSubmit(onSubmit, onError)}>
-                                <ReactHookFormTextField
-                                    rules={{
-                                        required: true,
-                                        invalid: isUserOccupiedResult?.isUserOccupied ? 'User is already in use' : null
-                                    }}
-                                    label={'Username'}
-                                    control={control}
-                                    name="username"
-                                />
-                                <ReactHookFormTextField
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    label={'Password'}
-                                    control={control}
-                                    name="password"
-                                />
+                            <Formik
+                                initialValues={{
+                                    username: user ? user.username : '',
+                                    password: 'changeme',
+                                    admin: user ? user.admin : false,
+                                    file: null,
+                                }}
+                                validationSchema={yup.object({
+                                        username: yup
+                                            .string()
+                                            .required('Email is required')
+                                            .test("unique", "email must be unique",
+                                                async function (value) {
+                                                    if (currentUser?._id !== user?._id && !currentUser?.admin) {
+                                                        const result = await queryDerivativeIsUserOccupied(client, { username: value || ''})
+                                                        return !result.data.isUserOccupied
+                                                    } else {
+                                                        return true
+                                                    }
 
-                                {
-                                    isAdmin
-                                        ? <ReactHookFormCheckbox control={control} name={'admin'} label={'admin'} />
-                                        : null
-                                }
-                                <ReactHookFormFile
-                                    rules={{
-                                        required: user ? !user.avatar : true,
-                                    }}
-                                    label={'Avatar'}
-                                    control={control}
-                                    name="avatar"
-                                />
-                                <Button
-                                    disabled={isDisabled || !canAlter}
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{mt: 3, mb: 2}}
-                                >
-                                    Submit
-                                </Button>
-                            </form>
+                                                }
+                                            ),
+                                        password: yup
+                                            .string()
+                                            .min(8, 'Password should be of minimum 8 characters length')
+                                            .required('Password is required'),
+                                        file: yup
+                                            .string()
+                                            .nullable()
+                                            .test('file required', 'Please provide a file', (val) => {
+                                                return !user || !user.avatar ? !!val : true
+                                            }),
+                                    })}
+                                onSubmit={async (data) => {
+                                    const { username, password, admin, file } = data
+
+                                    setIsDisabled(true)
+
+                                    const options = {
+                                        userInput: {
+                                            username: username,
+                                            password: password,
+                                            admin: isAdmin ? admin : false,
+                                        }
+                                    }
+
+
+                                    try {
+
+                                        let userId: string | undefined
+
+                                        if (user) {
+                                            const {data} = await updateUserMutation(
+                                                {
+                                                    variables: {
+                                                        id: user._id,
+                                                        ...options
+                                                    }
+                                                }
+                                            )
+                                            userId = data?.updateUser._id
+                                        } else {
+                                            const {data} = await signinMutation(
+                                                {
+                                                    variables: {
+                                                        ...options
+                                                    }
+                                                }
+                                            )
+                                            userId = data?.createUser._id
+                                        }
+
+                                        if (file && userId) {
+                                            await uploadFileMutation({
+                                                variables: {
+                                                    file: file,
+                                                    userId
+                                                }
+                                            })
+                                        }
+
+                                        history.push('/users')
+                                    } catch (e: unknown) {
+                                        if (e instanceof ApolloError) {
+                                            setMessage(e.message)
+                                        }
+                                    }
+
+                                    setMessage('')
+                                    setIsDisabled(false)
+                                }}
+                            >
+                                <Form>
+                                    <FormikTextField
+                                        name="username"
+                                        label="Username"
+                                    />
+                                    <FormikTextField
+                                        label="Password"
+                                        name="password"
+                                        type={'password'}
+                                    />
+                                    {
+
+                                        isAdmin ? <FormikCheckbox
+                                                name={'admin'}
+                                                label={'Admin'}
+                                            />
+                                            : null
+                                    }
+                                    <FormikFile
+                                        name={'file'}
+                                        label={'Upload file'}
+                                    />
+                                    <Button
+                                        disabled={isDisabled || !canAlter}
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{mt: 3, mb: 2}}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Form>
+                            </Formik>
                         </Box>
                     </Box>
                     <MauSnackbar

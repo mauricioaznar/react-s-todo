@@ -2,7 +2,7 @@ import React from 'react'
 import {Button, IconButton, TableCell, TableRow} from "@mui/material";
 import * as yup from 'yup';
 import {Form, Formik} from 'formik';
-import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../schema";
+import {IsUserOccupiedQuery, refetchIsUserOccupiedQuery} from "../../services/schema";
 import {ApolloQueryResult, useApolloClient} from "@apollo/client";
 import FormikTextField from "../../components/inputs/formik/FormikTextField";
 import FormikFile from "../../components/inputs/formik/FormikFile";

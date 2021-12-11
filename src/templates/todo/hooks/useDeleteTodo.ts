@@ -1,7 +1,7 @@
 import {TodoNode} from "../../../types/todo";
 import {ApolloError} from "@apollo/client";
 import {useState} from "react";
-import {namedOperations, useDeleteTodoMutation} from "../../../schema";
+import {namedOperations, useDeleteTodoMutation} from "../../../services/schema";
 
 export const useDeleteTodo = () => {
 

@@ -35,7 +35,7 @@ import {
 // local
 import {ListItemLink} from "../components/ListItemLink";
 import {useActions} from "../hooks/useActions";
-import {Query, useTodoSubscription} from "../schema";
+import {Query, useTodoSubscription} from "../services/schema";
 import {nameof} from "../helpers/nameof";
 import {useAppVariant} from "../hooks/app-variants/useAppVariant";
 import {commonLinks} from "../services/router-links";

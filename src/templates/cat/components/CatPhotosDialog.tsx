@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useForm} from "react-hook-form";
 import {ApolloError} from "@apollo/client";
 import ReactHookFormFile from "../../../components/inputs/react-hook-form/ReactHookFormFile";
-import {useUploadCatPhotosMutation} from "../../../schema";
+import {useUploadCatPhotosMutation} from "../../../services/schema";
 import MauSnackbar from "../../../components/MauSnackbar";
 
 

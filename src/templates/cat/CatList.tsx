@@ -11,7 +11,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 // components
 import {useHistory} from 'react-router-dom'
 import {Fab, IconButton, Typography} from "@mui/material";
-import {GetCatsQuery, namedOperations, useDeleteCatMutation, useGetCatsQuery} from "../../schema";
+import {GetCatsQuery, namedOperations, useDeleteCatMutation, useGetCatsQuery} from "../../services/schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

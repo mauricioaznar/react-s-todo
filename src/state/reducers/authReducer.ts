@@ -1,6 +1,6 @@
 import {ActionType} from "../action-types";
 import {Action} from "../actions";
-import {CurrentUserQuery} from "../../schema";
+import {CurrentUserQuery} from "../../services/schema";
 
 interface AuthState {
     accessToken: string | null;

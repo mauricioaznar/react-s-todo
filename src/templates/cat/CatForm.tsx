@@ -7,7 +7,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../schema";
+import {GetCatsQuery, Query, useCreateCatMutation, useUpdateCatMutation} from "../../services/schema";
 import {useHistory, useLocation} from "react-router-dom";
 import {nameof} from "../../helpers/nameof";
 import {useForm} from "react-hook-form";

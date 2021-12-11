@@ -41,7 +41,7 @@ import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 // local
-import {ColumnOrder, FilterTodoColumn, TodoEdge, useGetTodosQuery} from "../../schema";
+import {ColumnOrder, FilterTodoColumn, TodoEdge, useGetTodosQuery} from "../../services/schema";
 import MauSnackbar from "../../components/MauSnackbar";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK} from "../../helpers/format-date";

@@ -1,5 +1,5 @@
 import {ActionType} from "../action-types";
-import {CurrentUserQuery, User} from "../../schema";
+import {CurrentUserQuery, User} from "../../services/schema";
 
 interface Login {
     type: ActionType.LOGIN

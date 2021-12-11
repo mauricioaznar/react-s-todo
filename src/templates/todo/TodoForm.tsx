@@ -33,7 +33,7 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 
 // components
-import {Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../schema";
+import {Query, useCreateTodoMutation, useUpdateTodoMutation} from "../../services/schema";
 import {nameof} from "../../helpers/nameof";
 import MauSnackbar from "../../components/MauSnackbar";
 import ReactHookFormTextField from "../../components/inputs/react-hook-form/ReactHookFormTextField";

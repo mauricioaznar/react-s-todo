@@ -3,7 +3,7 @@ import * as React from 'react'
 import AddIcon from "@mui/icons-material/Add"
 import {useHistory} from 'react-router-dom'
 import {Avatar, Box, Fab, IconButton, Typography} from "@mui/material";
-import {GetUsersQuery, useGetUsersQuery} from "../../schema";
+import {GetUsersQuery, useGetUsersQuery} from "../../services/schema";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

@@ -1,4 +1,4 @@
-import {GetTodosQuery} from "../schema";
+import {GetTodosQuery} from "../services/schema";
 import {Concrete} from "./common";
 
 
