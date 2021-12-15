@@ -13,12 +13,14 @@ import TodoList from "../../templates/todo/TodoList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import TodoForm from "../../templates/todo/TodoForm";
 import * as React from "react";
-import NoteForm from "../../templates/notes/NoteForm";
+import NoteForm from "../../templates/cat/NoteForm";
+import Consistency from "../../templates/ui-engineering/consistency/Consistency";
 
 
 export interface AppVariantType {
     name: string;
     title: string;
+    description: string;
     primary: string;
     secondary: string;
     backgroundPrimary: string;
@@ -37,12 +39,13 @@ export const appVariants: AppVariantType[] = [
     {
         primary: `#D98014`,
         secondary: `#9937A6`,
+        description: 'If you worked a user interface, you’ve likely dealt with at least some of these challenges — either directly or using a library.',
         divider: `#D98014`,
         backgroundPrimary: `#5FA0D9`,
         backgroundSecondary: `#9ABBD9`,
         mode: 'light',
         name: 'ice_cream',
-        title: 'Ice Cream',
+        title: 'UI Engineering',
         icon: IcecreamIcon,
         primaryFont: 'Smooch',
         secondaryFont: 'Cinzel Decorative',
@@ -50,23 +53,24 @@ export const appVariants: AppVariantType[] = [
         links: [
             {
                 icon: <PetsIcon/>,
-                name: 'NoteForm',
-                path: '/note',
-                component: <NoteForm />,
+                name: 'Consistency',
+                path: '/Consistency',
+                component: <Consistency />,
                 navbar: true,
-                title: 'Note form'
+                title: 'Consistency'
             },
         ]
     },
     {
         primary: `#E0AC84`,
         secondary: `#AC8466`,
+        description: 'Get to know the most known react form libraries used to date. ',
         divider: `#E6D7CC`,
         backgroundPrimary: `#614A39`,
         backgroundSecondary: `#615B56`,
         mode: 'dark',
         name: 'forest',
-        title: 'Pets',
+        title: 'React form libraries',
         icon: ParkIcon,
         primaryFont: 'Lobster',
         secondaryFont: 'Lobster',
@@ -79,7 +83,7 @@ export const appVariants: AppVariantType[] = [
                 path: '/cats',
                 component: <CatList/>,
                 navbar: true,
-                title: 'Cats'
+                title: 'React hook form'
             },
             {
                 icon: <InputIcon/>,
@@ -88,11 +92,20 @@ export const appVariants: AppVariantType[] = [
                 component: <CatForm/>,
                 title: 'Cat'
             },
+            {
+                icon: <PetsIcon/>,
+                name: 'NoteForm',
+                path: '/note',
+                component: <NoteForm />,
+                navbar: true,
+                title: 'Formik inputs'
+            },
         ]
     },
     {
         primary: `#F2CB05`,
         secondary: `#73260A`,
+        description: '`Todo lists` provides you with the necessary tools to keep track of your tasks. ',
         divider: `#151340`,
         backgroundPrimary: `#151340`,
         backgroundSecondary: `#2B308C`,

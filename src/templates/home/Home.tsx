@@ -20,7 +20,7 @@ export default function Home () {
                     }
                 </Grid>
             </Grid>
-            <Grid container alignItems={'center'} justifyContent={'center'} mb={2}>
+            <Grid container alignItems={'start'} justifyContent={'center'} mb={2}>
                 {
                     appVariants.map(av => {
                         const AvatarIcon = av.icon
@@ -43,12 +43,10 @@ export default function Home () {
                                                 color: av.mode === 'dark' ? "white" : "black"
                                             }}
                                         >
-                                            This impressive paella is a perfect party dish and a fun meal to cook
-                                            together with your guests. Add 1 cup of frozen peas along with the mussels,
-                                            if you like.
+                                            { av.description }
                                         </Typography>
                                     </CardContent>
-                                    <CardActions disableSpacing>
+                                    <CardActions disableSpacing sx={{ justifyContent: "end" }}>
                                         <IconButton
                                             sx={{
                                                 bgcolor: av.backgroundSecondary

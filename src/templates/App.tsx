@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {useMemo} from 'react';
 import {Route, Switch, useHistory} from 'react-router-dom';
-import {animated, Spring} from 'react-spring'
 import {useApolloClient} from "@apollo/client";
 
 // mui
@@ -39,6 +38,7 @@ import {Query, useTodoSubscription} from "../services/schema";
 import {nameof} from "../helpers/nameof";
 import {useAppVariant} from "../hooks/app-variants/useAppVariant";
 import {commonLinks} from "../services/router-links";
+import AnimatedDiv from "../components/spring-components/AnimatedDiv";
 
 
 const drawerWidth: number = 240;
@@ -230,27 +230,15 @@ export default function App() {
                                                 component: Elem,
                                                 exact
                                             }) => {
-                                        return (
+                                            return (
                                             <Route
                                                 key={name}
                                                 path={path}
                                                 render={() => {
                                                     return (
-                                                        <Spring
-                                                            config={{
-                                                                duration: 500
-                                                            }}
-                                                            from={{ opacity: 0 }}
-                                                            to={{ opacity: 1 }}
-                                                        >
-                                                            {
-                                                                (styles) => {
-                                                                    return <animated.div style={styles}>
-                                                                        { Elem }
-                                                                    </animated.div>
-                                                                }
-                                                            }
-                                                        </Spring>
+                                                        <AnimatedDiv>
+                                                            { Elem }
+                                                        </AnimatedDiv>
                                                     )
                                                 }}
                                                 exact={exact || false}
