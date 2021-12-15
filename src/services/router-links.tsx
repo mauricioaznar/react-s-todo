@@ -1,11 +1,7 @@
+import * as React from "react";
 import {ReactElement} from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import Home from "../templates/home/Home";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import UserForm from "../templates/auth/UserForm";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import UserList from "../templates/auth/UserList";
-import * as React from "react";
 
 export interface RouterLink {
     title: string;
@@ -19,6 +15,4 @@ export interface RouterLink {
 
 export const commonLinks: RouterLink[] = [
     {icon: <HomeIcon />, name: 'Home', path: '/', component: <Home />, title: 'Sign in', exact: true},
-    {icon: <PersonAddIcon/>, name: 'SignInForm', path: '/signInForm', component: <UserForm />, title: 'Sign in'},
-    {icon: <PeopleAltIcon/>, name: 'UserList', path: '/users', component: <UserList />, navbar: true, title: 'Users'},
 ];

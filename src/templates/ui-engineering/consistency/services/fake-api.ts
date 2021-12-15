@@ -3,14 +3,14 @@ export const fakeApi = {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(true)
-            }, 2000)
+            }, 1000)
         })
     },
     fetchFail: function () {
         return new Promise((_, reject) => {
             setTimeout(() => {
                 reject(true)
-            }, 2000)
+            }, 1000)
         })
     },
 }

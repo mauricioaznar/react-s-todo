@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
-import {Badge, Box, Stack, Typography} from "@mui/material";
-import FeedbackButton from "../components/FeedbackButton";
-import {fakeApi} from "../services/fake-api";
+import {Badge, Stack} from "@mui/material";
+import FeedbackButton from "../../components/FeedbackButton";
 import {ThumbUp} from "@mui/icons-material";
+import React, {useState} from "react";
+import {fakeApi} from "../../services/fake-api";
 
-export default function TextIndicator () {
+export default function ScreenConsistency () {
+
     const [value, setValue] = useState(2)
     const [loading, setLoading] = useState(false)
 
@@ -20,12 +21,7 @@ export default function TextIndicator () {
         return true;
     }
 
-    return (<Box>
-        <Box>
-            <Typography variant={'h6'}>
-                #1 error: not updating all related items
-            </Typography>
-        </Box>
+    return (
         <Stack sx={{ my: 1 }} direction={'row'} alignItems={'center'} spacing={2}>
             <FeedbackButton
                 loading={loading}
@@ -33,12 +29,9 @@ export default function TextIndicator () {
                 onClick={fetch}
                 icon={<ThumbUp />}
             />
-            <Typography variant={'body1'}>
-                # of likes 0
-            </Typography>
             <Badge color="secondary" badgeContent={value}>
                 <ThumbUp />
             </Badge>
         </Stack>
-    </Box>)
+    )
 }

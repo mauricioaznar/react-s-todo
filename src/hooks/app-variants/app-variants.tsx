@@ -15,6 +15,10 @@ import TodoForm from "../../templates/todo/TodoForm";
 import * as React from "react";
 import NoteForm from "../../templates/cat/NoteForm";
 import Consistency from "../../templates/ui-engineering/consistency/Consistency";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import UserForm from "../../templates/auth/UserForm";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import UserList from "../../templates/auth/UserList";
 
 
 export interface AppVariantType {
@@ -54,8 +58,8 @@ export const appVariants: AppVariantType[] = [
             {
                 icon: <PetsIcon/>,
                 name: 'Consistency',
-                path: '/Consistency',
-                component: <Consistency />,
+                path: '/consistency',
+                component: <Consistency/>,
                 navbar: true,
                 title: 'Consistency'
             },
@@ -96,7 +100,7 @@ export const appVariants: AppVariantType[] = [
                 icon: <PetsIcon/>,
                 name: 'NoteForm',
                 path: '/note',
-                component: <NoteForm />,
+                component: <NoteForm/>,
                 navbar: true,
                 title: 'Formik inputs'
             },
@@ -139,6 +143,21 @@ export const appVariants: AppVariantType[] = [
                 path: '/todoForm',
                 component: <TodoForm/>,
                 title: 'todo'
+            },
+            {
+                icon: <PersonAddIcon/>,
+                name: 'SignInForm',
+                path: '/signInForm',
+                component: <UserForm/>,
+                title: 'Sign in'
+            },
+            {
+                icon: <PeopleAltIcon/>,
+                name: 'UserList',
+                path: '/users',
+                component: <UserList/>,
+                navbar: true,
+                title: 'Users'
             },
         ]
     },
