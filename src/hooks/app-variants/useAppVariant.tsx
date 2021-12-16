@@ -73,9 +73,13 @@ export const AppVariant = (props: AppVariantProps) => {
     const theme = React.useMemo(
         () => {
 
+            const families = [currAppVariant.primaryFont, currAppVariant.secondaryFont, currAppVariant.textFont]
+            if (currAppVariant.tertiaryFont) {
+                families.push(currAppVariant.tertiaryFont)
+            }
             WebFont.load({
                 google: {
-                    families: [currAppVariant.primaryFont, currAppVariant.secondaryFont,  currAppVariant.textFont],
+                    families: families,
                 },
             })
 
@@ -88,6 +92,13 @@ export const AppVariant = (props: AppVariantProps) => {
             const secondaryFont = {
                 fontFamily: [
                     `"${currAppVariant.secondaryFont}"`,
+                    'Roboto'
+                ].join(',')
+            }
+
+            const tertiaryFont = {
+                fontFamily: [
+                    `"${currAppVariant.tertiaryFont ? currAppVariant.tertiaryFont : currAppVariant.secondaryFont}"`,
                     'Roboto'
                 ].join(',')
             }
@@ -126,10 +137,10 @@ export const AppVariant = (props: AppVariantProps) => {
                     ...textFont,
                     h1: primaryFont,
                     h2: primaryFont,
-                    h3: primaryFont,
+                    h3: secondaryFont,
                     h4: secondaryFont,
-                    h5: secondaryFont,
-                    h6: secondaryFont,
+                    h5: tertiaryFont,
+                    h6: tertiaryFont,
 
                 },
                 components: {

@@ -1,31 +1,46 @@
 import React from 'react'
-import {Box, List, ListItem, ListItemText, Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 
 interface ProblemSolutionProps {
     problem: string;
+    example?: React.ReactElement<any, any>
     solutions: string[];
 }
 
 export default function ProblemSolution (props: ProblemSolutionProps ) {
-    const { problem, solutions } = props;
+    const { problem, solutions, example } = props;
 
     return <Box sx={{ mb: 3 }}>
-        <Typography variant={'h6'} sx={{ fontSize: '1.2rem' }}>
+        <Typography variant={'h6'} sx={{ fontSize: '1.2rem', mb: 1 }}>
             { problem }
         </Typography>
-        <List sx={{ py: 0 }}>
+        {
+            example ? <>
+                    <Typography variant={'body1'}>
+                        Example
+                    </Typography>
+                    {
+                        example
+                    }
+                </>
+                : null
+
+        }
+
+        <Typography variant={'body1'}>
+            { `Solution${solutions.length > 1 ? 's' : ''}` }
+        </Typography>
+        <ul style={{ margin: 0 }}>
             {
                 solutions.map((s, index) => {
-                    return ( <ListItem key={index} sx={{ py: 0 }} >
-                        <ListItemText  inset>
-                            &bull; { s }
-                        </ListItemText>
-
-                    </ListItem> )
+                    return (
+                        <li key={index} >
+                            { s }
+                        </li>
+                    )
                 })
             }
-
-        </List>
+        </ul>
 
     </Box>;
 }

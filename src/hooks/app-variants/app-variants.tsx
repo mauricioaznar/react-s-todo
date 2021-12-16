@@ -34,6 +34,7 @@ export interface AppVariantType {
     icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string },
     primaryFont: string,
     secondaryFont: string,
+    tertiaryFont?: string,
     textFont: string,
     links: RouterLink[],
 }
@@ -53,6 +54,7 @@ export const appVariants: AppVariantType[] = [
         icon: IcecreamIcon,
         primaryFont: 'Smooch',
         secondaryFont: 'Cinzel Decorative',
+        tertiaryFont: 'Paprika',
         textFont: 'Antic Slab',
         links: [
             {

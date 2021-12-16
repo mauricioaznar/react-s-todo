@@ -115,11 +115,11 @@ export default function App() {
                     }
 
                     <Typography
-                        component="h3"
-                        variant="h3"
+                        component="h2"
+                        variant="h2"
                         color="inherit"
                         noWrap
-                        sx={{flexGrow: 1}}
+                        sx={{flexGrow: 1, fontSize: '3.2rem'}}
                     >
                         { currAppVariant?.title }
                     </Typography>

@@ -2,12 +2,8 @@ import React from 'react'
 import {Box, Container, Tab, Tabs, Typography} from "@mui/material";
 import Explanation from "../components/explanation/Explanation";
 import AnimatedDiv from "../../../components/spring-components/AnimatedDiv";
-import ConsistencyProblems from "./views/ConsistencyProblems";
-import ConsistencySolutions from "./views/ConsistencySolutions";
-
-// interface ConsistencyProps {
-//
-// }
+import ConsistencyProblem from "./views/ConsistencyProblem";
+import ConsistencySolution from "./views/ConsistencySolution";
 
 export default function Consistency() {
 
@@ -36,14 +32,13 @@ export default function Consistency() {
             />
         },
         {
-            label: 'Common pitfalls',
-            component: <ConsistencyProblems />
+            label: 'Problems',
+            component:  <ConsistencyProblem />
         },
         {
-            label: 'Solutions',
-            component:  <ConsistencySolutions />
+            label: 'The solution example',
+            component:  <ConsistencySolution />
         },
-
     ]
 
     const TabItem = () => {
