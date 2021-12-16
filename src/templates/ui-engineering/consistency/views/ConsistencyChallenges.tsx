@@ -1,12 +1,11 @@
 import React from 'react'
-import {Box} from "@mui/material";
-import ProblemSolution from "../../components/problem-solution/ProblemSolution";
-import LocalConsistency from "./consitency-problems/LocalConsitency";
-import ScreenConsistency from "./consitency-problems/ScreenConsistency";
+import {ChallengeItem, Challenges} from "../../components/challenges/Challenge";
+import LocalConsistency from "./consitency-challenges/LocalConsitency";
+import ScreenConsistency from "./consitency-challenges/ScreenConsistency";
 
-export default function ConsistencyProblem () {
+export default function ConsistencyChallenges () {
 
-    const problemSolutions = [
+    const problemSolutions: ChallengeItem[] = [
         {
             problem: `If you share local state, it should update all related items.`,
             example: <LocalConsistency />,
@@ -38,19 +37,5 @@ export default function ConsistencyProblem () {
     ]
 
 
-    return (<Box>
-        {
-            problemSolutions.map((psm, index) => {
-                return (
-                    <ProblemSolution
-                        key={index}
-                        problem={`#${index + 1}: ${psm.problem}`}
-                        example={psm.example || undefined}
-                        solutions={psm.solutions}
-                    />
-                )
-            })
-        }
-
-    </Box>)
+    return (<Challenges items={problemSolutions} />)
 }

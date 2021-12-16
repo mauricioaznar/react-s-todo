@@ -1,20 +1,14 @@
 import React from 'react'
-import {Box, Container, Tab, Tabs, Typography} from "@mui/material";
 import Explanation from "../components/explanation/Explanation";
-import AnimatedDiv from "../../../components/spring-components/AnimatedDiv";
-import ConsistencyProblem from "./views/ConsistencyProblem";
+import ConsistencyChallenges from "./views/ConsistencyChallenges";
 import ConsistencySolution from "./views/ConsistencySolution";
+import VerticalTabs, {VerticalTabItem} from "../components/vertical-tabs/VerticalTabs";
 
 export default function Consistency() {
 
 
-    const [value, setValue] = React.useState(0);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
-
-    const tabs = [
+    const tabs: VerticalTabItem[] = [
         {
             label: 'Explanation',
             component: <Explanation
@@ -32,8 +26,8 @@ export default function Consistency() {
             />
         },
         {
-            label: 'Problems',
-            component:  <ConsistencyProblem />
+            label: 'Challenges',
+            component:  <ConsistencyChallenges />
         },
         {
             label: 'The solution example',
@@ -41,49 +35,7 @@ export default function Consistency() {
         },
     ]
 
-    const TabItem = () => {
-        return (
-            <AnimatedDiv> {
-                tabs.find((t, index) => index === value)?.component || null
-            }
-            </AnimatedDiv>
-        )
-    }
 
-    return <Container>
-        <Box sx={{mt: 2, mb: 4}}>
-            <Typography variant={'h4'}>
-                Consistency
-            </Typography>
-        </Box>
-        <Box
-            sx={{display: 'flex'}}
-        >
-            <Box sx={{mr: 4,}}>
-                <Tabs
-                    orientation="vertical"
-                    value={value}
-                    indicatorColor={'secondary'}
-                    variant="scrollable"
-                    scrollButtons
-                    allowScrollButtonsMobile
-                    onChange={handleChange}
-                    sx={{height: 400}}
-                >
 
-                    {
-                        tabs.map(t => {
-                            return (
-                                <Tab wrapped={false} sx={{whiteSpace: 'nowrap', fontWeight: 'bolder'}} key={t.label}
-                                     label={t.label}/>
-                            )
-                        })
-                    }
-                </Tabs>
-            </Box>
-            <Box>
-                <TabItem/>
-            </Box>
-        </Box>
-    </Container>
+    return <VerticalTabs items={tabs}  title={`Consistency`}/>
 }

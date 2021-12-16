@@ -19,6 +19,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import UserForm from "../../templates/auth/UserForm";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import UserList from "../../templates/auth/UserList";
+import Responsiveness from "../../templates/ui-engineering/responsiveness/Responsiveness";
 
 
 export interface AppVariantType {
@@ -64,6 +65,14 @@ export const appVariants: AppVariantType[] = [
                 component: <Consistency/>,
                 navbar: true,
                 title: 'Consistency'
+            },
+            {
+                icon: <PetsIcon/>,
+                name: 'Responsiveness',
+                path: '/responsiveness',
+                component: <Responsiveness/>,
+                navbar: true,
+                title: 'Responsiveness'
             },
         ]
     },
