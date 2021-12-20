@@ -22,7 +22,7 @@ export default function ScreenConsistency () {
     }
 
     return (
-        <Stack sx={{ my: 1 }} direction={'row'} alignItems={'center'} spacing={2}>
+        <Stack direction={'row'} alignItems={'center'} spacing={2}>
             <FeedbackButton
                 loading={loading}
                 label={`Like`}

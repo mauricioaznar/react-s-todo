@@ -1,5 +1,7 @@
 import React from 'react'
 import {ChallengeItem, Challenges} from "../../components/challenges/Challenge";
+import LackOfVisualFeedback from "./responsiveness-challenges/LackOfVisualFeedback";
+import JankyAnimation from "./responsiveness-challenges/JankyAnimation";
 
 export default function ResponsivenessChallenges () {
 
@@ -12,11 +14,13 @@ export default function ResponsivenessChallenges () {
             ],
             tradeoffs: [
                 `If an action takes less than 100ms, we can skip animations.`
-            ]
+            ],
+            example: <LackOfVisualFeedback />
         },
         {
             problem: `Skipping frames feels “janky.`,
-            solutions:   []
+            solutions:   [],
+            example: <JankyAnimation />
         },
         {
             problem: `Indicators that cause the page layout to “jump” or that go through several loading “stages”

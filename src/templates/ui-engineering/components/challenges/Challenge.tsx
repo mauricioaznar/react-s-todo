@@ -17,7 +17,7 @@ export function Challenge (props: ChallengeItem ) {
         </Typography>
         {
             example ? <Box sx={{ mb: 2 }}>
-                    <Typography variant={'body1'}>
+                    <Typography variant={'body1'} sx={{ mb: 1 }}>
                         Example
                     </Typography>
                     {
