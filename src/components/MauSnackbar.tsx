@@ -4,10 +4,11 @@ import ApolloErrorSeparator from "../constants/apollo-error-separator";
 
 interface MauSnackbarProps {
     message: string;
+    variant?: 'error' | 'success'
 }
 
 
-const MauSnackbar = ({message}: MauSnackbarProps) => {
+const MauSnackbar = ({message, variant = 'error'}: MauSnackbarProps) => {
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -16,7 +17,7 @@ const MauSnackbar = ({message}: MauSnackbarProps) => {
             const messages = message.split(ApolloErrorSeparator)
 
             messages.forEach((m) => {
-                enqueueSnackbar(m, { variant: 'error'})
+                enqueueSnackbar(m, { variant })
             })
         }
     }, [message])
