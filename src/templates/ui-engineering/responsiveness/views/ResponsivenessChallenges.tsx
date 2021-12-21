@@ -2,6 +2,7 @@ import React from 'react'
 import {ChallengeItem, Challenges} from "../../components/challenges/Challenge";
 import LackOfVisualFeedback from "./responsiveness-challenges/LackOfVisualFeedback";
 import JankyAnimation from "./responsiveness-challenges/JankyAnimation";
+import UiBlocker from "./responsiveness-challenges/UiBlocker";
 
 export default function ResponsivenessChallenges () {
 
@@ -25,7 +26,8 @@ export default function ResponsivenessChallenges () {
         {
             problem: `Indicators that cause the page layout to “jump” or that go through several loading “stages”
              can make the action feel longer than it was.`,
-            solutions: []
+            solutions: [],
+            example:  <UiBlocker />
         },
         {
             problem: `Handling an interaction within 20ms at the cost of dropping an
