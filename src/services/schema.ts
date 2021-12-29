@@ -20,6 +20,7 @@ export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
   currentUser: User;
+  getNotes: Array<Note>;
   isUserOccupied: Scalars['Boolean'];
   todos: TodoResponse;
   users: Array<User>;
@@ -64,6 +65,13 @@ export type User = {
   admin: Scalars['Boolean'];
   avatar?: Maybe<Scalars['String']>;
   username: Scalars['String'];
+};
+
+export type Note = {
+  __typename?: 'Note';
+  description: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export enum ColumnOrder {
@@ -131,6 +139,7 @@ export type PageData = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCat: Cat;
+  createNote: Note;
   createTodo: Todo;
   createUser: User;
   deleteCat: Cat;
@@ -147,6 +156,11 @@ export type Mutation = {
 export type MutationCreateCatArgs = {
   catInput: CatInput;
   files: Array<Scalars['Upload']>;
+};
+
+
+export type MutationCreateNoteArgs = {
+  noteInput: NoteInput;
 };
 
 
@@ -216,6 +230,11 @@ export type CharacteristicsInput = {
   color: Scalars['String'];
   lifespan: Scalars['String'];
   size: Scalars['String'];
+};
+
+export type NoteInput = {
+  description: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type TodoInput = {
