@@ -51,12 +51,13 @@ export default function FormikRadio<T>({ name, label, items, itemValue, itemText
                         const key = typeof itemKey === 'string' || typeof itemKey === 'number'
                             ? itemKey
                             : index;
+                        let itemLabel = item[itemText]
                         return (
                             <FormControlLabel
                                 key={key}
                                 value={item[itemValue]}
                                 control={<Radio />}
-                                label={item[itemText]}
+                                label={typeof itemLabel === 'string' ? itemLabel : ''}
                             />
                         )
                     })
