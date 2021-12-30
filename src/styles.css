@@ -1,3 +1,41 @@
 .MuiCalendarPicker-root div button:focus {
     background-color: rgba(120, 120, 120, 0.4) ;
 }
+
+
+.custom-editor .wmde-markdown-color code[class*='language-'] {
+    color: unset;
+}
+
+.custom-editor .wmde-markdown-color code[class*='language-'] {
+    color: unset;
+}
+
+.custom-editor .w-md-editor-text-pre .title, .w-md-editor-text-pre .bold {
+    color: unset !important;
+}
+
+.custom-editor .w-md-editor-text-pre .bold {
+    color: unset !important;
+}
+
+.custom-editor .w-md-editor-text-pre {
+    color: unset;
+}
+
+.custom-editor .wmde-markdown-color .token.tag {
+    color: unset;
+}
+
+.custom-editor .wmde-markdown-color code[class*='language-'] .token.url {
+    color: unset;
+    background: unset;
+}
+
+.custom-editor .w-md-editor-text-pre .url {
+    color: unset !important;
+}
+
+.custom-editor .w-md-editor-text-pre .url .content {
+    color: unset !important;
+}

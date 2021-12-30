@@ -13,7 +13,7 @@ import TodoList from "../../templates/todo/TodoList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import TodoForm from "../../templates/todo/TodoForm";
 import * as React from "react";
-import NoteForm from "../../templates/cat/NoteForm";
+import FormikForm from "../../templates/cat/FormikForm";
 import Consistency from "../../templates/ui-engineering/consistency/Consistency";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import UserForm from "../../templates/auth/UserForm";
@@ -30,6 +30,7 @@ import Resilience from "../../templates/ui-engineering/resilience/Resilience";
 import Abstraction from "../../templates/ui-engineering/abstraction/Abstraction";
 import Accesibility from "../../templates/ui-engineering/accesibility/Accesibility";
 import Navigation from "../../templates/ui-engineering/navigation/Navigation";
+import NoteForm from "../../templates/todo/NoteForm";
 
 export interface AppVariantType {
   name: string;
@@ -188,7 +189,7 @@ export const appVariants: AppVariantType[] = [
         icon: <PetsIcon />,
         name: "NoteForm",
         path: "/note",
-        component: <NoteForm />,
+        component: <FormikForm />,
         navbar: true,
         title: "Formik inputs",
       },
@@ -232,6 +233,14 @@ export const appVariants: AppVariantType[] = [
         path: "/todoForm",
         component: <TodoForm />,
         title: "todo",
+      },
+      {
+        icon: <PlaylistAddIcon />,
+        name: "NoteForm",
+        path: "/noteForm",
+        navbar: true,
+        component: <NoteForm />,
+        title: "Notes",
       },
       {
         icon: <PersonAddIcon />,

@@ -220,7 +220,7 @@ export default function App() {
                   p: 2,
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "start",
+                  justifyContent: "stretch",
                   minHeight: "50vh",
                 }}
               >
