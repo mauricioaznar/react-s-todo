@@ -82,6 +82,10 @@ query GetNotes {
         id
         title
         markdownContent
+        author {
+            username
+            _id
+        }
     }
 }
 
@@ -93,6 +97,12 @@ mutation CreateNote($noteInput: NoteInput!) {
 
 mutation UpdateNote($id: Float!, $noteInput: NoteInput!) {
     updateNote(id: $id, noteInput: $noteInput) {
+        title
+    }
+}
+
+mutation DeleteNote($id: Float!) {
+    deleteNote(id: $id) {
         title
     }
 }

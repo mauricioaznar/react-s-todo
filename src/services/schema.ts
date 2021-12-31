@@ -69,6 +69,8 @@ export type User = {
 
 export type Note = {
   __typename?: 'Note';
+  author?: Maybe<User>;
+  authorId: Scalars['String'];
   id: Scalars['Float'];
   markdownContent: Scalars['String'];
   title: Scalars['String'];
@@ -143,6 +145,7 @@ export type Mutation = {
   createTodo: Todo;
   createUser: User;
   deleteCat: Cat;
+  deleteNote: Note;
   deleteTodo: Todo;
   login: AccessToken;
   updateCat: Cat;
@@ -177,6 +180,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeleteCatArgs = {
   _id: Scalars['String'];
+};
+
+
+export type MutationDeleteNoteArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -920,6 +928,10 @@ export const GetNotesDocument = gql`
     id
     title
     markdownContent
+    author {
+      username
+      _id
+    }
   }
 }
     `;
@@ -1020,6 +1032,39 @@ export function useUpdateNoteMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateNoteMutationHookResult = ReturnType<typeof useUpdateNoteMutation>;
 export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
 export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<UpdateNoteMutation, UpdateNoteMutationVariables>;
+export const DeleteNoteDocument = gql`
+    mutation DeleteNote($id: Float!) {
+  deleteNote(id: $id) {
+    title
+  }
+}
+    `;
+export type DeleteNoteMutationFn = Apollo.MutationFunction<DeleteNoteMutation, DeleteNoteMutationVariables>;
+
+/**
+ * __useDeleteNoteMutation__
+ *
+ * To run a mutation, you first call `useDeleteNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNoteMutation, { data, loading, error }] = useDeleteNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteNoteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNoteMutation, DeleteNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNoteMutation, DeleteNoteMutationVariables>(DeleteNoteDocument, options);
+      }
+export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutation>;
+export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
+export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1149,7 +1194,7 @@ export type TodoSubscription = { __typename?: 'Subscription', todo: { __typename
 export type GetNotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, title: string, markdownContent: string }> };
+export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, title: string, markdownContent: string, author?: { __typename?: 'User', username: string, _id: string } | null | undefined }> };
 
 export type CreateNoteMutationVariables = Exact<{
   noteInput: NoteInput;
@@ -1165,6 +1210,13 @@ export type UpdateNoteMutationVariables = Exact<{
 
 
 export type UpdateNoteMutation = { __typename?: 'Mutation', updateNote: { __typename?: 'Note', title: string } };
+
+export type DeleteNoteMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteNoteMutation = { __typename?: 'Mutation', deleteNote: { __typename?: 'Note', title: string } };
 
 export const namedOperations = {
   Query: {
@@ -1188,7 +1240,8 @@ export const namedOperations = {
     UpdateTodo: 'UpdateTodo',
     CreateTodo: 'CreateTodo',
     CreateNote: 'CreateNote',
-    UpdateNote: 'UpdateNote'
+    UpdateNote: 'UpdateNote',
+    DeleteNote: 'DeleteNote'
   },
   Subscription: {
     Todo: 'Todo'
