@@ -31,6 +31,7 @@ import Abstraction from "../../templates/ui-engineering/abstraction/Abstraction"
 import Accesibility from "../../templates/ui-engineering/accesibility/Accesibility";
 import Navigation from "../../templates/ui-engineering/navigation/Navigation";
 import NoteForm from "../../templates/todo/NoteForm";
+import NoteList from "../../templates/todo/NoteList";
 
 export interface AppVariantType {
   name: string;
@@ -187,8 +188,8 @@ export const appVariants: AppVariantType[] = [
       },
       {
         icon: <PetsIcon />,
-        name: "NoteForm",
-        path: "/note",
+        name: "FormikForm",
+        path: "/formikForm",
         component: <FormikForm />,
         navbar: true,
         title: "Formik inputs",
@@ -238,8 +239,15 @@ export const appVariants: AppVariantType[] = [
         icon: <PlaylistAddIcon />,
         name: "NoteForm",
         path: "/noteForm",
-        navbar: true,
         component: <NoteForm />,
+        title: "Notes",
+      },
+      {
+        icon: <PlaylistAddIcon />,
+        name: "Notes",
+        path: "/notes",
+        navbar: true,
+        component: <NoteList />,
         title: "Notes",
       },
       {
