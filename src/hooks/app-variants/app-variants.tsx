@@ -28,7 +28,7 @@ import Internationalization from "../../templates/ui-engineering/internationaliz
 import Delivery from "../../templates/ui-engineering/delivery/Delivery";
 import Resilience from "../../templates/ui-engineering/resilience/Resilience";
 import Abstraction from "../../templates/ui-engineering/abstraction/Abstraction";
-import Accesibility from "../../templates/ui-engineering/accesibility/Accesibility";
+import Accessibility from "../../templates/ui-engineering/accesibility/Accessibility";
 import Navigation from "../../templates/ui-engineering/navigation/Navigation";
 import NoteForm from "../../templates/todo/NoteForm";
 import NoteList from "../../templates/todo/NoteList";
@@ -56,7 +56,7 @@ export const appVariants: AppVariantType[] = [
     primary: `#D98014`,
     secondary: `#9937A6`,
     description:
-      "If you worked a user interface, you’ve likely dealt with at least some of these challenges — either directly or using a library.",
+      "If you worked a user interface, you’ve likely dealt with at least some of these problems — either directly or using a library.",
     divider: `#D98014`,
     backgroundPrimary: `#5FA0D9`,
     backgroundSecondary: `#9ABBD9`,
@@ -121,7 +121,7 @@ export const appVariants: AppVariantType[] = [
       {
         name: "Accessibility",
         path: "/accessibility",
-        component: <Accesibility />,
+        component: <Accessibility />,
         navbar: true,
         title: "Accessibility",
       },

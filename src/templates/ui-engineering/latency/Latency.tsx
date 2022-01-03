@@ -3,6 +3,7 @@ import Explanation from "../components/explanation/Explanation";
 import VerticalTabs, {
   VerticalTabItem,
 } from "../components/vertical-tabs/VerticalTabs";
+import LatencyProblems from "./problems/LatencyProblems";
 
 export default function Latency() {
   const tabs: VerticalTabItem[] = [
@@ -21,6 +22,10 @@ export default function Latency() {
             do we change async dependencies without “rewiring” our code every time?`}
         />
       ),
+    },
+    {
+      label: "Problems",
+      component: <LatencyProblems />,
     },
   ];
 

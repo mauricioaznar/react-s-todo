@@ -3,8 +3,9 @@ import Explanation from "../components/explanation/Explanation";
 import VerticalTabs, {
   VerticalTabItem,
 } from "../components/vertical-tabs/VerticalTabs";
+import { AccessibilityProblems } from "./problems/AccessibilityProblems";
 
-export default function Accesibility() {
+export default function Accessibility() {
   const tabs: VerticalTabItem[] = [
     {
       label: "Explanation",
@@ -14,7 +15,11 @@ export default function Accesibility() {
         />
       ),
     },
+    {
+      label: "Problems",
+      component: <AccessibilityProblems />,
+    },
   ];
 
-  return <VerticalTabs items={tabs} title={`Accesibility`} />;
+  return <VerticalTabs items={tabs} title={`Accessibility`} />;
 }
