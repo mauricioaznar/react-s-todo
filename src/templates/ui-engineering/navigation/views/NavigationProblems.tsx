@@ -1,10 +1,12 @@
 import React from "react";
 import { ProblemItemProps, Problems } from "../../components/problems/Problem";
+import { SearchBarReset } from "./problems/SearchBarReset";
 
 export default function NavigationProblems() {
   const problemSolutions: ProblemItemProps[] = [
     {
       problem: `Switching between /profile/likes and /profile/follows tabs on a profile screen shouldn’t clear a search input outside the tabbed view.`,
+      example: <SearchBarReset />,
     },
     {
       problem: `Navigating to another screen is like walking into a room. People expect to go back later and find things as they left them (with, perhaps, some new items).`,

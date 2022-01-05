@@ -21,5 +21,8 @@
       "pragma": "React",
       "version": "15.6.1"
     }
+  },
+  "env": {
+    "browser": true
   }
 }

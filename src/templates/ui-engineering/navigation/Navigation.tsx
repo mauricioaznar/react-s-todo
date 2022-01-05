@@ -3,7 +3,7 @@ import Explanation from "../components/explanation/Explanation";
 import VerticalTabs, {
   VerticalTabItem,
 } from "../components/vertical-tabs/VerticalTabs";
-import NavigationProblems from "./problems/NavigationProblems";
+import NavigationProblems from "./views/NavigationProblems";
 
 export default function Navigation() {
   const tabs: VerticalTabItem[] = [
