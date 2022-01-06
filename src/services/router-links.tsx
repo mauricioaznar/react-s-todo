@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ReactElement } from "react";
 import HomeIcon from "@mui/icons-material/Home";
-import Home from "../templates/home/Home";
+import Home from "../programs/home/Home";
 
 export interface RouterLink {
   title: string;

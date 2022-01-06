@@ -1,22 +1,34 @@
-import * as React from 'react';
-import './styles.css'
-import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
-import {ApolloProvider,} from "@apollo/client";
-import Main from "./Main";
-import {Provider as StoreProvider} from "react-redux";
+import * as React from "react";
+import "./styles.css";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
+import { Provider as StoreProvider } from "react-redux";
+import DateAdapter from "@mui/lab/AdapterMoment";
+import { LocalizationProvider } from "@mui/lab";
+import { SnackbarProvider } from "notistack";
 
-import {store} from "./state";
+import AuthorizationWrapper from "./programs/AuthorizationWrapper";
+import { store } from "./global-state/redux";
 import client from "./services/init-apollo-client";
-
+import { ProgramsProvider } from "./global-state/context/programs-context";
+import ProgramHandler from "./programs/ProgramHandler";
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <StoreProvider store={store}>
-            <Router>
-                <Main />
-            </Router>
-        </StoreProvider>
-    </ApolloProvider>,
-    document.querySelector('#root'),
+  <ApolloProvider client={client}>
+    <StoreProvider store={store}>
+      <Router>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <ProgramsProvider>
+            <SnackbarProvider maxSnack={6}>
+              <AuthorizationWrapper>
+                <ProgramHandler />
+              </AuthorizationWrapper>
+            </SnackbarProvider>
+          </ProgramsProvider>
+        </LocalizationProvider>
+      </Router>
+    </StoreProvider>
+  </ApolloProvider>,
+  document.querySelector("#root")
 );
