@@ -32,7 +32,7 @@ interface AppVariantProps {
     children: React.ReactNode
 }
 
-export const AppVariant = (props: AppVariantProps) => {
+export const AppVariantProvider = (props: AppVariantProps) => {
 
     const history = useHistory()
 

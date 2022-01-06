@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import LocalStorage from "../helpers/local-storage";
+import LocalStorage from "../../helpers/local-storage";
 
 interface UseGraphqlPagination {
     afterKey?: string,

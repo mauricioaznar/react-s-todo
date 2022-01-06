@@ -8,7 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import {SnackbarProvider} from "notistack";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
-import {AppVariant} from "./hooks/app-variants/useAppVariant";
+import {AppVariantProvider} from "./hooks/app-variants/useAppVariant";
 import BigLoader from "./components/loaders/BigLoader";
 
 
@@ -39,7 +39,7 @@ const Main = () => {
 
     return (
         <LocalizationProvider dateAdapter={DateAdapter}>
-            <AppVariant>
+            <AppVariantProvider>
                 <CssBaseline/>
                 <SnackbarProvider maxSnack={6}>
                     {
@@ -50,7 +50,7 @@ const Main = () => {
                                 : <LogInForm/>
                     }
                 </SnackbarProvider>
-            </AppVariant>
+            </AppVariantProvider>
         </LocalizationProvider>
     );
 };
