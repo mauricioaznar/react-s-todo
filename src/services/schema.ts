@@ -20,6 +20,7 @@ export type Query = {
   __typename?: 'Query';
   cats: Array<Cat>;
   currentUser: User;
+  getServerVersion?: Maybe<Scalars['String']>;
   isUserOccupied: Scalars['Boolean'];
   notes: Array<Note>;
   todos: TodoResponse;
