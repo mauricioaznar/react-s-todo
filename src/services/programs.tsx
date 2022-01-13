@@ -6,6 +6,7 @@ import { uiEngineeringProgram } from "../programs/ui-engineering-program/program
 import { formsProgram } from "../programs/forms-program/program";
 import { utilitiesProgram } from "../programs/utilities-program/program";
 import { authProgram } from "../programs/auth-program/program";
+import { testingProgram } from "../programs/testing-program/program";
 
 export interface ProgramInterface {
   name: string;
@@ -30,4 +31,5 @@ export const programs: ProgramInterface[] = [
   uiEngineeringProgram,
   formsProgram,
   utilitiesProgram,
+  testingProgram,
 ];

@@ -14,21 +14,31 @@ import client from "./services/init-apollo-client";
 import { ProgramsProvider } from "./global-state/context/programs-context";
 import ProgramHandler from "./programs/ProgramHandler";
 
+interface ProvidersProps {
+  children: React.ReactElement<any, any>;
+}
+
+export const Providers = ({ children }: ProvidersProps) => {
+  return (
+    <ApolloProvider client={client}>
+      <StoreProvider store={store}>
+        <Router>
+          <LocalizationProvider dateAdapter={DateAdapter}>
+            <ProgramsProvider>
+              <SnackbarProvider maxSnack={6}>
+                <AuthorizationWrapper>{children}</AuthorizationWrapper>
+              </SnackbarProvider>
+            </ProgramsProvider>
+          </LocalizationProvider>
+        </Router>
+      </StoreProvider>
+    </ApolloProvider>
+  );
+};
+
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <StoreProvider store={store}>
-      <Router>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <ProgramsProvider>
-            <SnackbarProvider maxSnack={6}>
-              <AuthorizationWrapper>
-                <ProgramHandler />
-              </AuthorizationWrapper>
-            </SnackbarProvider>
-          </ProgramsProvider>
-        </LocalizationProvider>
-      </Router>
-    </StoreProvider>
-  </ApolloProvider>,
+  <Providers>
+    <ProgramHandler />
+  </Providers>,
   document.querySelector("#root")
 );
