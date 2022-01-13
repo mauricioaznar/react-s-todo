@@ -8,7 +8,7 @@ import { Providers } from "../global-state/context/providers";
 import { store } from "../global-state/redux";
 import { MockedProvider } from "@apollo/client/testing";
 
-const mocks = [];
+// const mocks = [];
 
 test("renders login page", async () => {
   await act(async () => {
