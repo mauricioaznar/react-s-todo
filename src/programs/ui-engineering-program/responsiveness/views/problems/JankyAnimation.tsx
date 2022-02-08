@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Stack, TextField } from '@mui/material';
-import { animated, useSpring } from 'react-spring';
+import React, { useEffect, useState } from "react";
+import { Stack, TextField } from "@mui/material";
+import { animated, useSpring } from "react-spring";
 
 const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(() => resolve(true), ms));
 };
 
 export default function JankyAnimation() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const [styles, api] = useSpring(() => {
     return {
@@ -40,10 +40,10 @@ export default function JankyAnimation() {
   }, [text]);
 
   return (
-    <Stack direction={'row'} spacing={2}>
+    <Stack direction={"row"} spacing={2}>
       <TextField
-        label={'Write fast!'}
-        helperText={'Write fast to feel the jankiness'}
+        label={"Write fast!"}
+        helperText={"Write fast to feel the jankiness"}
         value={text}
         onChange={(e) => {
           setText(e.target.value);
@@ -52,10 +52,10 @@ export default function JankyAnimation() {
       <animated.div
         style={{
           ...styles,
-          width: '50px',
-          height: '50px',
-          backgroundColor: 'white',
-          borderRadius: '100px',
+          width: "50px",
+          height: "50px",
+          backgroundColor: "white",
+          borderRadius: "100px",
         }}
       />
     </Stack>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { animated, Spring } from 'react-spring';
+import React from "react";
+import { animated, Spring } from "react-spring";
 
 interface AnimatedDivProps {
   children: React.ReactNode;

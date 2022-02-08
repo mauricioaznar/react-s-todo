@@ -1,13 +1,15 @@
-import React from 'react';
-import Explanation from '../components/explanation/Explanation';
-import ResponsivenessProblems from './views/ResponsivenessProblems';
-import ResponsivenessSolution from './views/ResponsivenessSolution';
-import VerticalTabs, { VerticalTabItem } from '../components/vertical-tabs/VerticalTabs';
+import React from "react";
+import Explanation from "../components/explanation/Explanation";
+import ResponsivenessProblems from "./views/ResponsivenessProblems";
+import ResponsivenessSolution from "./views/ResponsivenessSolution";
+import VerticalTabs, {
+  VerticalTabItem,
+} from "../components/vertical-tabs/VerticalTabs";
 
 export default function Responsiveness() {
   const tabs: VerticalTabItem[] = [
     {
-      label: 'Explanation',
+      label: "Explanation",
       component: (
         <Explanation
           explanation={`People can only tolerate a lack of visual feedback to their actions for a limited time.
@@ -23,11 +25,11 @@ export default function Responsiveness() {
       ),
     },
     {
-      label: 'Problems',
+      label: "Problems",
       component: <ResponsivenessProblems />,
     },
     {
-      label: 'The solution example',
+      label: "The solution example",
       component: <ResponsivenessSolution />,
     },
   ];

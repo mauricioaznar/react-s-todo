@@ -1,7 +1,11 @@
-import * as React from 'react';
-import { NavLink as RouterLink, LinkProps as RouterLinkProps, useLocation } from 'react-router-dom';
-import { ListItem, ListItemText, useTheme } from '@mui/material';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import * as React from "react";
+import {
+  NavLink as RouterLink,
+  LinkProps as RouterLinkProps,
+  useLocation,
+} from "react-router-dom";
+import { ListItem, ListItemText, useTheme } from "@mui/material";
+import ListItemIcon from "@mui/material/ListItemIcon";
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -18,22 +22,21 @@ export function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'to'>>(function Link(
-        itemProps,
-        ref,
-      ) {
-        return (
-          <RouterLink
-            strict
-            to={to}
-            ref={ref}
-            {...itemProps}
-            role={undefined}
-            exact={exact || false}
-            onClick={props.onClick}
-          />
-        );
-      }),
+      React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, "to">>(
+        function Link(itemProps, ref) {
+          return (
+            <RouterLink
+              strict
+              to={to}
+              ref={ref}
+              {...itemProps}
+              role={undefined}
+              exact={exact || false}
+              onClick={props.onClick}
+            />
+          );
+        },
+      ),
     [to],
   );
 
@@ -43,7 +46,8 @@ export function ListItemLink(props: ListItemLinkProps) {
         {icon ? (
           <ListItemIcon
             style={{
-              color: location.pathname === to ? theme.palette.primary.main : 'unset',
+              color:
+                location.pathname === to ? theme.palette.primary.main : "unset",
             }}
           >
             {icon}
@@ -52,7 +56,8 @@ export function ListItemLink(props: ListItemLinkProps) {
         <ListItemText
           primary={primary}
           style={{
-            color: location.pathname === to ? theme.palette.primary.main : 'unset',
+            color:
+              location.pathname === to ? theme.palette.primary.main : "unset",
           }}
         />
       </ListItem>

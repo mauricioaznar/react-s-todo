@@ -1,10 +1,10 @@
-import { Badge, Stack } from '@mui/material';
-import FeedbackButton from '../../components/FeedbackButton';
-import { ThumbUp } from '@mui/icons-material';
-import React, { useState } from 'react';
-import { fakeApi } from '../../services/fake-api';
+import { Badge, Stack } from "@mui/material";
+import FeedbackButton from "../../components/FeedbackButton";
+import { ThumbUp } from "@mui/icons-material";
+import React, { useState } from "react";
+import { fakeApi } from "../../services/fake-api";
 
-const LOCAL_CONSISTENCY_KEY = 'local_consistency_value_key';
+const LOCAL_CONSISTENCY_KEY = "local_consistency_value_key";
 
 export default function LocalConsistency() {
   const initialValue = window.localStorage.getItem(LOCAL_CONSISTENCY_KEY)
@@ -30,8 +30,13 @@ export default function LocalConsistency() {
   };
 
   return (
-    <Stack direction={'row'} alignItems={'center'} spacing={2}>
-      <FeedbackButton loading={loading} label={`Like`} onClick={fetch} icon={<ThumbUp />} />
+    <Stack direction={"row"} alignItems={"center"} spacing={2}>
+      <FeedbackButton
+        loading={loading}
+        label={`Like`}
+        onClick={fetch}
+        icon={<ThumbUp />}
+      />
       <Badge color="secondary" badgeContent={valueOne}>
         <ThumbUp />
       </Badge>

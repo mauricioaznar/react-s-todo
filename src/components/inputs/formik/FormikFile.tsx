@@ -1,18 +1,22 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import { Box, Button, FormHelperText, styled } from '@mui/material';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
-import { useField } from 'formik';
+import { Box, Button, FormHelperText, styled } from "@mui/material";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { useField } from "formik";
 
 interface FormikFileProps extends FormikDefaultProps {
   multiple?: boolean;
 }
 
-const Input = styled('input')({
-  display: 'none',
+const Input = styled("input")({
+  display: "none",
 });
 
-const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) => {
+const ReactHookFormFile = ({
+  label,
+  name,
+  multiple = false,
+}: FormikFileProps) => {
   const [formikProps, formikMeta, fieldHelperProps] = useField(name);
 
   const getFilename = useCallback(
@@ -20,9 +24,10 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
       if (value && multiple) {
         const fileArray = value as File[];
         const filenames = fileArray.reduce((curr, file, index) => {
-          const separator = index === 0 ? '' : index === fileArray.length - 1 ? ' and ' : ', ';
+          const separator =
+            index === 0 ? "" : index === fileArray.length - 1 ? " and " : ", ";
           return curr + separator + file.name;
-        }, '');
+        }, "");
         return <span>{filenames}</span>;
       } else if (value && !multiple) {
         const fileConst = value as File;
@@ -65,7 +70,11 @@ const ReactHookFormFile = ({ label, name, multiple = false }: FormikFileProps) =
         {getFilename(formikProps.value)}
         <Box sx={{ my: 0 }}>
           {formikMeta.touched && formikMeta.error ? (
-            <FormHelperText sx={{ fontSize: '0.8rem' }} error={true} variant={'standard'}>
+            <FormHelperText
+              sx={{ fontSize: "0.8rem" }}
+              error={true}
+              variant={"standard"}
+            >
               {formikMeta.error}
             </FormHelperText>
           ) : null}

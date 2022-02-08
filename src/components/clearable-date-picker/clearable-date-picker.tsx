@@ -1,11 +1,11 @@
-import { DatePicker } from '@mui/lab';
-import moment from 'moment';
-import TextField from '@mui/material/TextField';
-import { IconButton, InputAdornment } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import * as React from 'react';
+import { DatePicker } from "@mui/lab";
+import moment from "moment";
+import TextField from "@mui/material/TextField";
+import { IconButton, InputAdornment } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import * as React from "react";
 
-type Views = 'day' | 'year' | 'month';
+type Views = "day" | "year" | "month";
 
 interface EnhancedDatePickerProps {
   onChange: (date: string | null) => void;
@@ -20,7 +20,17 @@ interface EnhancedDatePickerProps {
 }
 
 export default function ClearableDatePicker(props: EnhancedDatePickerProps) {
-  const { onChange, disabled, label, value, views, mask, inputFormat, helperText, error } = props;
+  const {
+    onChange,
+    disabled,
+    label,
+    value,
+    views,
+    mask,
+    inputFormat,
+    helperText,
+    error,
+  } = props;
 
   return (
     <DatePicker
@@ -43,7 +53,7 @@ export default function ClearableDatePicker(props: EnhancedDatePickerProps) {
         return (
           <TextField
             {...params}
-            color={'primary'}
+            color={"primary"}
             margin="normal"
             fullWidth
             label={label}

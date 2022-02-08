@@ -1,3 +1,3 @@
-const ApolloErrorSeparator = '#%$';
+const ApolloErrorSeparator = "#%$";
 
 export default ApolloErrorSeparator;

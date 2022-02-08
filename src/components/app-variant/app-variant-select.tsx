@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
-import { useProgramsContext } from '../../hooks/context-hooks/useProgramsContext';
-import { Box, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import React, { useState } from "react";
+import { useProgramsContext } from "../../hooks/context-hooks/useProgramsContext";
+import {
+  Box,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 
 export default function AppVariantSelect() {
-  const { selectAppVariant, appVariants, currAppVariant } = useProgramsContext();
-  const [name, setName] = useState<string>(currAppVariant ? currAppVariant.name : '');
+  const { selectAppVariant, appVariants, currAppVariant } =
+    useProgramsContext();
+  const [name, setName] = useState<string>(
+    currAppVariant ? currAppVariant.name : "",
+  );
 
   return (
     <FormControl sx={{ m: 1 }} fullWidth>
@@ -24,7 +35,7 @@ export default function AppVariantSelect() {
         }}
         input={<OutlinedInput label="ProgramHandler" />}
         renderValue={() => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {currAppVariant ? <Chip label={currAppVariant.title} /> : null}
           </Box>
         )}

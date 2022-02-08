@@ -1,6 +1,6 @@
-import React from 'react';
-import { ProblemItemProps, Problems } from '../../components/problems/Problem';
-import { SearchBarReset } from './problems/SearchBarReset';
+import React from "react";
+import { ProblemItemProps, Problems } from "../../components/problems/Problem";
+import { SearchBarReset } from "./problems/SearchBarReset";
 
 export default function NavigationProblems() {
   const problemSolutions: ProblemItemProps[] = [

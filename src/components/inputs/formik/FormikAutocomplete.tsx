@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
-import { useField } from 'formik';
-import { Autocomplete, TextField } from '@mui/material';
-import { useState } from 'react';
+import * as React from "react";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { useField } from "formik";
+import { Autocomplete, TextField } from "@mui/material";
+import { useState } from "react";
 
 interface FormikAutocompleteProps<T> extends FormikDefaultProps {
   items: T[];
@@ -48,7 +48,7 @@ export default function FormikAutocomplete<T>({
       }}
       getOptionLabel={(option) => {
         const text = option[itemText];
-        return typeof text === 'string' ? text : '';
+        return typeof text === "string" ? text : "";
       }}
       id="controllable-states-demo"
       options={items}
@@ -58,7 +58,7 @@ export default function FormikAutocomplete<T>({
           {...params}
           label={label}
           error={hasError}
-          helperText={hasError ? formikMeta.error : ''}
+          helperText={hasError ? formikMeta.error : ""}
         />
       )}
     />

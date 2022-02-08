@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React from "react";
+import { Box, Typography } from "@mui/material";
 
 interface ExplanationProps {
   explanation: string;
@@ -10,10 +10,10 @@ export default function Explanation(props: ExplanationProps) {
 
   return (
     <Box>
-      <Typography variant={'body1'} sx={{ mb: 2 }}>
+      <Typography variant={"body1"} sx={{ mb: 2 }}>
         &ldquo;{explanation}&rdquo;
       </Typography>
-      <Typography align={'right'}>
+      <Typography align={"right"}>
         <i>The Elements of UI Engineering</i>, Dan Abramov
       </Typography>
     </Box>

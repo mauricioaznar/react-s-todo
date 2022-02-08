@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { Button, Stack, Typography } from "@mui/material";
 
 const fakeFetch = () => {
   return new Promise((resolve) => {
@@ -10,28 +10,28 @@ const fakeFetch = () => {
 };
 
 export default function LackOfVisualFeedback() {
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState("");
 
   const handleClick = async () => {
     try {
       await fakeFetch();
-      setResult('success!');
+      setResult("success!");
     } catch (e) {
       //
     }
   };
 
   return (
-    <Stack direction={'row'} spacing={3}>
+    <Stack direction={"row"} spacing={3}>
       <Button
-        variant={'contained'}
+        variant={"contained"}
         onClick={async () => {
           await handleClick();
         }}
       >
         Fetch
       </Button>
-      {result !== '' ? <Typography>{result}</Typography> : null}
+      {result !== "" ? <Typography>{result}</Typography> : null}
     </Stack>
   );
 }

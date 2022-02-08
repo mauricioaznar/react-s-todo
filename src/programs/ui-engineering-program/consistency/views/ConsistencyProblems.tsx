@@ -1,7 +1,7 @@
-import React from 'react';
-import { ProblemItemProps, Problems } from '../../components/problems/Problem';
-import LocalConsistency from './problems/LocalConsitency';
-import ScreenConsistency from './problems/ScreenConsistency';
+import React from "react";
+import { ProblemItemProps, Problems } from "../../components/problems/Problem";
+import LocalConsistency from "./problems/LocalConsitency";
+import ScreenConsistency from "./problems/ScreenConsistency";
 
 export default function ConsistencyProblems() {
   const problemSolutions: ProblemItemProps[] = [
@@ -29,7 +29,9 @@ export default function ConsistencyProblems() {
     },
     {
       problem: `How and when do we make the local data consistent with the server, and the other way around?`,
-      answers: [`Updating the server first and if successful update the local state. `],
+      answers: [
+        `Updating the server first and if successful update the local state. `,
+      ],
     },
   ];
 

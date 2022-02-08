@@ -1,8 +1,8 @@
-import React from 'react';
-import { DATE_FORMAT, DATE_MASK } from '../../../helpers/format-date';
-import ClearableDatePicker from '../../clearable-date-picker/clearable-date-picker';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
-import { useField } from 'formik';
+import React from "react";
+import { DATE_FORMAT, DATE_MASK } from "../../../helpers/format-date";
+import ClearableDatePicker from "../../clearable-date-picker/clearable-date-picker";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { useField } from "formik";
 
 interface FormikDateProps extends FormikDefaultProps {}
 
@@ -11,7 +11,7 @@ const ReactHookFormDatePicker = ({ name, label }: FormikDateProps) => {
 
   return (
     <ClearableDatePicker
-      views={['day']}
+      views={["day"]}
       mask={DATE_MASK}
       inputFormat={DATE_FORMAT}
       label={label}
@@ -21,7 +21,7 @@ const ReactHookFormDatePicker = ({ name, label }: FormikDateProps) => {
       }}
       value={formikProps.value}
       error={formikMeta.touched && !!formikMeta.error}
-      helperText={formikMeta.touched ? formikMeta.error : ''}
+      helperText={formikMeta.touched ? formikMeta.error : ""}
     />
   );
 };

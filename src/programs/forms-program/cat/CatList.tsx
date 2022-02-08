@@ -1,30 +1,30 @@
-import * as React from 'react';
-import { useState } from 'react';
+import * as React from "react";
+import { useState } from "react";
 
 // icons
-import CreateIcon from '@mui/icons-material/Create';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import CreateIcon from "@mui/icons-material/Create";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 // components
-import { useHistory } from 'react-router-dom';
-import { Fab, IconButton, Typography } from '@mui/material';
+import { useHistory } from "react-router-dom";
+import { Fab, IconButton, Typography } from "@mui/material";
 import {
   GetCatsQuery,
   namedOperations,
   useDeleteCatMutation,
   useGetCatsQuery,
-} from '../../../services/schema';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+} from "../../../services/schema";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 
 export default function CatList() {
   const history = useHistory();
@@ -35,17 +35,22 @@ export default function CatList() {
   }
 
   function handleCreateClick() {
-    history.push('/catForm');
+    history.push("/catForm");
   }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Grid container alignItems={'center'} mb={2}>
+      <Grid container alignItems={"center"} mb={2}>
         <Grid item xs>
-          {<Typography variant={'h4'}>Cats</Typography>}
+          {<Typography variant={"h4"}>Cats</Typography>}
         </Grid>
         <Grid item>
-          <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
+          <Fab
+            size={"small"}
+            color="primary"
+            aria-label="add"
+            onClick={handleCreateClick}
+          >
             <AddIcon />
           </Fab>
         </Grid>
@@ -77,7 +82,7 @@ export default function CatList() {
   );
 }
 
-function CatRow({ cat }: { cat: GetCatsQuery['cats'][number] }) {
+function CatRow({ cat }: { cat: GetCatsQuery["cats"][number] }) {
   const [isDisabled, setDisabled] = useState(false);
 
   const [, setOpen] = React.useState(false);
@@ -96,11 +101,11 @@ function CatRow({ cat }: { cat: GetCatsQuery['cats'][number] }) {
 
   const history = useHistory();
 
-  function handleEditClick(cat: GetCatsQuery['cats'][number]) {
-    history.push('/catForm', { cat });
+  function handleEditClick(cat: GetCatsQuery["cats"][number]) {
+    history.push("/catForm", { cat });
   }
 
-  async function onDelete(cat: GetCatsQuery['cats'][number]) {
+  async function onDelete(cat: GetCatsQuery["cats"][number]) {
     setDisabled(true);
     await deleteCatMutation({
       variables: {
@@ -111,7 +116,7 @@ function CatRow({ cat }: { cat: GetCatsQuery['cats'][number] }) {
 
   return (
     <>
-      <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell>{cat.breed}</TableCell>
         <TableCell>{cat.characteristics.color}</TableCell>
         <TableCell>{cat.characteristics.coat}</TableCell>
@@ -119,30 +124,30 @@ function CatRow({ cat }: { cat: GetCatsQuery['cats'][number] }) {
         <TableCell>{cat.characteristics.size}</TableCell>
         <TableCell>
           <IconButton
-            size={'small'}
+            size={"small"}
             onClick={() => {
               handleEditClick(cat);
             }}
           >
-            <CreateIcon fontSize={'small'} />
+            <CreateIcon fontSize={"small"} />
           </IconButton>
           <IconButton
             disabled={isDisabled}
-            size={'small'}
+            size={"small"}
             onClick={() => {
               onDelete(cat);
             }}
           >
-            <DeleteIcon fontSize={'small'} />
+            <DeleteIcon fontSize={"small"} />
           </IconButton>
           <IconButton
             disabled={isDisabled}
-            size={'small'}
+            size={"small"}
             onClick={() => {
               handleClickOpen();
             }}
           >
-            <FileUploadIcon fontSize={'small'} />
+            <FileUploadIcon fontSize={"small"} />
           </IconButton>
         </TableCell>
       </TableRow>

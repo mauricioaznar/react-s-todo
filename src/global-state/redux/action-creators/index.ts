@@ -1,1 +1,1 @@
-export { login, logout, setCurrentUser } from './auth';
+export { login, logout, setCurrentUser } from "./auth";

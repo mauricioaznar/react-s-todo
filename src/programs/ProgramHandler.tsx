@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { useMemo } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
+import * as React from "react";
+import { useMemo } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+import { useApolloClient } from "@apollo/client";
 
 // mui
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import LogoutIcon from '@mui/icons-material/Logout';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
-import CopyrightIcon from '@mui/icons-material/Copyright';
-import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LogoutIcon from "@mui/icons-material/Logout";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
+import CopyrightIcon from "@mui/icons-material/Copyright";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar as MuiAppBar,
   SwipeableDrawer as MuiDrawer,
@@ -29,22 +29,22 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from '@mui/material';
+} from "@mui/material";
 
 // local
-import { ListItemLink } from '../components/ListItemLink';
-import { useActions } from '../hooks/redux-hooks/useActions';
-import { Query, useTodoSubscription } from '../services/schema';
-import { nameof } from '../helpers/nameof';
-import { useProgramsContext } from '../hooks/context-hooks/useProgramsContext';
-import { commonLinks } from '../services/router-links';
-import AnimatedDiv from '../components/spring-components/AnimatedDiv';
+import { ListItemLink } from "../components/ListItemLink";
+import { useActions } from "../hooks/redux-hooks/useActions";
+import { Query, useTodoSubscription } from "../services/schema";
+import { nameof } from "../helpers/nameof";
+import { useProgramsContext } from "../hooks/context-hooks/useProgramsContext";
+import { commonLinks } from "../services/router-links";
+import AnimatedDiv from "../components/spring-components/AnimatedDiv";
 
 const drawerWidth: number = 240;
 
 export default function ProgramHandler() {
   const theme = useTheme();
-  const mdAndUp = useMediaQuery(theme.breakpoints.up('lg'));
+  const mdAndUp = useMediaQuery(theme.breakpoints.up("lg"));
   const history = useHistory();
 
   const { toggleAppVariant, currAppVariant } = useProgramsContext();
@@ -61,8 +61,8 @@ export default function ProgramHandler() {
   useTodoSubscription({
     onSubscriptionData({ client }) {
       client.cache.evict({
-        id: 'ROOT_QUERY',
-        fieldName: nameof<Query>('todos'),
+        id: "ROOT_QUERY",
+        fieldName: nameof<Query>("todos"),
       });
     },
   });
@@ -72,11 +72,14 @@ export default function ProgramHandler() {
   }, [currAppVariant]);
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Box sx={{ display: "flex" }}>
+      <MuiAppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar
           sx={{
-            pr: '24px', // keep right padding when drawer closed
+            pr: "24px", // keep right padding when drawer closed
           }}
         >
           {!mdAndUp ? (
@@ -86,7 +89,7 @@ export default function ProgramHandler() {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
+                marginRight: "36px",
               }}
             >
               <MenuIcon />
@@ -97,10 +100,10 @@ export default function ProgramHandler() {
             <IconButton
               sx={{ mr: 2 }}
               onClick={() => {
-                history.push('/');
+                history.push("/");
               }}
             >
-              <SvgIcon fontSize={'large'} component={currAppVariant.icon} />
+              <SvgIcon fontSize={"large"} component={currAppVariant.icon} />
             </IconButton>
           ) : null}
 
@@ -109,7 +112,7 @@ export default function ProgramHandler() {
             variant="h2"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1, fontSize: '3.2rem' }}
+            sx={{ flexGrow: 1, fontSize: "3.2rem" }}
           >
             {currAppVariant?.title}
           </Typography>
@@ -126,7 +129,7 @@ export default function ProgramHandler() {
       </MuiAppBar>
 
       <MuiDrawer
-        variant={mdAndUp ? 'permanent' : 'temporary'}
+        variant={mdAndUp ? "permanent" : "temporary"}
         open={open}
         onClose={() => {
           setOpen(false);
@@ -139,15 +142,15 @@ export default function ProgramHandler() {
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
       >
         <Toolbar
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
             px: [1],
           }}
         >
@@ -177,7 +180,11 @@ export default function ProgramHandler() {
         <List style={{ marginTop: `auto` }}>
           <ListItem button={true} onClick={toggleAppVariant}>
             <ListItemIcon>
-              {theme.palette.mode === 'dark' ? <ModeNightIcon /> : <WbSunnyIcon />}
+              {theme.palette.mode === "dark" ? (
+                <ModeNightIcon />
+              ) : (
+                <WbSunnyIcon />
+              )}
             </ListItemIcon>
             <ListItemText>{currAppVariant?.title}</ListItemText>
           </ListItem>
@@ -189,9 +196,9 @@ export default function ProgramHandler() {
               <Link color="inherit" href="https://www.mauaznar.com/">
                 Mau Aznar
               </Link>
-              {'   '}
+              {"   "}
               {new Date().getFullYear()}
-              {'.'}
+              {"."}
             </ListItemText>
           </ListItem>
         </List>
@@ -200,21 +207,21 @@ export default function ProgramHandler() {
         component="main"
         sx={{
           flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
+          height: "100vh",
+          overflow: "auto",
         }}
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3} justifyContent={'center'}>
+          <Grid container spacing={3} justifyContent={"center"}>
             <Grid item xs>
               <Paper
                 sx={{
                   p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'stretch',
-                  minHeight: '50vh',
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "stretch",
+                  minHeight: "50vh",
                 }}
               >
                 <Switch>

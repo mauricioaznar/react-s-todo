@@ -1,11 +1,11 @@
-import { ActionType } from '../action-types';
-import { Action } from '../actions';
-import { Dispatch } from 'redux';
-import { CurrentUserQuery } from '../../../services/schema';
+import { ActionType } from "../action-types";
+import { Action } from "../actions";
+import { Dispatch } from "redux";
+import { CurrentUserQuery } from "../../../services/schema";
 
 export const login = (accessToken: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    window.localStorage.setItem('token', accessToken);
+    window.localStorage.setItem("token", accessToken);
     dispatch({
       type: ActionType.LOGIN,
       payload: accessToken,
@@ -13,7 +13,7 @@ export const login = (accessToken: string) => {
   };
 };
 
-export const setCurrentUser = (user: CurrentUserQuery['currentUser']) => {
+export const setCurrentUser = (user: CurrentUserQuery["currentUser"]) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.SET_CURRENT_USER,
@@ -24,7 +24,7 @@ export const setCurrentUser = (user: CurrentUserQuery['currentUser']) => {
 
 export const logout = () => {
   return async (dispatch: Dispatch<Action>) => {
-    window.localStorage.removeItem('token');
+    window.localStorage.removeItem("token");
     dispatch({
       type: ActionType.LOGOUT,
     });

@@ -1,17 +1,17 @@
-import * as React from 'react';
-import { useSnackbar } from 'notistack';
-import ApolloErrorSeparator from '../constants/apollo-error-separator';
+import * as React from "react";
+import { useSnackbar } from "notistack";
+import ApolloErrorSeparator from "../constants/apollo-error-separator";
 
 interface MauSnackbarProps {
   message: string;
-  variant?: 'error' | 'success';
+  variant?: "error" | "success";
 }
 
-const MauSnackbar = ({ message, variant = 'error' }: MauSnackbarProps) => {
+const MauSnackbar = ({ message, variant = "error" }: MauSnackbarProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {
-    if (message !== '') {
+    if (message !== "") {
       const messages = message.split(ApolloErrorSeparator);
 
       messages.forEach((m) => {

@@ -1,27 +1,27 @@
-import * as React from 'react';
-import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import PetsIcon from '@mui/icons-material/Pets';
-import Typography from '@mui/material/Typography';
-import { useLoginMutation } from '../../services/schema';
-import { Grid } from '@mui/material';
-import { ApolloError } from '@apollo/client';
-import { useActions } from '../../hooks/redux-hooks/useActions';
-import MauSnackbar from '../../components/MauSnackbar';
-import AppVariantSelect from '../../components/app-variant/app-variant-select';
+import * as React from "react";
+import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import PetsIcon from "@mui/icons-material/Pets";
+import Typography from "@mui/material/Typography";
+import { useLoginMutation } from "../../services/schema";
+import { Grid } from "@mui/material";
+import { ApolloError } from "@apollo/client";
+import { useActions } from "../../hooks/redux-hooks/useActions";
+import MauSnackbar from "../../components/MauSnackbar";
+import AppVariantSelect from "../../components/app-variant/app-variant-select";
 
 // const theme = createTheme();
 
 export default function LogInForm() {
   // const history = useHistory()
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
-  const [username, setUsername] = useState('john');
-  const [password, setPassword] = useState('changeme');
+  const [username, setUsername] = useState("john");
+  const [password, setPassword] = useState("changeme");
 
   const [loginMutation] = useLoginMutation();
 
@@ -55,7 +55,7 @@ export default function LogInForm() {
       if (e instanceof ApolloError) {
         setMessage(e.message);
       }
-      setMessage('');
+      setMessage("");
       setIsDisabled(false);
     }
   };
@@ -65,20 +65,20 @@ export default function LogInForm() {
       container
       spacing={0}
       sx={{
-        minHeight: '100vh',
-        flexDirection: ['column', 'column', 'row'],
-        justifyContent: 'center',
-        alignItems: 'center',
+        minHeight: "100vh",
+        flexDirection: ["column", "column", "row"],
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Grid
         item
         container
         sx={{
-          position: ['relative', 'relative', 'absolute'],
+          position: ["relative", "relative", "absolute"],
           top: [null, null, 0],
-          alignSelf: 'center',
-          justifyContent: 'center',
+          alignSelf: "center",
+          justifyContent: "center",
         }}
       >
         <Box>
@@ -90,26 +90,31 @@ export default function LogInForm() {
         container
         xs
         sx={{
-          alignSelf: ['center', 'center', 'auto'],
-          flexDirection: 'column',
-          alignContent: 'center',
-          justifyContent: 'center',
+          alignSelf: ["center", "center", "auto"],
+          flexDirection: "column",
+          alignContent: "center",
+          justifyContent: "center",
         }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <PetsIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required

@@ -1,12 +1,12 @@
-import moment from 'moment';
-import { DATE_FORMAT } from './format-date';
+import moment from "moment";
+import { DATE_FORMAT } from "./format-date";
 
 export function saveBoolean(value: boolean, key: string) {
-  window.localStorage.setItem(key, value ? 'true' : 'false');
+  window.localStorage.setItem(key, value ? "true" : "false");
 }
 
 export function getBoolean(key: string): boolean {
-  return window.localStorage.getItem(key) === 'true';
+  return window.localStorage.getItem(key) === "true";
 }
 
 export function saveString(value: string, key: string) {
@@ -27,10 +27,14 @@ export function getNumber(key: string): number | null {
     : null;
 }
 
-export function saveMomentDate(value: string | null, key: string, format: string = DATE_FORMAT) {
+export function saveMomentDate(
+  value: string | null,
+  key: string,
+  format: string = DATE_FORMAT,
+) {
   if (moment.isMoment(value)) {
     window.localStorage.setItem(key, value.format(format));
-  } else if (typeof value === 'string') {
+  } else if (typeof value === "string") {
     window.localStorage.setItem(key, value);
   } else {
     window.localStorage.removeItem(key);

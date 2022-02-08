@@ -1,13 +1,15 @@
-import React from 'react';
-import Explanation from '../components/explanation/Explanation';
-import ConsistencyProblems from './views/ConsistencyProblems';
-import ConsistencySolution from './views/ConsistencySolution';
-import VerticalTabs, { VerticalTabItem } from '../components/vertical-tabs/VerticalTabs';
+import React from "react";
+import Explanation from "../components/explanation/Explanation";
+import ConsistencyProblems from "./views/ConsistencyProblems";
+import ConsistencySolution from "./views/ConsistencySolution";
+import VerticalTabs, {
+  VerticalTabItem,
+} from "../components/vertical-tabs/VerticalTabs";
 
 export default function Consistency() {
   const tabs: VerticalTabItem[] = [
     {
-      label: 'Explanation',
+      label: "Explanation",
       component: (
         <Explanation
           explanation={`You click on a “Like” button and the text updates:
@@ -24,11 +26,11 @@ export default function Consistency() {
       ),
     },
     {
-      label: 'Problems',
+      label: "Problems",
       component: <ConsistencyProblems />,
     },
     {
-      label: 'The solution example',
+      label: "The solution example",
       component: <ConsistencySolution />,
     },
   ];

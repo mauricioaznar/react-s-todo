@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { LoadingButton } from '@mui/lab';
+import React, { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 
 interface FeedbackButtonProps {
   onClick: () => Promise<boolean>;
@@ -8,35 +8,35 @@ interface FeedbackButtonProps {
   icon: React.ReactElement<any, any>;
 }
 
-type Variants = 'success' | 'error' | 'primary';
+type Variants = "success" | "error" | "primary";
 
 export default function FeedbackButton(props: FeedbackButtonProps) {
   const { loading = false, onClick, label, icon } = props;
 
-  const [color, setColor] = useState<Variants>('primary');
+  const [color, setColor] = useState<Variants>("primary");
 
   const runPromise = async () => {
     const val = await onClick();
     if (val) {
-      await startTimeout('success');
+      await startTimeout("success");
     } else {
-      await startTimeout('error');
+      await startTimeout("error");
     }
   };
 
   const startTimeout = async (variant: Variants) => {
     setColor(variant);
     setTimeout(() => {
-      setColor('primary');
+      setColor("primary");
     }, 2000);
   };
 
   return (
     <LoadingButton
       loading={loading}
-      loadingPosition={'end'}
+      loadingPosition={"end"}
       onClick={runPromise}
-      variant={'contained'}
+      variant={"contained"}
       endIcon={icon}
       color={color as any}
     >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   FormHelperText,
@@ -11,14 +11,18 @@ import {
   TableHead,
   Toolbar,
   Tooltip,
-} from '@mui/material';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
-import { useField } from 'formik';
-import Typography from '@mui/material/Typography';
-import AddIcon from '@mui/icons-material/Add';
+} from "@mui/material";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { useField } from "formik";
+import Typography from "@mui/material/Typography";
+import AddIcon from "@mui/icons-material/Add";
 
 interface FormikArrayProps<T> extends FormikDefaultProps {
-  renderRow: (item: T, index: number, deleteItem: () => void) => React.ReactNode;
+  renderRow: (
+    item: T,
+    index: number,
+    deleteItem: () => void,
+  ) => React.ReactNode;
   renderHeader: () => React.ReactNode;
   defaultItem: T;
 }
@@ -48,7 +52,7 @@ function FormikTable<T>({
       }}
       xs={12}
     >
-      <Grid container direction={'column'}>
+      <Grid container direction={"column"}>
         <Grid item xs={12}>
           <Toolbar disableGutters>
             <Box
@@ -56,12 +60,12 @@ function FormikTable<T>({
                 flexGrow: 1,
               }}
             >
-              <Typography variant={'body1'}>{label}</Typography>
-              {formikMeta.touched && typeof formikMeta.error === 'string' ? (
+              <Typography variant={"body1"}>{label}</Typography>
+              {formikMeta.touched && typeof formikMeta.error === "string" ? (
                 <FormHelperText
-                  sx={{ fontSize: '0.8rem', my: 0 }}
+                  sx={{ fontSize: "0.8rem", my: 0 }}
                   error={true}
-                  variant={'standard'}
+                  variant={"standard"}
                 >
                   {formikMeta.error}
                 </FormHelperText>
@@ -82,7 +86,7 @@ function FormikTable<T>({
 
           {items.length > 0 ? (
             <TableContainer component={Paper}>
-              <Table size={'small'} aria-label="credit notes table">
+              <Table size={"small"} aria-label="credit notes table">
                 <TableHead>{renderHeader()}</TableHead>
                 <TableBody>
                   {items.map((i, index) => {

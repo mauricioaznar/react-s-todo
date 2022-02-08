@@ -1,21 +1,21 @@
-import * as React from 'react';
+import * as React from "react";
 
-import AddIcon from '@mui/icons-material/Add';
-import { useHistory } from 'react-router-dom';
-import { Avatar, Box, Fab, IconButton, Typography } from '@mui/material';
-import { GetUsersQuery, useGetUsersQuery } from '../../services/schema';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import CreateIcon from '@mui/icons-material/Create';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useTypedSelector } from '../../hooks/redux-hooks/useTypedSelector';
+import AddIcon from "@mui/icons-material/Add";
+import { useHistory } from "react-router-dom";
+import { Avatar, Box, Fab, IconButton, Typography } from "@mui/material";
+import { GetUsersQuery, useGetUsersQuery } from "../../services/schema";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useTypedSelector } from "../../hooks/redux-hooks/useTypedSelector";
 
 export default function UserList() {
   const history = useHistory();
@@ -26,17 +26,22 @@ export default function UserList() {
   }
 
   function handleCreateClick() {
-    history.push('/signInForm');
+    history.push("/signInForm");
   }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Grid container alignItems={'center'} mb={2}>
+      <Grid container alignItems={"center"} mb={2}>
         <Grid item xs>
-          {<Typography variant={'h4'}>Users</Typography>}
+          {<Typography variant={"h4"}>Users</Typography>}
         </Grid>
         <Grid item>
-          <Fab size={'small'} color="primary" aria-label="add" onClick={handleCreateClick}>
+          <Fab
+            size={"small"}
+            color="primary"
+            aria-label="add"
+            onClick={handleCreateClick}
+          >
             <AddIcon />
           </Fab>
         </Grid>
@@ -49,7 +54,7 @@ export default function UserList() {
                 <TableRow>
                   <TableCell>Username</TableCell>
                   <TableCell>Avatar</TableCell>
-                  <TableCell width={'10%'}>Actions</TableCell>
+                  <TableCell width={"10%"}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -65,7 +70,7 @@ export default function UserList() {
   );
 }
 
-function UserRow({ user }: { user: GetUsersQuery['users'][number] }) {
+function UserRow({ user }: { user: GetUsersQuery["users"][number] }) {
   const { currentUser } = useTypedSelector((state) => state.auth);
 
   const history = useHistory();
@@ -74,7 +79,7 @@ function UserRow({ user }: { user: GetUsersQuery['users'][number] }) {
   // const history = useHistory()
   //
   function handleEditClick() {
-    history.push('/SignInForm', { user });
+    history.push("/SignInForm", { user });
   }
   //
   //
@@ -87,36 +92,38 @@ function UserRow({ user }: { user: GetUsersQuery['users'][number] }) {
   const canAlter = isAdmin || isUserCurrent;
 
   return (
-    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell>{user.username}</TableCell>
       <TableCell>
-        {user.avatar ? <Avatar alt={'user image from ' + user.username} src={user.avatar} /> : null}
+        {user.avatar ? (
+          <Avatar alt={"user image from " + user.username} src={user.avatar} />
+        ) : null}
       </TableCell>
       <TableCell>
         <Box
           sx={{
-            display: 'flex',
-            flexWrap: 'nowrap',
+            display: "flex",
+            flexWrap: "nowrap",
           }}
         >
           {canAlter ? (
             <IconButton
-              size={'small'}
+              size={"small"}
               onClick={() => {
                 handleEditClick();
               }}
             >
-              <CreateIcon fontSize={'small'} />
+              <CreateIcon fontSize={"small"} />
             </IconButton>
           ) : null}
           {canAlter ? (
             <IconButton
-              size={'small'}
+              size={"small"}
               onClick={async () => {
                 // await handleDeleteClick(todo)
               }}
             >
-              <DeleteIcon fontSize={'small'} />
+              <DeleteIcon fontSize={"small"} />
             </IconButton>
           ) : null}
         </Box>

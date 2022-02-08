@@ -1,36 +1,40 @@
-import React, { useState } from 'react';
-import TableContainer from '@mui/material/TableContainer';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableBody from '@mui/material/TableBody';
-import { namedOperations, useDeleteNoteMutation, useGetNotesQuery } from '../../../services/schema';
-import { Box, Fab, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import PageLoader from '../../../components/loaders/PageLoader';
-import { useHistory } from 'react-router-dom';
-import CreateIcon from '@mui/icons-material/Create';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { NoteNode } from '../../../types/note';
-import MauSnackbar from '../../../components/MauSnackbar';
-import { ApolloError } from '@apollo/client';
+import React, { useState } from "react";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import {
+  namedOperations,
+  useDeleteNoteMutation,
+  useGetNotesQuery,
+} from "../../../services/schema";
+import { Box, Fab, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import PageLoader from "../../../components/loaders/PageLoader";
+import { useHistory } from "react-router-dom";
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { NoteNode } from "../../../types/note";
+import MauSnackbar from "../../../components/MauSnackbar";
+import { ApolloError } from "@apollo/client";
 
 export default function NoteList() {
   const history = useHistory();
 
   const { data, loading } = useGetNotesQuery();
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
 
   function handleCreateClick() {
-    history.push('/noteForm');
+    history.push("/noteForm");
   }
 
   function handleEditClick(note: NoteNode) {
-    history.push('/noteForm', {
+    history.push("/noteForm", {
       note,
     });
   }
@@ -52,7 +56,7 @@ export default function NoteList() {
         setMessage(e.message);
       }
     }
-    setMessage('');
+    setMessage("");
     setDisabled(false);
   };
 
@@ -65,26 +69,29 @@ export default function NoteList() {
       <Fab
         sx={{
           margin: 0,
-          top: 'auto',
+          top: "auto",
           right: 20,
           bottom: 20,
-          position: 'fixed',
-          left: 'auto',
+          position: "fixed",
+          left: "auto",
         }}
-        size={'large'}
+        size={"large"}
         color="primary"
         aria-label="add"
         onClick={handleCreateClick}
       >
         <AddIcon />
       </Fab>
-      <TableContainer component={Paper} sx={{ overflowY: 'hidden', overflowX: 'hidden' }}>
+      <TableContainer
+        component={Paper}
+        sx={{ overflowY: "hidden", overflowX: "hidden" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell width={'45%'}>Title</TableCell>
-              <TableCell width={'45%'}>Author</TableCell>
-              <TableCell width={'10%'}>Actions</TableCell>
+              <TableCell width={"45%"}>Title</TableCell>
+              <TableCell width={"45%"}>Author</TableCell>
+              <TableCell width={"10%"}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -97,26 +104,26 @@ export default function NoteList() {
                       <TableCell>
                         <Box
                           sx={{
-                            display: 'flex',
-                            flexWrap: 'nowrap',
+                            display: "flex",
+                            flexWrap: "nowrap",
                           }}
                         >
                           <IconButton
-                            size={'small'}
+                            size={"small"}
                             onClick={() => {
                               handleEditClick(n);
                             }}
                           >
-                            <CreateIcon fontSize={'small'} />
+                            <CreateIcon fontSize={"small"} />
                           </IconButton>
                           <IconButton
                             disabled={disabled}
-                            size={'small'}
+                            size={"small"}
                             onClick={async () => {
                               await handleDeleteMutation(n.id);
                             }}
                           >
-                            <DeleteIcon fontSize={'small'} />
+                            <DeleteIcon fontSize={"small"} />
                           </IconButton>
                         </Box>
                       </TableCell>

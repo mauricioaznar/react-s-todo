@@ -1,8 +1,8 @@
-import { Badge, Stack } from '@mui/material';
-import FeedbackButton from '../../components/FeedbackButton';
-import { ThumbUp } from '@mui/icons-material';
-import React, { useState } from 'react';
-import { fakeApi } from '../../services/fake-api';
+import { Badge, Stack } from "@mui/material";
+import FeedbackButton from "../../components/FeedbackButton";
+import { ThumbUp } from "@mui/icons-material";
+import React, { useState } from "react";
+import { fakeApi } from "../../services/fake-api";
 
 export default function ScreenConsistency() {
   const [value, setValue] = useState(2);
@@ -21,8 +21,13 @@ export default function ScreenConsistency() {
   };
 
   return (
-    <Stack direction={'row'} alignItems={'center'} spacing={2}>
-      <FeedbackButton loading={loading} label={`Like`} onClick={fetch} icon={<ThumbUp />} />
+    <Stack direction={"row"} alignItems={"center"} spacing={2}>
+      <FeedbackButton
+        loading={loading}
+        label={`Like`}
+        onClick={fetch}
+        icon={<ThumbUp />}
+      />
       <Badge color="secondary" badgeContent={value}>
         <ThumbUp />
       </Badge>

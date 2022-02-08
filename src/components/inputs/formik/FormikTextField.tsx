@@ -1,13 +1,17 @@
-import React from 'react';
-import { TextField } from '@mui/material';
-import { useField } from 'formik';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
+import React from "react";
+import { TextField } from "@mui/material";
+import { useField } from "formik";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
 
 interface FormikTextFieldProps extends FormikDefaultProps {
-  type?: 'text' | 'password';
+  type?: "text" | "password";
 }
 
-export const FormikTextField = ({ name, label, type = 'text' }: FormikTextFieldProps) => {
+export const FormikTextField = ({
+  name,
+  label,
+  type = "text",
+}: FormikTextFieldProps) => {
   const [formikProps, { error, touched }] = useField(name);
 
   return (

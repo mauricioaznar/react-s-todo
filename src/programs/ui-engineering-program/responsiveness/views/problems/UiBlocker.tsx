@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { Box, Button, FormHelperText, Stack, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import MauSnackbar from '../../../../../components/MauSnackbar';
+import React, { useCallback, useState } from "react";
+import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import MauSnackbar from "../../../../../components/MauSnackbar";
 
 const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(() => resolve(true), ms));
@@ -9,17 +9,17 @@ const sleep = (ms: number) => {
 
 export default function UiBlocker() {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
-  const [label1, setLabel1] = useState('-');
-  const [label2, setLabel2] = useState('-');
-  const [computationDuration, setComputationDuration] = useState('-');
+  const [label1, setLabel1] = useState("-");
+  const [label2, setLabel2] = useState("-");
+  const [computationDuration, setComputationDuration] = useState("-");
 
   const heavyComputation = useCallback(() => {
     const s = new Date().getTime();
     let x = {} as { [key: string]: number };
     for (let i = 0; i < 30000; i++) {
-      const key = 'x' + i.toString();
+      const key = "x" + i.toString();
       x[key] = i * i + i;
     }
     const e = new Date().getTime();
@@ -27,14 +27,16 @@ export default function UiBlocker() {
   }, []);
 
   return (
-    <Stack direction={'row'} spacing={2} alignItems={'baseline'}>
+    <Stack direction={"row"} spacing={2} alignItems={"baseline"}>
       <Box>
-        <Typography sx={{ fontSize: '3rem', fontWeight: 'bold' }}>{computationDuration}</Typography>
+        <Typography sx={{ fontSize: "3rem", fontWeight: "bold" }}>
+          {computationDuration}
+        </Typography>
         <FormHelperText>Duration of the computation only</FormHelperText>
       </Box>
       <Box>
         <Button
-          variant={'contained'}
+          variant={"contained"}
           onClick={() => {
             const s = new Date().getTime();
             heavyComputation();
@@ -49,7 +51,7 @@ export default function UiBlocker() {
       </Box>
       <Box>
         <LoadingButton
-          variant={'contained'}
+          variant={"contained"}
           loading={loading}
           onClick={async () => {
             const s = new Date().getTime();
@@ -57,7 +59,7 @@ export default function UiBlocker() {
             heavyComputation();
             await sleep(1000);
             setLoading(false);
-            setMessage('Loaded');
+            setMessage("Loaded");
             const e = new Date().getTime();
             const duration = (e - s).toString();
             setLabel2(duration);
@@ -65,10 +67,12 @@ export default function UiBlocker() {
         >
           Click
         </LoadingButton>
-        <FormHelperText>Action with loading states duration {label2}</FormHelperText>
+        <FormHelperText>
+          Action with loading states duration {label2}
+        </FormHelperText>
       </Box>
 
-      <MauSnackbar message={message} variant={'success'} />
+      <MauSnackbar message={message} variant={"success"} />
     </Stack>
   );
 }

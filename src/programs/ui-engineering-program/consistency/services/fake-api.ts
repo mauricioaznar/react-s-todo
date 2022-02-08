@@ -1,4 +1,4 @@
-const CONSISTENCY_LIKES_VALUE_KEY = 'consistency_likes_value_key';
+const CONSISTENCY_LIKES_VALUE_KEY = "consistency_likes_value_key";
 let likes = window.localStorage.getItem(CONSISTENCY_LIKES_VALUE_KEY)
   ? Number(window.localStorage.getItem(CONSISTENCY_LIKES_VALUE_KEY))
   : 0;
@@ -28,7 +28,10 @@ export const fakeApi = {
   setLikes: function (newLikes: number) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        window.localStorage.setItem(CONSISTENCY_LIKES_VALUE_KEY, String(newLikes));
+        window.localStorage.setItem(
+          CONSISTENCY_LIKES_VALUE_KEY,
+          String(newLikes),
+        );
         likes = newLikes;
         resolve(true);
       }, 1000);

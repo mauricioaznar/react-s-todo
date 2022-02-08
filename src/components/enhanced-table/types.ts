@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { ColumnOrder } from '../../services/schema';
+import * as React from "react";
+import { ColumnOrder } from "../../services/schema";
 
 export interface EnhancedContainerProps<T> {
   onRequestSort: (event: React.MouseEvent<unknown>, property: T) => void;

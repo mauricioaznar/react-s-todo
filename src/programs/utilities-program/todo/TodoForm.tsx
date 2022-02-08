@@ -1,33 +1,37 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { ApolloError } from '@apollo/client';
-import { Form, Formik } from 'formik';
+import * as React from "react";
+import { useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { ApolloError } from "@apollo/client";
+import { Form, Formik } from "formik";
 
 // mui
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import { IconButton, TableCell, TableRow } from '@mui/material';
-import Box from '@mui/material/Box';
-import PetsIcon from '@mui/icons-material/Pets';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
-import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import { IconButton, TableCell, TableRow } from "@mui/material";
+import Box from "@mui/material/Box";
+import PetsIcon from "@mui/icons-material/Pets";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 
 // components
-import { Query, useCreateTodoMutation, useUpdateTodoMutation } from '../../../services/schema';
-import { nameof } from '../../../helpers/nameof';
-import MauSnackbar from '../../../components/MauSnackbar';
-import { TodoNode } from '../../../types/todo';
-import * as yup from 'yup';
-import FormikTextField from '../../../components/inputs/formik/FormikTextField';
-import FormikCheckbox from '../../../components/inputs/formik/FormikCheckbox';
-import FormikDate from '../../../components/inputs/formik/FormikDate';
-import FormikTable from '../../../components/inputs/formik/FormikTable';
-import { Delete } from '@mui/icons-material';
+import {
+  Query,
+  useCreateTodoMutation,
+  useUpdateTodoMutation,
+} from "../../../services/schema";
+import { nameof } from "../../../helpers/nameof";
+import MauSnackbar from "../../../components/MauSnackbar";
+import { TodoNode } from "../../../types/todo";
+import * as yup from "yup";
+import FormikTextField from "../../../components/inputs/formik/FormikTextField";
+import FormikCheckbox from "../../../components/inputs/formik/FormikCheckbox";
+import FormikDate from "../../../components/inputs/formik/FormikDate";
+import FormikTable from "../../../components/inputs/formik/FormikTable";
+import { Delete } from "@mui/icons-material";
 
 interface TodoFormLocationProps {
   todo?: TodoNode;
@@ -35,7 +39,7 @@ interface TodoFormLocationProps {
 
 export default function TodoForm() {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const history = useHistory();
 
@@ -45,8 +49,8 @@ export default function TodoForm() {
   const [createTodoMutation] = useCreateTodoMutation({
     update(cache) {
       cache.evict({
-        id: 'ROOT_QUERY',
-        fieldName: nameof<Query>('todos'),
+        id: "ROOT_QUERY",
+        fieldName: nameof<Query>("todos"),
       });
     },
   });
@@ -54,8 +58,8 @@ export default function TodoForm() {
   const [updateTodoMutation] = useUpdateTodoMutation({
     update(cache) {
       cache.evict({
-        id: 'ROOT_QUERY',
-        fieldName: nameof<Query>('todos'),
+        id: "ROOT_QUERY",
+        fieldName: nameof<Query>("todos"),
       });
     },
   });
@@ -64,38 +68,42 @@ export default function TodoForm() {
     <Container component="main">
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <PetsIcon />
         </Avatar>
         <Typography variant="h4">Todo</Typography>
         <Box sx={{ mt: 1 }}>
           <Formik
             initialValues={{
-              description: todo ? todo.description : '',
-              due: todo ? todo.due : '',
+              description: todo ? todo.description : "",
+              due: todo ? todo.due : "",
               archived: todo ? todo.archived : false,
               locked: todo ? todo.locked : false,
-              items: todo ? todo.items : [{ description: '', completed: false }],
+              items: todo
+                ? todo.items
+                : [{ description: "", completed: false }],
             }}
             validationSchema={yup.object({
-              description: yup.string().required('Description is required'),
-              due: yup.string().required('Date is required'),
+              description: yup.string().required("Description is required"),
+              due: yup.string().required("Date is required"),
               file: yup.string().nullable(),
               items: yup
                 .array()
-                .min(1, 'items required minimum 1 item')
+                .min(1, "items required minimum 1 item")
                 .of(
                   yup.object().shape({
-                    description: yup.string().required('description is required'),
+                    description: yup
+                      .string()
+                      .required("description is required"),
                     completed: yup.boolean(),
                   }),
                 )
-                .required('Required'),
+                .required("Required"),
             })}
             onSubmit={async (data) => {
               const { description, due, locked, archived, items } = data;
@@ -107,7 +115,7 @@ export default function TodoForm() {
                   description: description,
                   locked: locked,
                   archived: archived,
-                  due: due ? due.toString() : '',
+                  due: due ? due.toString() : "",
                   items: items.map((i) => {
                     return {
                       description: i.description,
@@ -133,29 +141,29 @@ export default function TodoForm() {
                   });
                 }
 
-                history.push('/todos');
+                history.push("/todos");
               } catch (e) {
                 if (e instanceof ApolloError) {
                   setMessage(e.message);
                 }
               }
 
-              setMessage('');
+              setMessage("");
               setIsDisabled(false);
             }}
           >
             <Form>
               <FormikTextField name="description" label="Description" />
-              <FormikDate label={'Due'} name="due" />
+              <FormikDate label={"Due"} name="due" />
               <FormikCheckbox
-                name={'locked'}
-                label={'Locked'}
+                name={"locked"}
+                label={"Locked"}
                 uncheckedIcon={LockOpenRoundedIcon}
                 checkedIcon={LockRoundedIcon}
               />
               <FormikCheckbox
-                name={'archived'}
-                label={'Archived'}
+                name={"archived"}
+                label={"Archived"}
                 checkedIcon={ArchiveIcon}
                 uncheckedIcon={UnarchiveOutlinedIcon}
               />
@@ -164,9 +172,9 @@ export default function TodoForm() {
                 renderHeader={() => {
                   return (
                     <TableRow>
-                      <TableCell width={'60%'}>Description</TableCell>
-                      <TableCell width={'20%'}>Completed</TableCell>
-                      <TableCell width={'20%'}>&nbsp;</TableCell>
+                      <TableCell width={"60%"}>Description</TableCell>
+                      <TableCell width={"20%"}>Completed</TableCell>
+                      <TableCell width={"20%"}>&nbsp;</TableCell>
                     </TableRow>
                   );
                 }}
@@ -174,12 +182,18 @@ export default function TodoForm() {
                   return (
                     <TableRow key={index}>
                       <TableCell>
-                        <FormikTextField name={`items[${index}].description`} label="Description" />
+                        <FormikTextField
+                          name={`items[${index}].description`}
+                          label="Description"
+                        />
                       </TableCell>
                       <TableCell>
-                        <FormikCheckbox name={`items[${index}].completed`} label="Completed" />
+                        <FormikCheckbox
+                          name={`items[${index}].completed`}
+                          label="Completed"
+                        />
                       </TableCell>
-                      <TableCell align={'right'}>
+                      <TableCell align={"right"}>
                         <IconButton onClick={deleteItem}>
                           <Delete />
                         </IconButton>
@@ -188,11 +202,11 @@ export default function TodoForm() {
                   );
                 }}
                 defaultItem={{
-                  description: '',
+                  description: "",
                   completed: false,
                 }}
-                name={'items'}
-                label={'Items'}
+                name={"items"}
+                label={"Items"}
               />
 
               <Button

@@ -8,7 +8,7 @@ export default {
   clearMocks: false,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: 'coverage',
+  coverageDirectory: "coverage",
 
   // A path to a module which exports an async function that is triggered once after all test suites
   // globalTeardown: undefined,
@@ -25,12 +25,12 @@ export default {
   // ],
 
   // An array of file extensions your modules use
-  moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
+  moduleFileExtensions: ["js", "json", "jsx", "ts", "tsx", "node"],
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.[t|j]sx?$': 'babel-jest',
+    "^.+\\.[t|j]sx?$": "babel-jest",
   },
 
-  setupFiles: ['<rootDir>/src/jest-setup.ts'],
+  setupFiles: ["<rootDir>/src/jest-setup.ts"],
 };

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { ReactElement } from 'react';
-import HomeIcon from '@mui/icons-material/Home';
-import Home from '../programs/home/Home';
+import * as React from "react";
+import { ReactElement } from "react";
+import HomeIcon from "@mui/icons-material/Home";
+import Home from "../programs/home/Home";
 
 export interface RouterLink {
   title: string;
@@ -16,10 +16,10 @@ export interface RouterLink {
 export const commonLinks: RouterLink[] = [
   {
     icon: <HomeIcon />,
-    name: 'Home',
-    path: '/',
+    name: "Home",
+    path: "/",
     component: <Home />,
-    title: 'Sign in',
+    title: "Sign in",
     exact: true,
   },
 ];

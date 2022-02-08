@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { FormikDefaultProps } from './common/FormikDefaultProps';
-import { useField } from 'formik';
-import { FormHelperText } from '@mui/material';
-import { useState } from 'react';
+import * as React from "react";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { useField } from "formik";
+import { FormHelperText } from "@mui/material";
+import { useState } from "react";
 
 interface FormikRadioProps<T> extends FormikDefaultProps {
   items: T[];
@@ -26,7 +26,9 @@ export default function FormikRadio<T>({
 }: FormikRadioProps<T>) {
   const [, formikMeta, fieldHelperProps] = useField(name);
   const [value, setValue] = useState<string>(() => {
-    return returnObject ? formikMeta.initialValue[itemValue] : formikMeta.initialValue;
+    return returnObject
+      ? formikMeta.initialValue[itemValue]
+      : formikMeta.initialValue;
   });
 
   const hasError = Boolean(formikMeta.touched && formikMeta.error);
@@ -55,20 +57,27 @@ export default function FormikRadio<T>({
       >
         {items.map((item, index) => {
           const itemKey = itemValue ? item[itemValue] : null;
-          const key = typeof itemKey === 'string' || typeof itemKey === 'number' ? itemKey : index;
+          const key =
+            typeof itemKey === "string" || typeof itemKey === "number"
+              ? itemKey
+              : index;
           let itemLabel = item[itemText];
           return (
             <FormControlLabel
               key={key}
               value={item[itemValue]}
               control={<Radio />}
-              label={typeof itemLabel === 'string' ? itemLabel : ''}
+              label={typeof itemLabel === "string" ? itemLabel : ""}
             />
           );
         })}
       </RadioGroup>
       {hasError ? (
-        <FormHelperText sx={{ fontSize: '0.8rem' }} error={true} variant={'standard'}>
+        <FormHelperText
+          sx={{ fontSize: "0.8rem" }}
+          error={true}
+          variant={"standard"}
+        >
           {formikMeta.error}
         </FormHelperText>
       ) : null}
