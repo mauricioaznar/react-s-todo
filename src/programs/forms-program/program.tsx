@@ -2,8 +2,6 @@ import { ProgramInterface } from "../../services/programs";
 import ParkIcon from "@mui/icons-material/Park";
 import PetsIcon from "@mui/icons-material/Pets";
 import CatList from "./cat/CatList";
-import InputIcon from "@mui/icons-material/Input";
-import ReactHookFormForm from "./cat/ReactHookFormForm";
 import FormikForm from "./cat/FormikForm";
 import * as React from "react";
 
@@ -29,13 +27,6 @@ export const formsProgram: ProgramInterface = {
       component: <CatList />,
       navbar: true,
       title: "React hook form",
-    },
-    {
-      icon: <InputIcon />,
-      name: "ReactHookFormForm",
-      path: "/catForm",
-      component: <ReactHookFormForm />,
-      title: "Cat",
     },
     {
       icon: <PetsIcon />,
