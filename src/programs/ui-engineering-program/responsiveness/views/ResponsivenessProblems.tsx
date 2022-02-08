@@ -1,8 +1,8 @@
-import React from "react";
-import { ProblemItemProps, Problems } from "../../components/problems/Problem";
-import LackOfVisualFeedback from "./problems/LackOfVisualFeedback";
-import JankyAnimation from "./problems/JankyAnimation";
-import UiBlocker from "./problems/UiBlocker";
+import React from 'react';
+import { ProblemItemProps, Problems } from '../../components/problems/Problem';
+import LackOfVisualFeedback from './problems/LackOfVisualFeedback';
+import JankyAnimation from './problems/JankyAnimation';
+import UiBlocker from './problems/UiBlocker';
 
 export default function ResponsivenessProblems() {
   const problemSolutions: ProblemItemProps[] = [
@@ -12,9 +12,7 @@ export default function ResponsivenessProblems() {
         `Inform the user about each stage of their actions.`,
         `Use animations to show different transitions smoothly`,
       ],
-      tradeoffs: [
-        `If an action takes less than 100ms, we can skip animations.`,
-      ],
+      tradeoffs: [`If an action takes less than 100ms, we can skip animations.`],
       example: <LackOfVisualFeedback />,
     },
     {
@@ -28,9 +26,7 @@ export default function ResponsivenessProblems() {
     },
     {
       problem: `How do we keep our apps responsive to different kinds of inputs?.`,
-      answers: [
-        "If the action takes longer than 100ms, we display a loading global-state.",
-      ],
+      answers: ['If the action takes longer than 100ms, we display a loading global-state.'],
     },
   ];
 

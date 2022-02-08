@@ -1,14 +1,11 @@
-import { TodoNode } from "../../../../types/todo";
-import { ApolloError } from "@apollo/client";
-import { useState } from "react";
-import {
-  namedOperations,
-  useDeleteTodoMutation,
-} from "../../../../services/schema";
+import { TodoNode } from '../../../../types/todo';
+import { ApolloError } from '@apollo/client';
+import { useState } from 'react';
+import { namedOperations, useDeleteTodoMutation } from '../../../../services/schema';
 
 export const useDeleteTodo = () => {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [deleteTodoMutation] = useDeleteTodoMutation({
     refetchQueries: [namedOperations.Query.GetTodos],
   });
@@ -26,7 +23,7 @@ export const useDeleteTodo = () => {
         setMessage(e.message);
       }
     }
-    setMessage("");
+    setMessage('');
     setIsDisabled(false);
   }
 

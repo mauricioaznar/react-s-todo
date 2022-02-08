@@ -1,20 +1,17 @@
-import React from "react";
-import { Button, IconButton, TableCell, TableRow } from "@mui/material";
-import * as yup from "yup";
-import { Form, Formik } from "formik";
-import {
-  IsUserOccupiedQuery,
-  refetchIsUserOccupiedQuery,
-} from "../../../services/schema";
-import { ApolloQueryResult, useApolloClient } from "@apollo/client";
-import FormikTextField from "../../../components/inputs/formik/FormikTextField";
-import FormikFile from "../../../components/inputs/formik/FormikFile";
-import FormikDate from "../../../components/inputs/formik/FormikDate";
-import FormikCheckbox from "../../../components/inputs/formik/FormikCheckbox";
-import FormikRadio from "../../../components/inputs/formik/FormikRadio";
-import FormikAutocomplete from "../../../components/inputs/formik/FormikAutocomplete";
-import FormikTable from "../../../components/inputs/formik/FormikTable";
-import { Delete } from "@mui/icons-material";
+import React from 'react';
+import { Button, IconButton, TableCell, TableRow } from '@mui/material';
+import * as yup from 'yup';
+import { Form, Formik } from 'formik';
+import { IsUserOccupiedQuery, refetchIsUserOccupiedQuery } from '../../../services/schema';
+import { ApolloQueryResult, useApolloClient } from '@apollo/client';
+import FormikTextField from '../../../components/inputs/formik/FormikTextField';
+import FormikFile from '../../../components/inputs/formik/FormikFile';
+import FormikDate from '../../../components/inputs/formik/FormikDate';
+import FormikCheckbox from '../../../components/inputs/formik/FormikCheckbox';
+import FormikRadio from '../../../components/inputs/formik/FormikRadio';
+import FormikAutocomplete from '../../../components/inputs/formik/FormikAutocomplete';
+import FormikTable from '../../../components/inputs/formik/FormikTable';
+import { Delete } from '@mui/icons-material';
 
 export default function FormikForm() {
   const client = useApolloClient();
@@ -22,64 +19,60 @@ export default function FormikForm() {
   const validationSchema = yup.object({
     email: yup
       .string()
-      .required("Email is required")
-      .test("unique", "email must be unique", async function (value) {
-        const result: ApolloQueryResult<IsUserOccupiedQuery> =
-          await client.query(
-            refetchIsUserOccupiedQuery({ username: value || "" })
-          );
+      .required('Email is required')
+      .test('unique', 'email must be unique', async function (value) {
+        const result: ApolloQueryResult<IsUserOccupiedQuery> = await client.query(
+          refetchIsUserOccupiedQuery({ username: value || '' }),
+        );
         return !result.data.isUserOccupied;
       }),
     password: yup
       .string()
-      .min(8, "Password should be of minimum 8 characters length")
-      .required("Password is required"),
-    file: yup.string().nullable().required("Pleasse provide a file"),
-    files: yup.mixed().nullable().required("Pleasse provide a date"),
-    date: yup.mixed().nullable().required("Pleasse provide a file"),
-    radio: yup.mixed().nullable().required("Pleasse provide a radio"),
-    autocomplete: yup
-      .mixed()
-      .nullable()
-      .required("Pleasse provide a autocomplete"),
+      .min(8, 'Password should be of minimum 8 characters length')
+      .required('Password is required'),
+    file: yup.string().nullable().required('Pleasse provide a file'),
+    files: yup.mixed().nullable().required('Pleasse provide a date'),
+    date: yup.mixed().nullable().required('Pleasse provide a file'),
+    radio: yup.mixed().nullable().required('Pleasse provide a radio'),
+    autocomplete: yup.mixed().nullable().required('Pleasse provide a autocomplete'),
     array: yup
       .array()
-      .min(1, "array required minimum 1 item")
+      .min(1, 'array required minimum 1 item')
       .of(
         yup.object().shape({
-          description: yup.string().required("description is required"),
-        })
+          description: yup.string().required('description is required'),
+        }),
       )
-      .required("Required"),
+      .required('Required'),
   });
 
   const items = [
     {
-      text: "text 1",
-      value: "value 1",
+      text: 'text 1',
+      value: 'value 1',
     },
     {
-      text: "text 2",
-      value: "value 2",
+      text: 'text 2',
+      value: 'value 2',
     },
     {
-      text: "text 3",
-      value: "value 3",
+      text: 'text 3',
+      value: 'value 3',
     },
   ];
 
   return (
     <Formik
       initialValues={{
-        email: "foobar@example.com",
-        password: "foobar43243",
+        email: 'foobar@example.com',
+        password: 'foobar43243',
         file: null,
         files: null,
-        date: "2021-01-01",
+        date: '2021-01-01',
         checkbox: false,
         radio: items[0].value,
         autocomplete: items[0].value,
-        array: [{ description: "12341234" }],
+        array: [{ description: '12341234' }],
       }}
       validationSchema={validationSchema}
       onSubmit={() => {
@@ -87,34 +80,34 @@ export default function FormikForm() {
       }}
     >
       <Form>
-        <FormikDate name={"date"} label={"Date"} />
+        <FormikDate name={'date'} label={'Date'} />
         <FormikTextField name="email" label="Email" />
-        <FormikTextField label="Password" name="password" type={"password"} />
-        <FormikFile name={"file"} label={"Upload file"} />
+        <FormikTextField label="Password" name="password" type={'password'} />
+        <FormikFile name={'file'} label={'Upload file'} />
 
-        <FormikFile name={"files"} label={"Upload files"} multiple={true} />
-        <FormikCheckbox name={"checkbox"} label={"Checkbox"} />
+        <FormikFile name={'files'} label={'Upload files'} multiple={true} />
+        <FormikCheckbox name={'checkbox'} label={'Checkbox'} />
         <FormikRadio
           items={items}
-          itemText={"text"}
-          itemValue={"value"}
-          name={"radio"}
-          label={"Radio"}
+          itemText={'text'}
+          itemValue={'value'}
+          name={'radio'}
+          label={'Radio'}
         />
         <FormikAutocomplete
           items={items}
-          itemText={"text"}
-          itemValue={"value"}
-          name={"autocomplete"}
-          label={"Autocomplete"}
+          itemText={'text'}
+          itemValue={'value'}
+          name={'autocomplete'}
+          label={'Autocomplete'}
         />
 
         <FormikTable
           renderHeader={() => {
             return (
               <TableRow>
-                <TableCell width={"70%"}>Description</TableCell>
-                <TableCell align={"right"}>Actions</TableCell>
+                <TableCell width={'70%'}>Description</TableCell>
+                <TableCell align={'right'}>Actions</TableCell>
               </TableRow>
             );
           }}
@@ -122,12 +115,9 @@ export default function FormikForm() {
             return (
               <TableRow key={index}>
                 <TableCell>
-                  <FormikTextField
-                    name={`array[${index}].description`}
-                    label="Desscription"
-                  />
+                  <FormikTextField name={`array[${index}].description`} label="Desscription" />
                 </TableCell>
-                <TableCell align={"right"}>
+                <TableCell align={'right'}>
                   <IconButton onClick={deleteItem}>
                     <Delete />
                   </IconButton>
@@ -136,10 +126,10 @@ export default function FormikForm() {
             );
           }}
           defaultItem={{
-            description: "",
+            description: '',
           }}
-          name={"array"}
-          label={"Array"}
+          name={'array'}
+          label={'Array'}
         />
 
         <Button color="primary" variant="contained" fullWidth type="submit">

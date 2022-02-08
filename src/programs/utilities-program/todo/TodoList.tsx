@@ -1,19 +1,19 @@
-import * as React from "react";
-import { useState } from "react";
-import { animated, config as springConfig, useTransition } from "react-spring";
-import { useHistory } from "react-router-dom";
+import * as React from 'react';
+import { useState } from 'react';
+import { animated, config as springConfig, useTransition } from 'react-spring';
+import { useHistory } from 'react-router-dom';
 
 // mui
-import CreateIcon from "@mui/icons-material/Create";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CreateIcon from '@mui/icons-material/Create';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import LockRoundedIcon from '@mui/icons-material/LockRounded';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   Box,
   Button,
@@ -27,18 +27,18 @@ import {
   Menu,
   MenuItem,
   Typography,
-} from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import ViewHeadlineIcon from "@mui/icons-material/ViewHeadline";
+} from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 // local
 import {
@@ -46,32 +46,28 @@ import {
   FilterTodoColumn,
   TodoEdge,
   useGetTodosQuery,
-} from "../../../services/schema";
-import MauSnackbar from "../../../components/MauSnackbar";
-import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
-import {
-  formatDate,
-  YEAR_MONTH_FORMAT,
-  YEAR_MONTH_MASK,
-} from "../../../helpers/format-date";
-import { TodoEdges, TodoNode } from "../../../types/todo";
-import LocalStorage from "../../../helpers/local-storage";
-import { useGraphqlPagination } from "../../../hooks/server-hooks/useGraphqlPagination";
-import { EnhancedContainerProps } from "../../../components/enhanced-table/types";
-import EnhancedTableHead from "../../../components/enhanced-table/enhanced-table-head";
-import ClearableDatePicker from "../../../components/clearable-date-picker/clearable-date-picker";
-import { useMenu } from "../../../hooks/material-ui-hooks/useMenu";
-import { useDeleteTodo } from "./hooks/useDeleteTodo";
-import { useEditTodoClick } from "./hooks/useEditTodoClick";
-import PageLoader from "../../../components/loaders/PageLoader";
+} from '../../../services/schema';
+import MauSnackbar from '../../../components/MauSnackbar';
+import { useTypedSelector } from '../../../hooks/redux-hooks/useTypedSelector';
+import { formatDate, YEAR_MONTH_FORMAT, YEAR_MONTH_MASK } from '../../../helpers/format-date';
+import { TodoEdges, TodoNode } from '../../../types/todo';
+import LocalStorage from '../../../helpers/local-storage';
+import { useGraphqlPagination } from '../../../hooks/server-hooks/useGraphqlPagination';
+import { EnhancedContainerProps } from '../../../components/enhanced-table/types';
+import EnhancedTableHead from '../../../components/enhanced-table/enhanced-table-head';
+import ClearableDatePicker from '../../../components/clearable-date-picker/clearable-date-picker';
+import { useMenu } from '../../../hooks/material-ui-hooks/useMenu';
+import { useDeleteTodo } from './hooks/useDeleteTodo';
+import { useEditTodoClick } from './hooks/useEditTodoClick';
+import PageLoader from '../../../components/loaders/PageLoader';
 
 // constants
-const TODO_AFTER = "todo_after";
-const TODO_LIMIT = "todo_limit";
-const TODO_BEFORE = "todo_before";
-const TODO_DUE = "todo_due";
-const TODO_COMPLETED = "todo_completed";
-const TODO_VIEW = "todo_view";
+const TODO_AFTER = 'todo_after';
+const TODO_LIMIT = 'todo_limit';
+const TODO_BEFORE = 'todo_before';
+const TODO_DUE = 'todo_due';
+const TODO_COMPLETED = 'todo_completed';
+const TODO_VIEW = 'todo_view';
 
 interface TodoListProps {
   archived?: boolean;
@@ -81,15 +77,11 @@ export default function TodoList({ archived = false }: TodoListProps) {
   const history = useHistory();
 
   const [order, setOrder] = React.useState<ColumnOrder>(ColumnOrder.Desc);
-  const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(
-    FilterTodoColumn.Id
-  );
+  const [orderBy, setOrderBy] = React.useState<FilterTodoColumn>(FilterTodoColumn.Id);
   const [view, setView] = React.useState(LocalStorage.getBoolean(TODO_VIEW));
-  const [completed, setCompleted] = useState(
-    LocalStorage.getBoolean(TODO_COMPLETED)
-  );
+  const [completed, setCompleted] = useState(LocalStorage.getBoolean(TODO_COMPLETED));
   const [due, setDue] = useState<string | null>(
-    LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT)
+    LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT),
   );
   const [firstRender, setFirstRender] = useState(true);
 
@@ -122,18 +114,13 @@ export default function TodoList({ archived = false }: TodoListProps) {
   const edges = data?.todos.page.edges;
   const offset = data?.todos?.pageData?.offset || 0;
   const count = data?.todos?.pageData?.count || 0;
-  const forwardDisabled = data?.todos?.pageData
-    ? offset >= count - (limit ? limit : 0)
-    : true;
+  const forwardDisabled = data?.todos?.pageData ? offset >= count - (limit ? limit : 0) : true;
 
   function handleCreateClick() {
-    history.push("/todoForm");
+    history.push('/todoForm');
   }
 
-  function handleOrderBy(
-    event: React.MouseEvent<unknown>,
-    property: FilterTodoColumn
-  ) {
+  function handleOrderBy(event: React.MouseEvent<unknown>, property: FilterTodoColumn) {
     if (property !== orderBy) {
       setOrderBy(property);
       setOrder(ColumnOrder.Asc);
@@ -150,22 +137,21 @@ export default function TodoList({ archived = false }: TodoListProps) {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Grid container alignItems={"center"} mb={2}>
+      <Grid container alignItems={'center'} mb={2}>
         <Grid item xs>
-          {<Typography variant={"h4"}>Todos</Typography>}
+          {<Typography variant={'h4'}>Todos</Typography>}
         </Grid>
         <Grid item>
-          <Grid container spacing={2} alignItems={"center"}>
+          <Grid container spacing={2} alignItems={'center'}>
             <Grid item>
               <IconButton
                 disabled={data?.todos?.pageData?.offset === 0}
                 onClick={() => {
-                  const newCursor =
-                    edges && edges.length > 0 ? edges[0].cursor : null;
+                  const newCursor = edges && edges.length > 0 ? edges[0].cursor : null;
                   setBefore(newCursor);
                 }}
               >
-                <ArrowBackIosIcon fontSize={"medium"} />
+                <ArrowBackIosIcon fontSize={'medium'} />
               </IconButton>
             </Grid>
             <Grid item>
@@ -173,13 +159,11 @@ export default function TodoList({ archived = false }: TodoListProps) {
                 disabled={forwardDisabled}
                 onClick={() => {
                   const newCursor =
-                    edges && edges.length > 0
-                      ? edges[edges.length - 1].cursor
-                      : null;
+                    edges && edges.length > 0 ? edges[edges.length - 1].cursor : null;
                   setAfter(newCursor);
                 }}
               >
-                <ArrowForwardIosIcon fontSize={"medium"} />
+                <ArrowForwardIosIcon fontSize={'medium'} />
               </IconButton>
             </Grid>
             {/* MENU */}
@@ -188,7 +172,7 @@ export default function TodoList({ archived = false }: TodoListProps) {
                 id="demo-positioned-button"
                 aria-controls="demo-positioned-menu"
                 aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
+                aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
               >
                 <MoreVertIcon />
@@ -202,19 +186,15 @@ export default function TodoList({ archived = false }: TodoListProps) {
               >
                 <ListItem>
                   <ClearableDatePicker
-                    views={due ? ["month"] : ["year", "month"]}
+                    views={due ? ['month'] : ['year', 'month']}
                     mask={YEAR_MONTH_MASK}
                     inputFormat={YEAR_MONTH_FORMAT}
-                    label={"Selected due"}
+                    label={'Selected due'}
                     value={due}
                     onChange={(newValue) => {
                       setDue(newValue);
                       if (newValue !== null) {
-                        LocalStorage.saveMomentDate(
-                          newValue,
-                          TODO_DUE,
-                          YEAR_MONTH_FORMAT
-                        );
+                        LocalStorage.saveMomentDate(newValue, TODO_DUE, YEAR_MONTH_FORMAT);
                       } else {
                         LocalStorage.removeItem(TODO_DUE);
                       }
@@ -232,16 +212,16 @@ export default function TodoList({ archived = false }: TodoListProps) {
                   >
                     <ListItemIcon>
                       {completed ? (
-                        <CheckBoxIcon fontSize={"medium"} />
+                        <CheckBoxIcon fontSize={'medium'} />
                       ) : (
-                        <CheckBoxOutlineBlankIcon fontSize={"medium"} />
+                        <CheckBoxOutlineBlankIcon fontSize={'medium'} />
                       )}
                     </ListItemIcon>
-                    {completed ? "Completed" : "Uncompleted"}
+                    {completed ? 'Completed' : 'Uncompleted'}
                   </MenuItem>
                 ) : null}
                 <MenuItem
-                  sx={{ display: "flex", alignItems: "center" }}
+                  sx={{ display: 'flex', alignItems: 'center' }}
                   onClick={() => {
                     const newView = !view;
                     LocalStorage.saveBoolean(newView, TODO_VIEW);
@@ -250,12 +230,12 @@ export default function TodoList({ archived = false }: TodoListProps) {
                 >
                   <ListItemIcon>
                     {view ? (
-                      <ViewModuleIcon fontSize={"medium"} />
+                      <ViewModuleIcon fontSize={'medium'} />
                     ) : (
-                      <ViewHeadlineIcon fontSize={"medium"} />
+                      <ViewHeadlineIcon fontSize={'medium'} />
                     )}
                   </ListItemIcon>
-                  {view ? "Cards" : "Table"}
+                  {view ? 'Cards' : 'Table'}
                 </MenuItem>
               </Menu>
             </Grid>
@@ -287,17 +267,17 @@ export default function TodoList({ archived = false }: TodoListProps) {
         </Grid>
       </Grid>
 
-      <MauSnackbar message={error ? error.message : ""} />
+      <MauSnackbar message={error ? error.message : ''} />
       <Fab
         sx={{
           margin: 0,
-          top: "auto",
+          top: 'auto',
           right: 20,
           bottom: 20,
-          position: "fixed",
-          left: "auto",
+          position: 'fixed',
+          left: 'auto',
         }}
-        size={"large"}
+        size={'large'}
         color="primary"
         aria-label="add"
         onClick={handleCreateClick}
@@ -308,15 +288,12 @@ export default function TodoList({ archived = false }: TodoListProps) {
   );
 }
 
-export interface EnhancedTodoContainerProps<T>
-  extends EnhancedContainerProps<T> {
+export interface EnhancedTodoContainerProps<T> extends EnhancedContainerProps<T> {
   firstRender: boolean;
   edges: TodoEdges | undefined | null;
 }
 
-function EnhancedTodoCards(
-  props: EnhancedTodoContainerProps<FilterTodoColumn>
-) {
+function EnhancedTodoCards(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
   const { edges } = props;
 
   const transitions = useTransition(edges, {
@@ -327,7 +304,7 @@ function EnhancedTodoCards(
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    order: ["enter", "update", "leave"],
+    order: ['enter', 'update', 'leave'],
     trail: 150,
     config: springConfig.gentle,
   });
@@ -375,30 +352,24 @@ function TodoCard({ todo }: { todo: TodoNode }) {
           {todo.description}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          <span style={{ fontStyle: "normal", fontWeight: "bold" }}>
-            {" "}
-            due:{" "}
-          </span>
+          <span style={{ fontStyle: 'normal', fontWeight: 'bold' }}> due: </span>
           {formatDate(todo.due)}
         </Typography>
         <Box
           sx={{
-            display: "flex",
-            flexWrap: "nowrap",
+            display: 'flex',
+            flexWrap: 'nowrap',
           }}
         ></Box>
         <Typography variant="body2">
-          <span style={{ fontStyle: "normal", fontWeight: "bold" }}>
-            {" "}
-            user:{" "}
-          </span>{" "}
+          <span style={{ fontStyle: 'normal', fontWeight: 'bold' }}> user: </span>{' '}
           {todo.user?.username}
         </Typography>
         <ul>
           {todo?.items.map((item) => (
             <li
               style={{
-                textDecoration: item.completed ? "line-through" : undefined,
+                textDecoration: item.completed ? 'line-through' : undefined,
               }}
               key={item.description}
             >
@@ -407,10 +378,10 @@ function TodoCard({ todo }: { todo: TodoNode }) {
           ))}
         </ul>
       </CardContent>
-      <CardActions style={{ display: "flex", alignItems: "center" }}>
+      <CardActions style={{ display: 'flex', alignItems: 'center' }}>
         {currentUser?._id === todo.user?._id ? (
           <Button
-            size={"small"}
+            size={'small'}
             onClick={() => {
               handleEditTodoClick(todo);
             }}
@@ -421,7 +392,7 @@ function TodoCard({ todo }: { todo: TodoNode }) {
         {currentUser?._id === todo.user?._id ? (
           <Button
             disabled={isDisabled}
-            size={"small"}
+            size={'small'}
             onClick={async () => {
               await handleDeleteClick(todo);
             }}
@@ -429,11 +400,11 @@ function TodoCard({ todo }: { todo: TodoNode }) {
             Delete
           </Button>
         ) : null}
-        <Box style={{ flexGrow: 1, display: "flex", justifyContent: "end" }}>
+        <Box style={{ flexGrow: 1, display: 'flex', justifyContent: 'end' }}>
           {todo.locked ? (
-            <LockRoundedIcon fontSize={"medium"} />
+            <LockRoundedIcon fontSize={'medium'} />
           ) : (
-            <LockOpenRoundedIcon fontSize={"medium"} />
+            <LockOpenRoundedIcon fontSize={'medium'} />
           )}
         </Box>
       </CardActions>
@@ -442,9 +413,7 @@ function TodoCard({ todo }: { todo: TodoNode }) {
   );
 }
 
-function EnhancedTodoTable(
-  props: EnhancedTodoContainerProps<FilterTodoColumn>
-) {
+function EnhancedTodoTable(props: EnhancedTodoContainerProps<FilterTodoColumn>) {
   const { onRequestSort, order, orderBy, firstRender, edges } = props;
 
   // enter and leave overlapping
@@ -454,10 +423,10 @@ function EnhancedTodoTable(
       const todo = item as TodoEdge;
       return todo.node?._id!;
     },
-    from: { opacity: 0, x: firstRender ? "0%" : "10%" },
-    enter: { opacity: 1, x: "0%" },
-    leave: { opacity: 0, x: "10%" },
-    order: ["enter", "update", "leave"],
+    from: { opacity: 0, x: firstRender ? '0%' : '10%' },
+    enter: { opacity: 1, x: '0%' },
+    leave: { opacity: 0, x: '10%' },
+    order: ['enter', 'update', 'leave'],
     trail: 150,
     config: springConfig.gentle,
   });
@@ -465,31 +434,28 @@ function EnhancedTodoTable(
   const AnimatedTableRow = animated(TableRow);
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ overflowY: "hidden", overflowX: "hidden" }}
-    >
+    <TableContainer component={Paper} sx={{ overflowY: 'hidden', overflowX: 'hidden' }}>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell width={"10%"}>&nbsp;</TableCell>
+            <TableCell width={'10%'}>&nbsp;</TableCell>
             <EnhancedTableHead
               onRequestSort={onRequestSort}
               order={order}
               title={FilterTodoColumn.Description}
               orderBy={orderBy}
-              width={"30%"}
+              width={'30%'}
             />
             <EnhancedTableHead
               onRequestSort={onRequestSort}
               order={order}
               title={FilterTodoColumn.Due}
               orderBy={orderBy}
-              width={"20%"}
+              width={'20%'}
             />
-            <TableCell width={"10%"}>Completed</TableCell>
-            <TableCell width={"20%"}>User</TableCell>
-            <TableCell width={"10%"}>Actions</TableCell>
+            <TableCell width={'10%'}>Completed</TableCell>
+            <TableCell width={'20%'}>User</TableCell>
+            <TableCell width={'10%'}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -519,18 +485,18 @@ function TodoCells({ todo }: { todo: TodoNode }) {
 
   return (
     <React.Fragment>
-      <TableCell align={"center"}>
+      <TableCell align={'center'}>
         <Box
           sx={{
-            "& > :not(style)": {
+            '& > :not(style)': {
               m: 2,
             },
           }}
         >
           {todo.locked ? (
-            <LockRoundedIcon fontSize={"medium"} />
+            <LockRoundedIcon fontSize={'medium'} />
           ) : (
-            <LockOpenRoundedIcon fontSize={"medium"} />
+            <LockOpenRoundedIcon fontSize={'medium'} />
           )}
         </Box>
       </TableCell>
@@ -541,29 +507,29 @@ function TodoCells({ todo }: { todo: TodoNode }) {
       <TableCell>
         <Box
           sx={{
-            display: "flex",
-            flexWrap: "nowrap",
+            display: 'flex',
+            flexWrap: 'nowrap',
           }}
         >
           {currentUser?._id === todo.user?._id ? (
             <IconButton
-              size={"small"}
+              size={'small'}
               onClick={() => {
                 handleEditTodoClick(todo);
               }}
             >
-              <CreateIcon fontSize={"small"} />
+              <CreateIcon fontSize={'small'} />
             </IconButton>
           ) : null}
           {currentUser?._id === todo.user?._id ? (
             <IconButton
               disabled={isDisabled}
-              size={"small"}
+              size={'small'}
               onClick={async () => {
                 await handleDeleteClick(todo);
               }}
             >
-              <DeleteIcon fontSize={"small"} />
+              <DeleteIcon fontSize={'small'} />
             </IconButton>
           ) : null}
         </Box>

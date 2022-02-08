@@ -1,10 +1,10 @@
-import * as React from "react";
-import { useHistory } from "react-router-dom";
-import { ProgramInterface, programs } from "../../services/programs";
-import WebFont from "webfontloader";
-import { grey } from "@mui/material/colors";
-import { createTheme, ThemeProvider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import * as React from 'react';
+import { useHistory } from 'react-router-dom';
+import { ProgramInterface, programs } from '../../services/programs';
+import WebFont from 'webfontloader';
+import { grey } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export interface ProgramsContextInterface {
   toggleAppVariant: () => void;
@@ -27,39 +27,35 @@ interface ProgramsProviderProps {
 export const ProgramsProvider = (props: ProgramsProviderProps) => {
   const history = useHistory();
 
-  const [currAppVariant, setCurrAppVariant] = React.useState<ProgramInterface>(
-    () => {
-      const themeName = window.localStorage.getItem("appVariant");
-      if (themeName) {
-        const appVariant = programs.find((t) => themeName === t.name);
-        return appVariant || programs[0];
-      } else {
-        return programs[0];
-      }
+  const [currAppVariant, setCurrAppVariant] = React.useState<ProgramInterface>(() => {
+    const themeName = window.localStorage.getItem('appVariant');
+    if (themeName) {
+      const appVariant = programs.find((t) => themeName === t.name);
+      return appVariant || programs[0];
+    } else {
+      return programs[0];
     }
-  );
+  });
 
   const { toggleAppVariant, selectAppVariant } = React.useMemo(
     () => ({
       toggleAppVariant: () => {
-        history.push("/");
+        history.push('/');
         setCurrAppVariant((prevTheme) => {
-          const foundIndex = programs.findIndex(
-            (t) => t.name === prevTheme.name
-          );
+          const foundIndex = programs.findIndex((t) => t.name === prevTheme.name);
           const index = foundIndex === programs.length - 1 ? 0 : foundIndex + 1;
           const newTheme = programs[index];
-          window.localStorage.setItem("appVariant", newTheme.name);
+          window.localStorage.setItem('appVariant', newTheme.name);
           return newTheme;
         });
       },
       selectAppVariant: (av: ProgramInterface) => {
-        history.push("/");
-        window.localStorage.setItem("appVariant", av.name);
+        history.push('/');
+        window.localStorage.setItem('appVariant', av.name);
         setCurrAppVariant(av);
       },
     }),
-    []
+    [],
   );
 
   const theme = React.useMemo(() => {
@@ -78,25 +74,23 @@ export const ProgramsProvider = (props: ProgramsProviderProps) => {
     });
 
     const primaryFont = {
-      fontFamily: [`"${currAppVariant.primaryFont}"`, "Roboto"].join(","),
+      fontFamily: [`"${currAppVariant.primaryFont}"`, 'Roboto'].join(','),
     };
     const secondaryFont = {
-      fontFamily: [`"${currAppVariant.secondaryFont}"`, "Roboto"].join(","),
+      fontFamily: [`"${currAppVariant.secondaryFont}"`, 'Roboto'].join(','),
     };
 
     const tertiaryFont = {
       fontFamily: [
         `"${
-          currAppVariant.tertiaryFont
-            ? currAppVariant.tertiaryFont
-            : currAppVariant.secondaryFont
+          currAppVariant.tertiaryFont ? currAppVariant.tertiaryFont : currAppVariant.secondaryFont
         }"`,
-        "Roboto",
-      ].join(","),
+        'Roboto',
+      ].join(','),
     };
 
     const textFont = {
-      fontFamily: [`"${currAppVariant.textFont}"`, "sans-serif"].join(","),
+      fontFamily: [`"${currAppVariant.textFont}"`, 'sans-serif'].join(','),
     };
     const {
       mode: modeColor,
@@ -107,8 +101,8 @@ export const ProgramsProvider = (props: ProgramsProviderProps) => {
       backgroundSecondary,
     } = currAppVariant;
 
-    const textPrimary = modeColor === "light" ? `#000000` : grey["50"];
-    const textSecondary = modeColor === "light" ? grey["900"] : grey["400"];
+    const textPrimary = modeColor === 'light' ? `#000000` : grey['50'];
+    const textSecondary = modeColor === 'light' ? grey['900'] : grey['400'];
 
     return createTheme({
       palette: {
@@ -145,7 +139,7 @@ export const ProgramsProvider = (props: ProgramsProviderProps) => {
             // Name of the slot
             root: {
               // Some CSS
-              borderBottom: "1px solid transparent",
+              borderBottom: '1px solid transparent',
               borderBottomColor: divider,
             },
           },

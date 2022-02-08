@@ -1,10 +1,10 @@
-import { ActionType } from "../action-types";
-import { Action } from "../actions";
-import { CurrentUserQuery } from "../../../services/schema";
+import { ActionType } from '../action-types';
+import { Action } from '../actions';
+import { CurrentUserQuery } from '../../../services/schema';
 
 interface AuthState {
   accessToken: string | null;
-  currentUser: CurrentUserQuery["currentUser"] | null;
+  currentUser: CurrentUserQuery['currentUser'] | null;
 }
 
 const initialState = {
@@ -12,10 +12,7 @@ const initialState = {
   currentUser: null,
 };
 
-const reducer = (
-  state: AuthState = initialState,
-  action: Action
-): AuthState => {
+const reducer = (state: AuthState = initialState, action: Action): AuthState => {
   switch (action.type) {
     case ActionType.LOGIN:
       return {

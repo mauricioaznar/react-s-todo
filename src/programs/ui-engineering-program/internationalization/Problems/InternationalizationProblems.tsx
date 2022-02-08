@@ -1,5 +1,5 @@
-import React from "react";
-import { ProblemItemProps, Problems } from "../../components/problems/Problem";
+import React from 'react';
+import { ProblemItemProps, Problems } from '../../components/problems/Problem';
 
 export default function InternationalizationProblems() {
   const problemSolutions: ProblemItemProps[] = [

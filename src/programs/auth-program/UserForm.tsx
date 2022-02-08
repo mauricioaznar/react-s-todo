@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
-import { Form, Formik } from "formik";
-import { ApolloError, useApolloClient } from "@apollo/client";
-import * as yup from "yup";
+import * as React from 'react';
+import { useState } from 'react';
+import { Form, Formik } from 'formik';
+import { ApolloError, useApolloClient } from '@apollo/client';
+import * as yup from 'yup';
 
 // mui
-import { Grid } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import PetsIcon from "@mui/icons-material/Pets";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import { Grid } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import PetsIcon from '@mui/icons-material/Pets';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 
 // local
 import {
@@ -20,25 +20,25 @@ import {
   useSignInMutation,
   useUpdateUserMutation,
   useUploadFileMutation,
-} from "../../services/schema";
-import MauSnackbar from "../../components/MauSnackbar";
-import { useHistory, useLocation } from "react-router-dom";
-import { nameof } from "../../helpers/nameof";
-import { useTypedSelector } from "../../hooks/redux-hooks/useTypedSelector";
-import FormikTextField from "../../components/inputs/formik/FormikTextField";
-import FormikFile from "../../components/inputs/formik/FormikFile";
-import FormikCheckbox from "../../components/inputs/formik/FormikCheckbox";
-import { queryDerivativeIsUserOccupied } from "../../services/schema-derivative";
+} from '../../services/schema';
+import MauSnackbar from '../../components/MauSnackbar';
+import { useHistory, useLocation } from 'react-router-dom';
+import { nameof } from '../../helpers/nameof';
+import { useTypedSelector } from '../../hooks/redux-hooks/useTypedSelector';
+import FormikTextField from '../../components/inputs/formik/FormikTextField';
+import FormikFile from '../../components/inputs/formik/FormikFile';
+import FormikCheckbox from '../../components/inputs/formik/FormikCheckbox';
+import { queryDerivativeIsUserOccupied } from '../../services/schema-derivative';
 
 interface UseFormLocationProps {
-  user?: GetUsersQuery["users"][number];
+  user?: GetUsersQuery['users'][number];
 }
 
 export default function UserForm() {
   const { currentUser } = useTypedSelector((state) => state.auth);
 
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   const client = useApolloClient();
 
@@ -53,8 +53,8 @@ export default function UserForm() {
   const [signinMutation] = useSignInMutation({
     update(cache) {
       cache.evict({
-        id: "ROOT_QUERY",
-        fieldName: nameof<Query>("users"),
+        id: 'ROOT_QUERY',
+        fieldName: nameof<Query>('users'),
       });
     },
   });
@@ -62,8 +62,8 @@ export default function UserForm() {
   const [updateUserMutation] = useUpdateUserMutation({
     update(cache) {
       cache.evict({
-        id: "ROOT_QUERY",
-        fieldName: nameof<Query>("users"),
+        id: 'ROOT_QUERY',
+        fieldName: nameof<Query>('users'),
       });
     },
   });
@@ -71,23 +71,17 @@ export default function UserForm() {
   const [uploadFileMutation] = useUploadFileMutation();
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="row"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
       <Grid item xs>
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <PetsIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -96,41 +90,33 @@ export default function UserForm() {
             <Box sx={{ mt: 1 }}>
               <Formik
                 initialValues={{
-                  username: user ? user.username : "",
-                  password: "changeme",
+                  username: user ? user.username : '',
+                  password: 'changeme',
                   admin: user ? user.admin : false,
                   file: null,
                 }}
                 validationSchema={yup.object({
                   username: yup
                     .string()
-                    .required("Email is required")
-                    .test(
-                      "unique",
-                      "email must be unique",
-                      async function (value) {
-                        if (
-                          currentUser?._id !== user?._id &&
-                          !currentUser?.admin
-                        ) {
-                          const result = await queryDerivativeIsUserOccupied(
-                            client,
-                            { username: value || "" }
-                          );
-                          return !result.data.isUserOccupied;
-                        } else {
-                          return true;
-                        }
+                    .required('Email is required')
+                    .test('unique', 'email must be unique', async function (value) {
+                      if (currentUser?._id !== user?._id && !currentUser?.admin) {
+                        const result = await queryDerivativeIsUserOccupied(client, {
+                          username: value || '',
+                        });
+                        return !result.data.isUserOccupied;
+                      } else {
+                        return true;
                       }
-                    ),
+                    }),
                   password: yup
                     .string()
-                    .min(8, "Password should be of minimum 8 characters length")
-                    .required("Password is required"),
+                    .min(8, 'Password should be of minimum 8 characters length')
+                    .required('Password is required'),
                   file: yup
                     .string()
                     .nullable()
-                    .test("file required", "Please provide a file", (val) => {
+                    .test('file required', 'Please provide a file', (val) => {
                       return !user || !user.avatar ? !!val : true;
                     }),
                 })}
@@ -176,28 +162,22 @@ export default function UserForm() {
                       });
                     }
 
-                    history.push("/users");
+                    history.push('/users');
                   } catch (e: unknown) {
                     if (e instanceof ApolloError) {
                       setMessage(e.message);
                     }
                   }
 
-                  setMessage("");
+                  setMessage('');
                   setIsDisabled(false);
                 }}
               >
                 <Form>
                   <FormikTextField name="username" label="Username" />
-                  <FormikTextField
-                    label="Password"
-                    name="password"
-                    type={"password"}
-                  />
-                  {isAdmin ? (
-                    <FormikCheckbox name={"admin"} label={"Admin"} />
-                  ) : null}
-                  <FormikFile name={"file"} label={"Upload file"} />
+                  <FormikTextField label="Password" name="password" type={'password'} />
+                  {isAdmin ? <FormikCheckbox name={'admin'} label={'Admin'} /> : null}
+                  <FormikFile name={'file'} label={'Upload file'} />
                   <Button
                     disabled={isDisabled || !canAlter}
                     type="submit"

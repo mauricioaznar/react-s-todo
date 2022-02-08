@@ -1,16 +1,16 @@
-import React from "react";
-import { act, render } from "@testing-library/react";
+import React from 'react';
+import { act, render } from '@testing-library/react';
 // import { act, render, screen as rtlScreen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import AuthorizationWrapper from "./AuthorizationWrapper";
-import { Box } from "@mui/material";
-import { Providers } from "../global-state/context/providers";
-import { store } from "../global-state/redux";
-import { MockedProvider } from "@apollo/client/testing";
+import '@testing-library/jest-dom';
+import AuthorizationWrapper from './AuthorizationWrapper';
+import { Box } from '@mui/material';
+import { Providers } from '../global-state/context/providers';
+import { store } from '../global-state/redux';
+import { MockedProvider } from '@apollo/client/testing';
 
 // const mocks = [];
 
-test("renders login page", async () => {
+test('renders login page', async () => {
   await act(async () => {
     render(
       <MockedProvider mocks={[]}>
@@ -19,7 +19,7 @@ test("renders login page", async () => {
             <Box />
           </AuthorizationWrapper>
         </Providers>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 

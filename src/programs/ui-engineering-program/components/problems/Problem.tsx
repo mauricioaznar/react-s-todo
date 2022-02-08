@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 
 export interface ProblemItemProps {
   problem: string;
@@ -14,12 +14,12 @@ export function Problem(props: ProblemItemProps) {
 
   return (
     <Box sx={{ mb: 4 }}>
-      <Typography variant={"h6"} sx={{ fontSize: "1.2rem", mb: 2 }}>
+      <Typography variant={'h6'} sx={{ fontSize: '1.2rem', mb: 2 }}>
         {problem}
       </Typography>
       {example ? (
         <Box sx={{ mb: 2 }}>
-          <Typography variant={"body1"} sx={{ mb: 1 }}>
+          <Typography variant={'body1'} sx={{ mb: 1 }}>
             Example
           </Typography>
           {example}
@@ -28,9 +28,7 @@ export function Problem(props: ProblemItemProps) {
 
       {solutions && solutions.length > 0 ? (
         <Box sx={{ mb: 2 }}>
-          <Typography variant={"body1"}>
-            {`Solution${solutions.length > 1 ? "s" : ""}`}
-          </Typography>
+          <Typography variant={'body1'}>{`Solution${solutions.length > 1 ? 's' : ''}`}</Typography>
           <ul style={{ margin: 0 }}>
             {solutions.map((s, index) => {
               return <li key={index}>{s}</li>;
@@ -41,9 +39,7 @@ export function Problem(props: ProblemItemProps) {
 
       {answers && answers.length > 0 ? (
         <Box sx={{ mb: 2 }}>
-          <Typography variant={"body1"}>
-            {`Answer${answers.length > 1 ? "s" : ""}`}
-          </Typography>
+          <Typography variant={'body1'}>{`Answer${answers.length > 1 ? 's' : ''}`}</Typography>
           <ul style={{ margin: 0 }}>
             {answers.map((s, index) => {
               return <li key={index}>{s}</li>;
@@ -54,9 +50,7 @@ export function Problem(props: ProblemItemProps) {
 
       {tradeoffs && tradeoffs.length > 0 ? (
         <Box>
-          <Typography variant={"body1"}>
-            {`Tradeoff${tradeoffs.length > 1 ? "s" : ""}`}
-          </Typography>
+          <Typography variant={'body1'}>{`Tradeoff${tradeoffs.length > 1 ? 's' : ''}`}</Typography>
           <ul style={{ margin: 0 }}>
             {tradeoffs.map((s, index) => {
               return <li key={index}>{s}</li>;
@@ -79,13 +73,7 @@ export function Problems(props: ProblemsProps) {
     <Box>
       {items.map((psm, index) => {
         const { problem, ...rest } = psm;
-        return (
-          <Problem
-            key={index}
-            problem={`#${index + 1}: ${problem}`}
-            {...rest}
-          />
-        );
+        return <Problem key={index} problem={`#${index + 1}: ${problem}`} {...rest} />;
       })}
     </Box>
   );

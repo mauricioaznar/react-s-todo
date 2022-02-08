@@ -1,14 +1,12 @@
-import React from "react";
-import Explanation from "../components/explanation/Explanation";
-import VerticalTabs, {
-  VerticalTabItem,
-} from "../components/vertical-tabs/VerticalTabs";
-import LatencyProblems from "./problems/LatencyProblems";
+import React from 'react';
+import Explanation from '../components/explanation/Explanation';
+import VerticalTabs, { VerticalTabItem } from '../components/vertical-tabs/VerticalTabs';
+import LatencyProblems from './problems/LatencyProblems';
 
 export default function Latency() {
   const tabs: VerticalTabItem[] = [
     {
-      label: "Explanation",
+      label: 'Explanation',
       component: (
         <Explanation
           explanation={`Both computations and network access take time. Sometimes we can ignore
@@ -24,7 +22,7 @@ export default function Latency() {
       ),
     },
     {
-      label: "Problems",
+      label: 'Problems',
       component: <LatencyProblems />,
     },
   ];

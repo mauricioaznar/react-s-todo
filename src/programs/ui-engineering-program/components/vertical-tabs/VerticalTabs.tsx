@@ -1,6 +1,6 @@
-import React from "react";
-import AnimatedDiv from "../../../../components/spring-components/AnimatedDiv";
-import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
+import React from 'react';
+import AnimatedDiv from '../../../../components/spring-components/AnimatedDiv';
+import { Box, Container, Tab, Tabs, Typography } from '@mui/material';
 
 export interface VerticalTabItem {
   label: string;
@@ -15,7 +15,7 @@ interface VerticalTabsProps {
 export default function VerticalTabs(props: VerticalTabsProps) {
   const { items, title } = props;
 
-  const VERTICAL_TABS_KEY = "vertical_tabs_key_" + title;
+  const VERTICAL_TABS_KEY = 'vertical_tabs_key_' + title;
   const initialState = window.localStorage.getItem(VERTICAL_TABS_KEY)
     ? Number(window.localStorage.getItem(VERTICAL_TABS_KEY))
     : 0;
@@ -28,24 +28,21 @@ export default function VerticalTabs(props: VerticalTabsProps) {
 
   const TabItem = () => {
     return (
-      <AnimatedDiv>
-        {" "}
-        {items.find((t, index) => index === value)?.component || null}
-      </AnimatedDiv>
+      <AnimatedDiv> {items.find((t, index) => index === value)?.component || null}</AnimatedDiv>
     );
   };
 
   return (
     <Container>
       <Box sx={{ mt: 2, mb: 4 }}>
-        <Typography variant={"h4"}>{title}</Typography>
+        <Typography variant={'h4'}>{title}</Typography>
       </Box>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <Box sx={{ mr: 4 }}>
           <Tabs
             orientation="vertical"
             value={value}
-            indicatorColor={"secondary"}
+            indicatorColor={'secondary'}
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile
@@ -56,7 +53,7 @@ export default function VerticalTabs(props: VerticalTabsProps) {
               return (
                 <Tab
                   wrapped={false}
-                  sx={{ whiteSpace: "nowrap", fontWeight: "bolder" }}
+                  sx={{ whiteSpace: 'nowrap', fontWeight: 'bolder' }}
                   key={t.label}
                   label={t.label}
                 />
