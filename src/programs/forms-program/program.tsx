@@ -4,6 +4,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import CatList from "./cat/CatList";
 import FormikForm from "./cat/FormikForm";
 import * as React from "react";
+import { CatForm } from "./cat/CatForm";
 
 export const formsProgram: ProgramInterface = {
   primary: `#E0AC84`,
@@ -22,19 +23,27 @@ export const formsProgram: ProgramInterface = {
   links: [
     {
       icon: <PetsIcon />,
-      name: "CatList",
-      path: "/cats",
-      component: <CatList />,
-      navbar: true,
-      title: "React hook form",
-    },
-    {
-      icon: <PetsIcon />,
       name: "FormikForm",
       path: "/formikForm",
       component: <FormikForm />,
       navbar: true,
       title: "Formik inputs",
+    },
+    {
+      icon: <PetsIcon />,
+      name: "CatList",
+      path: "/cats",
+      component: <CatList />,
+      navbar: true,
+      title: "Form example",
+    },
+    {
+      icon: <PetsIcon />,
+      name: "CatForm",
+      path: "/catForm",
+      component: <CatForm />,
+      navbar: false,
+      title: "Form example",
     },
   ],
 };

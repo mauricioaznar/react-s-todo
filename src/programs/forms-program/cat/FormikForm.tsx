@@ -35,8 +35,8 @@ export default function FormikForm() {
       .min(8, "Password should be of minimum 8 characters length")
       .required("Password is required"),
     file: yup.string().nullable().required("Pleasse provide a file"),
-    files: yup.mixed().nullable().required("Pleasse provide a date"),
-    date: yup.mixed().nullable().required("Pleasse provide a file"),
+    files: yup.mixed().nullable().required("Pleasse provide a file"),
+    date: yup.mixed().nullable().required("Pleasse provide a date"),
     radio: yup.mixed().nullable().required("Pleasse provide a radio"),
     autocomplete: yup
       .mixed()
@@ -82,8 +82,8 @@ export default function FormikForm() {
         array: [{ description: "12341234" }],
       }}
       validationSchema={validationSchema}
-      onSubmit={() => {
-        // alert(JSON.stringify(values, null, 2));
+      onSubmit={(values) => {
+        alert(JSON.stringify(values, null, 2));
       }}
     >
       <Form>

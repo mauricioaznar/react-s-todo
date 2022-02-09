@@ -25,6 +25,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import CatPhotosDialog from "./components/CatPhotosDialog";
 
 export default function CatList() {
   const history = useHistory();
@@ -85,15 +86,15 @@ export default function CatList() {
 function CatRow({ cat }: { cat: GetCatsQuery["cats"][number] }) {
   const [isDisabled, setDisabled] = useState(false);
 
-  const [, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const [deleteCatMutation] = useDeleteCatMutation({
     refetchQueries: [namedOperations.Query.GetCats],
@@ -151,6 +152,7 @@ function CatRow({ cat }: { cat: GetCatsQuery["cats"][number] }) {
           </IconButton>
         </TableCell>
       </TableRow>
+      <CatPhotosDialog open={open} handleClose={handleClose} id={cat._id} />
     </>
   );
 }
