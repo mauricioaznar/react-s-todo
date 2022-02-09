@@ -10,7 +10,7 @@ import {
   useUpdateCatMutation,
 } from "../../../services/schema";
 import { nameof } from "../../../helpers/nameof";
-import { Grid } from "@mui/material";
+import { Badge, Grid, IconButton } from "@mui/material";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -24,6 +24,7 @@ import FormikCheckbox from "../../../components/inputs/formik/FormikCheckbox";
 import FormikFile from "../../../components/inputs/formik/FormikFile";
 import Button from "@mui/material/Button";
 import MauSnackbar from "../../../components/MauSnackbar";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface UseCatFormLocationProps {
   cat?: GetCatsQuery["cats"][number];
@@ -36,6 +37,8 @@ export function CatForm() {
   const history = useHistory();
   const location = useLocation<UseCatFormLocationProps>();
   const cat = location.state?.cat;
+
+  const [filenames, setFilenames] = useState(cat?.filenames || []);
 
   const [createCatMutation] = useCreateCatMutation({
     update(cache) {
@@ -54,6 +57,14 @@ export function CatForm() {
       });
     },
   });
+
+  const removeFilename = (filename: string) => {
+    setFilenames(
+      filenames.filter((f) => {
+        return f !== filename;
+      }),
+    );
+  };
 
   return (
     <Grid
@@ -86,16 +97,23 @@ export function CatForm() {
                   coat: cat ? cat.characteristics.coat : "",
                   lifespan: cat ? cat.characteristics.lifespan : "",
                   size: cat ? cat.characteristics.size : "",
+                  files: null,
                 }}
                 validationSchema={yup.object({
                   breed: yup.string().required("Breed is required"),
                   color: yup.string().required("Color is required"),
                   coat: yup.string().required("Coat is required"),
                   lifespan: yup.string().required("Lifespan is required"),
+                  files: yup
+                    .mixed()
+                    .nullable()
+                    .required("Pleasse provide a file"),
                   size: yup.string().required("Size is required"),
                 })}
                 onSubmit={async (data) => {
-                  const { breed, color, coat, lifespan, size } = data;
+                  const { breed, color, coat, lifespan, size, files } = data;
+
+                  console.log(files);
 
                   setIsDisabled(true);
 
@@ -110,7 +128,7 @@ export function CatForm() {
                           lifespan: lifespan,
                         },
                       },
-                      files: [],
+                      files: files,
                     };
 
                     if (cat) {
@@ -118,7 +136,7 @@ export function CatForm() {
                         variables: {
                           id: cat._id,
                           ...catOptions,
-                          filenames: [],
+                          filenames: filenames,
                         },
                       });
                     } else {
@@ -146,7 +164,36 @@ export function CatForm() {
                   <FormikTextField name="size" label="Size" />
                   <FormikTextField name="lifespan" label="Lifespan" />
                   <FormikTextField name="color" label="Color" />
-                  <FormikFile name={"file"} label={"Upload file"} />
+                  <FormikFile name={"files"} label={"Upload file"} multiple />
+                  <Box>
+                    {cat
+                      ? filenames.map((f) => (
+                          <Badge
+                            key={f}
+                            overlap="circular"
+                            anchorOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                            }}
+                            badgeContent={
+                              <IconButton
+                                sx={{
+                                  width: "30px",
+                                  height: "30px",
+                                }}
+                                onClick={() => {
+                                  removeFilename(f);
+                                }}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            }
+                          >
+                            <Avatar alt="Travis Howard" src={f} />
+                          </Badge>
+                        ))
+                      : null}
+                  </Box>
                   <Button
                     disabled={isDisabled}
                     type="submit"
