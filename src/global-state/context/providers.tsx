@@ -3,7 +3,7 @@ import { Provider as StoreProvider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterMoment";
-import { ProgramsProvider } from "./programs-context";
+import { ThemeProvider } from "./theme-context";
 import { SnackbarProvider } from "notistack";
 
 interface ProvidersProps {
@@ -16,9 +16,9 @@ export const Providers = ({ children, store }: ProvidersProps) => {
     <StoreProvider store={store}>
       <Router>
         <LocalizationProvider dateAdapter={DateAdapter}>
-          <ProgramsProvider>
+          <ThemeProvider>
             <SnackbarProvider maxSnack={6}>{children}</SnackbarProvider>
-          </ProgramsProvider>
+          </ThemeProvider>
         </LocalizationProvider>
       </Router>
     </StoreProvider>

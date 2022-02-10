@@ -7,7 +7,7 @@ import {
 
 type QueryDerivativeIsUserOccupiedType = (
   client: ApolloClient<object>,
-  variables?: IsUserOccupiedQueryVariables,
+  variables: IsUserOccupiedQueryVariables,
 ) => Promise<ApolloQueryResult<IsUserOccupiedQuery>>;
 
 export const queryDerivativeIsUserOccupied: QueryDerivativeIsUserOccupiedType =

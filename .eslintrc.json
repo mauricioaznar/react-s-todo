@@ -18,12 +18,6 @@
     "no-console": 1,
     "no-unexpected-multiline": "warn"
   },
-  "settings": {
-    "react": {
-      "pragma": "React",
-      "version": "15.6.1"
-    }
-  },
   "env": {
     "browser": true,
     "jest/globals": true
