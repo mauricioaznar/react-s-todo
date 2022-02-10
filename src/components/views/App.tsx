@@ -4,7 +4,6 @@ import {
   NavLink as RouterLink,
   Route,
   Switch,
-  useHistory,
   useLocation,
 } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
@@ -48,7 +47,6 @@ const drawerWidth: number = 240;
 export default function App() {
   const theme = useTheme();
   const mdAndUp = useMediaQuery(theme.breakpoints.up("lg"));
-  const history = useHistory();
 
   const { toggleTheme, currentTheme } = useThemeContext();
 
