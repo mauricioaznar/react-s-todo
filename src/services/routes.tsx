@@ -1,5 +1,4 @@
 import * as React from "react";
-import { ReactElement } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import Home from "../components/views/home/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";

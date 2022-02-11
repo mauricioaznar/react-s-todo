@@ -1,10 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import { ApolloError, useApolloClient } from "@apollo/client";
+import { ApolloError } from "@apollo/client";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   GetCatsQuery,
-  GetUsersQuery,
   Query,
   useCreateCatMutation,
   useUpdateCatMutation,
@@ -18,9 +17,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import Typography from "@mui/material/Typography";
 import { Form, Formik } from "formik";
 import * as yup from "yup";
-import { queryDerivativeIsUserOccupied } from "../../../../services/schema-derivative";
 import FormikTextField from "../../../dum/inputs/formik/FormikTextField";
-import FormikCheckbox from "../../../dum/inputs/formik/FormikCheckbox";
 import FormikFile from "../../../dum/inputs/formik/FormikFile";
 import Button from "@mui/material/Button";
 import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
@@ -113,8 +110,6 @@ export function CatForm() {
                 onSubmit={async (data) => {
                   const { breed, color, coat, lifespan, size, files } = data;
 
-                  console.log(files);
-
                   setIsDisabled(true);
 
                   try {
@@ -161,7 +156,7 @@ export function CatForm() {
                 <Form>
                   <FormikTextField name="breed" label="Breed" />
                   <FormikTextField name="coat" label="Coat" />
-                  <FormikTextField name="size" label="Size" />
+                  <FormikTextField name="size" label="Size"/>
                   <FormikTextField name="lifespan" label="Lifespan" />
                   <FormikTextField name="color" label="Color" />
                   <FormikFile name={"files"} label={"Upload file"} multiple />
