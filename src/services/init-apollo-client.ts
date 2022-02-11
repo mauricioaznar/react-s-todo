@@ -9,7 +9,6 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
 // @ts-ignore
 import { createUploadLink } from "apollo-upload-client";
-import { RetryLink } from "@apollo/client/link/retry";
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -23,7 +22,7 @@ import { RetryLink } from "@apollo/client/link/retry";
 // }
 
 const httpProtocol = process.env.NODE_ENV === "development" ? "http" : "https";
-const httpLink = createUploadLink({
+let httpLink = createUploadLink({
   uri: `${httpProtocol}://${apiUrl}/graphql`,
 });
 
@@ -66,8 +65,7 @@ const errorLink = onError(
     // To retry on network errors, we recommend the RetryLink
     // instead of the onError link. This just logs the error.
     if (networkError) {
-      networkError.name = "Server unavailable";
-      forward(operation);
+      networkError.message = "Server error";
     }
   },
 );
@@ -83,7 +81,6 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     lazy: true,
-    reconnectionAttempts: 10,
     inactivityTimeout: 1000,
     connectionParams: () => {
       return {
@@ -104,16 +101,9 @@ const wsLink = new WebSocketLink({
   },
 });
 
-const retryLink = new RetryLink({
-  delay: {
-    initial: 100,
-    max: 2000,
-    jitter: true,
-  },
-  attempts: {
-    max: 5,
-  },
-});
+// const linkMiddleware = new ApolloLink((operation, forward) => {
+//     return forward(operation);
+// })
 
 const splitLink = split(
   ({ query }) => {
@@ -124,7 +114,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  from([authLink, retryLink, errorLink, httpLink]),
+  from([authLink, errorLink, httpLink]),
 );
 
 const client = new ApolloClient({
