@@ -66,6 +66,7 @@ const errorLink = onError(
     // To retry on network errors, we recommend the RetryLink
     // instead of the onError link. This just logs the error.
     if (networkError) {
+      networkError.name = "Server unavailable";
       forward(operation);
     }
   },
