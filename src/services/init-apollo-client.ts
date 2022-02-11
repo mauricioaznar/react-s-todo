@@ -1,10 +1,4 @@
-import {
-  ApolloClient,
-  from,
-  InMemoryCache,
-  ServerError,
-  split,
-} from "@apollo/client";
+import { ApolloClient, from, InMemoryCache, split } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { store } from "../global-state/redux";
@@ -15,6 +9,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
 // @ts-ignore
 import { createUploadLink } from "apollo-upload-client";
+import { RetryLink } from "@apollo/client/link/retry";
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -71,10 +66,7 @@ const errorLink = onError(
     // To retry on network errors, we recommend the RetryLink
     // instead of the onError link. This just logs the error.
     if (networkError) {
-      if (networkError.name === "ServerError") {
-        const serverError = networkError as ServerError;
-        networkError.message = serverError.result.message;
-      }
+      forward(operation);
     }
   },
 );
@@ -90,6 +82,7 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     lazy: true,
+    reconnectionAttempts: 10,
     inactivityTimeout: 1000,
     connectionParams: () => {
       return {
@@ -110,9 +103,16 @@ const wsLink = new WebSocketLink({
   },
 });
 
-// const linkMiddleware = new ApolloLink((operation, forward) => {
-//     return forward(operation);
-// })
+const retryLink = new RetryLink({
+  delay: {
+    initial: 100,
+    max: 2000,
+    jitter: true,
+  },
+  attempts: {
+    max: 5,
+  },
+});
 
 const splitLink = split(
   ({ query }) => {
@@ -123,7 +123,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  from([authLink, errorLink, httpLink]),
+  from([authLink, retryLink, errorLink, httpLink]),
 );
 
 const client = new ApolloClient({

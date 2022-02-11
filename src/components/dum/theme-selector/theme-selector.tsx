@@ -18,7 +18,7 @@ export default function ThemeSelector() {
 
   return (
     <FormControl sx={{ m: 1 }} fullWidth>
-      <InputLabel id="app-variant-label">ProgramHandler</InputLabel>
+      <InputLabel id="app-variant-label">Th eme</InputLabel>
       <Select
         labelId="app-variant-label"
         value={name}
