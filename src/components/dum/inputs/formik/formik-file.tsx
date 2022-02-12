@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { Box, Button, FormHelperText, styled } from "@mui/material";
-import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { FormikDefaultProps } from "./common/formik-default-props";
 import { useField } from "formik";
 
 interface FormikFileProps extends FormikDefaultProps {

@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import { Form, Formik } from "formik";
 import * as yup from "yup";
 import { ApolloError } from "@apollo/client";
-import FormikTextField from "../../../dum/inputs/formik/FormikTextField";
+import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
 import Button from "@mui/material/Button";
 import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
 import CustomMarkdownEditor from "./components/CustomMarkdownEditor";

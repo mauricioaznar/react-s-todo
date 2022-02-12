@@ -4,7 +4,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { FormikDefaultProps } from "./common/formik-default-props";
 import { useField } from "formik";
 import { FormHelperText } from "@mui/material";
 import { useState } from "react";

@@ -13,7 +13,7 @@ import {
 import ApolloSnackbar from "../../../../smart/apollo-snackbar/apollo-snackbar";
 import { ApolloError } from "@apollo/client";
 import { Form, Formik } from "formik";
-import FormikFile from "../../../../dum/inputs/formik/FormikFile";
+import FormikFile from "../../../../dum/inputs/formik/formik-file";
 import * as yup from "yup";
 import { nameof } from "../../../../../helpers/nameof";
 import { useState } from "react";

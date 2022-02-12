@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { Route } from "@mui/icons-material";
 
 export interface Route {
   title: string;
@@ -9,4 +8,9 @@ export interface Route {
   component: ReactElement<any, any>;
   exact?: boolean;
   navbar?: boolean;
+}
+
+export interface RouteGroup {
+  title: string;
+  routes: Route[];
 }

@@ -7,23 +7,23 @@ import {
   refetchIsUserOccupiedQuery,
 } from "../../../../services/schema";
 import { ApolloQueryResult, useApolloClient } from "@apollo/client";
-import FormikTextField from "../../../dum/inputs/formik/FormikTextField";
-import FormikFile from "../../../dum/inputs/formik/FormikFile";
-import FormikDate from "../../../dum/inputs/formik/FormikDate";
-import FormikCheckbox from "../../../dum/inputs/formik/FormikCheckbox";
-import FormikRadio from "../../../dum/inputs/formik/FormikRadio";
-import FormikAutocomplete from "../../../dum/inputs/formik/FormikAutocomplete";
-import FormikTable from "../../../dum/inputs/formik/FormikTable";
+import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
+import FormikFile from "../../../dum/inputs/formik/formik-file";
+import FormikDate from "../../../dum/inputs/formik/formik-date";
+import FormikCheckbox from "../../../dum/inputs/formik/formik-checkbox";
+import FormikRadio from "../../../dum/inputs/formik/formik-radio";
+import FormikAutocomplete from "../../../dum/inputs/formik/formik-autocomplete";
+import FormikTable from "../../../dum/inputs/formik/formik-table";
 import { Delete } from "@mui/icons-material";
 
-export default function FormikForm() {
+export default function Inputs() {
   const client = useApolloClient();
 
   const validationSchema = yup.object({
-    email: yup
+    username: yup
       .string()
-      .required("Email is required")
-      .test("unique", "email must be unique", async function (value) {
+      .required("Username is required")
+      .test("unique", "username must be unique", async function (value) {
         const result: ApolloQueryResult<IsUserOccupiedQuery> =
           await client.query(
             refetchIsUserOccupiedQuery({ username: value || "" }),
@@ -71,7 +71,7 @@ export default function FormikForm() {
   return (
     <Formik
       initialValues={{
-        email: "foobar@example.com",
+        username: "jonas",
         password: "foobar43243",
         file: null,
         files: null,
@@ -88,7 +88,7 @@ export default function FormikForm() {
     >
       <Form>
         <FormikDate name={"date"} label={"Date"} />
-        <FormikTextField name="email" label="Email" />
+        <FormikTextField name="username" label="Username" />
         <FormikTextField label="Password" name="password" type={"password"} />
         <FormikFile name={"file"} label={"Upload file"} />
 

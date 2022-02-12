@@ -12,7 +12,7 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { FormikDefaultProps } from "./common/formik-default-props";
 import { useField } from "formik";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";

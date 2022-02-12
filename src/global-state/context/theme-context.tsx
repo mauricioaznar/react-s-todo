@@ -172,6 +172,14 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
             },
           },
         },
+        MuiListSubheader: {
+          styleOverrides: {
+            root: {
+              backgroundColor: "transparent",
+              lineHeight: "2rem",
+            },
+          },
+        },
       },
     });
   }, [currentTheme]);

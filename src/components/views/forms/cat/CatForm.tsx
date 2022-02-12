@@ -17,8 +17,8 @@ import PetsIcon from "@mui/icons-material/Pets";
 import Typography from "@mui/material/Typography";
 import { Form, Formik } from "formik";
 import * as yup from "yup";
-import FormikTextField from "../../../dum/inputs/formik/FormikTextField";
-import FormikFile from "../../../dum/inputs/formik/FormikFile";
+import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
+import FormikFile from "../../../dum/inputs/formik/formik-file";
 import Button from "@mui/material/Button";
 import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -156,7 +156,7 @@ export function CatForm() {
                 <Form>
                   <FormikTextField name="breed" label="Breed" />
                   <FormikTextField name="coat" label="Coat" />
-                  <FormikTextField name="size" label="Size"/>
+                  <FormikTextField name="size" label="Size" />
                   <FormikTextField name="lifespan" label="Lifespan" />
                   <FormikTextField name="color" label="Color" />
                   <FormikFile name={"files"} label={"Upload file"} multiple />

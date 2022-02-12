@@ -8,7 +8,7 @@ import {
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { FormikDefaultProps } from "./common/formik-default-props";
 import { useField } from "formik";
 
 interface FormikCheckboxProps extends FormikDefaultProps {

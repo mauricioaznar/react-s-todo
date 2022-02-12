@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField } from "@mui/material";
 import { useField } from "formik";
-import { FormikDefaultProps } from "./common/FormikDefaultProps";
+import { FormikDefaultProps } from "./common/formik-default-props";
 
 interface FormikTextFieldProps extends FormikDefaultProps {
   type?: "text" | "password";

@@ -5,7 +5,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {} as const;
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -402,7 +402,7 @@ export function useIsUserOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type IsUserOccupiedQueryHookResult = ReturnType<typeof useIsUserOccupiedQuery>;
 export type IsUserOccupiedLazyQueryHookResult = ReturnType<typeof useIsUserOccupiedLazyQuery>;
 export type IsUserOccupiedQueryResult = Apollo.QueryResult<IsUserOccupiedQuery, IsUserOccupiedQueryVariables>;
-export function refetchIsUserOccupiedQuery(variables: IsUserOccupiedQueryVariables) {
+export function refetchIsUserOccupiedQuery(variables?: IsUserOccupiedQueryVariables) {
       return { query: IsUserOccupiedDocument, variables: variables }
     }
 export const LoginDocument = gql`
@@ -1070,12 +1070,12 @@ export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMut
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean, avatar?: string | null } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', username: string, _id: string, admin: boolean, avatar?: string | null | undefined } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean, avatar?: string | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', _id: string, username: string, admin: boolean, avatar?: string | null | undefined }> };
 
 export type IsUserOccupiedQueryVariables = Exact<{
   username: Scalars['String'];
@@ -1153,18 +1153,18 @@ export type UploadCatPhotosMutationVariables = Exact<{
 export type UploadCatPhotosMutation = { __typename?: 'Mutation', uploadCatPhotos: boolean };
 
 export type GetTodosQueryVariables = Exact<{
-  archived?: InputMaybe<Scalars['Boolean']>;
-  completed?: InputMaybe<Scalars['Boolean']>;
-  limit?: InputMaybe<Scalars['Float']>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  due?: InputMaybe<Scalars['String']>;
-  orderBy?: InputMaybe<FilterTodoColumn>;
-  order?: InputMaybe<ColumnOrder>;
+  archived?: Maybe<Scalars['Boolean']>;
+  completed?: Maybe<Scalars['Boolean']>;
+  limit?: Maybe<Scalars['Float']>;
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  due?: Maybe<Scalars['String']>;
+  orderBy?: Maybe<FilterTodoColumn>;
+  order?: Maybe<ColumnOrder>;
 }>;
 
 
-export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: string | null, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null }> | null, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null }, pageData?: { __typename?: 'PageData', count?: number | null, limit?: number | null, offset?: number | null } | null } };
+export type GetTodosQuery = { __typename?: 'Query', todos: { __typename?: 'TodoResponse', page: { __typename?: 'TodoConnection', edges?: Array<{ __typename?: 'TodoEdge', cursor?: string | null | undefined, node?: { __typename?: 'Todo', _id: string, description: string, due: string, locked: boolean, completed_percentage?: string | null | undefined, archived: boolean, user?: { __typename?: 'User', _id: string, username: string } | null | undefined, items: Array<{ __typename?: 'TodoItem', description: string, completed: boolean }> } | null | undefined }> | null | undefined, pageInfo?: { __typename?: 'TodoPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } | null | undefined }, pageData?: { __typename?: 'PageData', count?: number | null | undefined, limit?: number | null | undefined, offset?: number | null | undefined } | null | undefined } };
 
 export type DeleteTodoMutationVariables = Exact<{
   id: Scalars['String'];
@@ -1196,7 +1196,7 @@ export type TodoSubscription = { __typename?: 'Subscription', todo: { __typename
 export type GetNotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, title: string, markdownContent: string, author?: { __typename?: 'User', username: string, _id: string } | null }> };
+export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, title: string, markdownContent: string, author?: { __typename?: 'User', username: string, _id: string } | null | undefined }> };
 
 export type CreateNoteMutationVariables = Exact<{
   noteInput: NoteInput;

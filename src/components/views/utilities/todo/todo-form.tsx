@@ -27,10 +27,10 @@ import { nameof } from "../../../../helpers/nameof";
 import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
 import { TodoNode } from "../../../../types/todo";
 import * as yup from "yup";
-import FormikTextField from "../../../dum/inputs/formik/FormikTextField";
-import FormikCheckbox from "../../../dum/inputs/formik/FormikCheckbox";
-import FormikDate from "../../../dum/inputs/formik/FormikDate";
-import FormikTable from "../../../dum/inputs/formik/FormikTable";
+import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
+import FormikCheckbox from "../../../dum/inputs/formik/formik-checkbox";
+import FormikDate from "../../../dum/inputs/formik/formik-date";
+import FormikTable from "../../../dum/inputs/formik/formik-table";
 import { Delete } from "@mui/icons-material";
 
 interface TodoFormLocationProps {

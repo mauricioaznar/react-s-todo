@@ -25,9 +25,9 @@ import ApolloSnackbar from "../../smart/apollo-snackbar/apollo-snackbar";
 import { useHistory, useLocation } from "react-router-dom";
 import { nameof } from "../../../helpers/nameof";
 import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
-import FormikTextField from "../../dum/inputs/formik/FormikTextField";
-import FormikFile from "../../dum/inputs/formik/FormikFile";
-import FormikCheckbox from "../../dum/inputs/formik/FormikCheckbox";
+import FormikTextField from "../../dum/inputs/formik/formik-text-field";
+import FormikFile from "../../dum/inputs/formik/formik-file";
+import FormikCheckbox from "../../dum/inputs/formik/formik-checkbox";
 import { queryDerivativeIsUserOccupied } from "../../../services/schema-derivative";
 
 interface UseFormLocationProps {
@@ -104,7 +104,7 @@ export default function UserForm() {
                 validationSchema={yup.object({
                   username: yup
                     .string()
-                    .required("Email is required")
+                    .required("NestedEmailInput is required")
                     .test(
                       "unique",
                       "email must be unique",

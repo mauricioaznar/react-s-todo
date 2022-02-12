@@ -27,6 +27,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Paper,
   SvgIcon,
   SwipeableDrawer as MuiDrawer,
@@ -40,7 +41,7 @@ import { useActions } from "../../hooks/redux-hooks/useActions";
 import { Query, useTodoSubscription } from "../../services/schema";
 import { nameof } from "../../helpers/nameof";
 import { useThemeContext } from "../../hooks/context-hooks/useThemeContext";
-import { routes } from "../../services/routes";
+import { routeGroups, routes } from "../../services/routes";
 
 const drawerWidth: number = 240;
 
@@ -148,25 +149,31 @@ export default function App() {
             <ChevronLeftIcon />
           </IconButton>
         </Toolbar>
-        <Divider />
-        <List>
-          {routes
-            .filter((route) => route.navbar === true)
-            .map((route) => {
-              return (
-                <ListItemLink
-                  key={route.name}
-                  primary={route.title}
-                  icon={route.icon}
-                  to={route.path}
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                />
-              );
-            })}
-        </List>
-        <Divider />
+        {routeGroups.map((rg) => {
+          return (
+            <React.Fragment key={rg.title}>
+              <List>
+                <ListSubheader>{rg.title}</ListSubheader>
+                {rg.routes
+                  .filter((route) => route.navbar === true)
+                  .map((route) => {
+                    return (
+                      <ListItemLink
+                        key={route.name}
+                        primary={route.title}
+                        icon={route.icon}
+                        to={route.path}
+                        onClick={() => {
+                          setOpen(false);
+                        }}
+                      />
+                    );
+                  })}
+              </List>
+              <Divider />
+            </React.Fragment>
+          );
+        })}
         <List style={{ marginTop: `auto` }}>
           <ListItem button={true} onClick={toggleTheme}>
             <ListItemIcon>
