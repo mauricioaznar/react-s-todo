@@ -6,7 +6,7 @@ import UserForm from "../components/views/auth/UserForm";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import UserList from "../components/views/auth/UserList";
 import PetsIcon from "@mui/icons-material/Pets";
-import Inputs from "../components/views/forms/formik/FormikInputs";
+import Inputs from "../components/views/forms/formik/formik-inputs";
 import CatList from "../components/views/forms/cat/CatList";
 import { CatForm } from "../components/views/forms/cat/CatForm";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";

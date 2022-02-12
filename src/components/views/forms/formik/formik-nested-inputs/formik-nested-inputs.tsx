@@ -2,20 +2,20 @@ import React from "react";
 import { Button } from "@mui/material";
 import * as yup from "yup";
 import { Form, Formik } from "formik";
-import NestedEmailInput from "./inputs/NestedEmailInput";
+import NestedEmailInput from "./inputs/nested-email-input";
 import IFormikNestedInputs from "./i-formik-nested-inputs";
 import { SchemaOf } from "yup";
-import NestedNameInput from "./inputs/NestedNameInput";
+import NestedNameInput from "./inputs/nested-name-input";
 
 export default function FormikNestedInputs() {
   const initialValues: IFormikNestedInputs = {
-    email: "",
     name: "",
+    email: "",
   };
 
   const validationSchema: SchemaOf<IFormikNestedInputs> = yup.object({
-    email: yup.string().required("Email is required").email(),
     name: yup.string(),
+    email: yup.string().required("Email is required").email(),
   });
 
   return (
@@ -27,8 +27,8 @@ export default function FormikNestedInputs() {
       }}
     >
       <Form>
-        <NestedEmailInput />
         <NestedNameInput />
+        <NestedEmailInput />
         <Button
           color="primary"
           variant="contained"
