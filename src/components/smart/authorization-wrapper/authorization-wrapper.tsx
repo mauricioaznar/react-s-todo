@@ -25,7 +25,9 @@ const AuthorizationWrapper = (props: AuthorizationWrapperProps) => {
   }, [data]);
 
   useEffect(() => {
-    void getCurrentUser();
+    if (accessToken !== null) {
+      void getCurrentUser();
+    }
   }, [accessToken]);
 
   // theme-selector
