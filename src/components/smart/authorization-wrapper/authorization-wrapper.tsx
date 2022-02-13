@@ -15,14 +15,14 @@ const AuthorizationWrapper = (props: AuthorizationWrapperProps) => {
 
   const { login, setCurrentUser } = useActions();
 
-  const [getCurrentUser, { loading, data }] = useCurrentUserLazyQuery();
-
-  useEffect(() => {
-    if (data?.currentUser.username) {
-      setCurrentUser(data.currentUser);
-      login(window.localStorage.getItem("token")!);
-    }
-  }, [data]);
+  const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
+    onCompleted: function (data) {
+      if (data?.currentUser.username) {
+        setCurrentUser(data.currentUser);
+        login(window.localStorage.getItem("token")!);
+      }
+    },
+  });
 
   useEffect(() => {
     if (accessToken !== null) {
@@ -30,9 +30,13 @@ const AuthorizationWrapper = (props: AuthorizationWrapperProps) => {
     }
   }, [accessToken]);
 
-  // theme-selector
-
-  return loading ? <BigLoader /> : accessToken ? props.children : <LoginForm />;
+  return loading ? (
+    <BigLoader />
+  ) : accessToken !== null ? (
+    props.children
+  ) : (
+    <LoginForm />
+  );
 };
 
 export default AuthorizationWrapper;

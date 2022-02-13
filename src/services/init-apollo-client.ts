@@ -42,19 +42,21 @@ const errorLink = onError(
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
         if (
-          err.extensions?.code === "UNAUTHENTICATED" ||
+          err.extensions?.code.toLowerCase() === "unauthenticated" ||
           err.message.toLowerCase() === "unauthorized"
         ) {
-          // Apollo Server sets code to UNAUTHENTICATED
-          // when an AuthenticationError is thrown in a resolver
-
-          store.dispatch(logout() as any);
           store.dispatch(
             pushMessage({
-              message: "Unauthorized",
+              message:
+                store.getState().auth.accessToken !== null
+                  ? "Session expired"
+                  : "Unauthorized",
               variant: "error",
             }) as any,
           );
+
+          store.dispatch(logout() as any);
+
           const oldHeaders = operation.getContext().headers;
           operation.setContext({
             headers: {
