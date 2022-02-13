@@ -9,6 +9,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
 // @ts-ignore
 import { createUploadLink } from "apollo-upload-client";
+import { pushMessage } from "../global-state/redux/action-creators/global-messages";
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -40,11 +41,20 @@ const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
-        if (err.extensions?.code === "UNAUTHENTICATED") {
+        if (
+          err.extensions?.code === "UNAUTHENTICATED" ||
+          err.message.toLowerCase() === "unauthorized"
+        ) {
           // Apollo Server sets code to UNAUTHENTICATED
           // when an AuthenticationError is thrown in a resolver
 
           store.dispatch(logout() as any);
+          store.dispatch(
+            pushMessage({
+              message: "Unauthorized",
+              variant: "error",
+            }) as any,
+          );
           const oldHeaders = operation.getContext().headers;
           operation.setContext({
             headers: {

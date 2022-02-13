@@ -7,7 +7,7 @@ import { ThemeProvider } from "./theme-context";
 import { SnackbarProvider } from "notistack";
 
 interface ProvidersProps {
-  children: React.ReactElement<any, any>;
+  children: React.ReactNode[] | React.ReactNode;
   store: any;
 }
 

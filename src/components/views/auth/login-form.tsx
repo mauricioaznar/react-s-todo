@@ -15,7 +15,7 @@ import ThemeSelector from "../../dum/theme-selector/theme-selector";
 
 // const theme-selector = createTheme();
 
-export default function LogInForm() {
+export default function LoginForm() {
   // const history = useHistory()
   const [isDisabled, setIsDisabled] = useState(false);
   const [message, setMessage] = useState("");

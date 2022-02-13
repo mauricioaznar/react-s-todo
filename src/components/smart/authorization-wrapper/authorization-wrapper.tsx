@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
-import LogInForm from "../../views/auth/LoginForm";
+import LoginForm from "../../views/auth/login-form";
 import { useCurrentUserLazyQuery } from "../../../services/schema";
 import { useActions } from "../../../hooks/redux-hooks/useActions";
 import BigLoader from "../../dum/loaders/BigLoader";
@@ -30,7 +30,7 @@ const AuthorizationWrapper = (props: AuthorizationWrapperProps) => {
 
   // theme-selector
 
-  return loading ? <BigLoader /> : accessToken ? props.children : <LogInForm />;
+  return loading ? <BigLoader /> : accessToken ? props.children : <LoginForm />;
 };
 
 export default AuthorizationWrapper;

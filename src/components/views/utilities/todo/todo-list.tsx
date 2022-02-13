@@ -324,6 +324,7 @@ function EnhancedTodoCards(
         return (
           todoNode && (
             <Grid
+              key={todoNode?._id}
               item
               xs={12}
               sm={6}
@@ -455,7 +456,7 @@ function EnhancedTodoTable(
             const todoNode = item.node;
             return (
               todoNode && (
-                <TableRow>
+                <TableRow key={todoNode?._id}>
                   <TodoCells todo={todoNode} />
                 </TableRow>
               )

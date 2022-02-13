@@ -24,7 +24,6 @@ import {
   useUpdateTodoMutation,
 } from "../../../../services/schema";
 import { nameof } from "../../../../helpers/nameof";
-import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
 import { TodoNode } from "../../../../types/todo";
 import * as yup from "yup";
 import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
@@ -39,7 +38,6 @@ interface TodoFormLocationProps {
 
 export default function TodoForm() {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
 
   const history = useHistory();
 
@@ -144,11 +142,10 @@ export default function TodoForm() {
                 history.push("/todos");
               } catch (e) {
                 if (e instanceof ApolloError) {
-                  setMessage(e.message);
+                  // console.error(e)
                 }
               }
 
-              setMessage("");
               setIsDisabled(false);
             }}
           >
@@ -222,7 +219,6 @@ export default function TodoForm() {
           </Formik>
         </Box>
       </Box>
-      <ApolloSnackbar message={message} />
     </Container>
   );
 }

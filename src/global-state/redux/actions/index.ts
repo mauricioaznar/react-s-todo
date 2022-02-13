@@ -1,5 +1,6 @@
 import { ActionType } from "../action-types";
 import { CurrentUserQuery, User } from "../../../services/schema";
+import { GlobalMessage } from "../../../types/global-message";
 
 interface Login {
   type: ActionType.LOGIN;
@@ -15,4 +16,9 @@ interface SetCurrentUser {
   payload: CurrentUserQuery["currentUser"];
 }
 
-export type Action = Login | Logout | SetCurrentUser;
+interface PushMessage {
+  type: ActionType.PUSH_MESSAGE;
+  payload: GlobalMessage;
+}
+
+export type Action = Login | Logout | SetCurrentUser | PushMessage;
