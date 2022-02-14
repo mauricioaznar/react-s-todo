@@ -8,9 +8,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import Typography from "@mui/material/Typography";
 import { useLoginMutation } from "../../../services/schema";
 import { Grid } from "@mui/material";
-import { ApolloError } from "@apollo/client";
-import { useActions } from "../../../hooks/redux-hooks/useActions";
-import ApolloSnackbar from "../../smart/apollo-snackbar/apollo-snackbar";
+import { useActions } from "../../../hooks/redux-hooks/use-actions";
 import ThemeSelector from "../../dum/theme-selector/theme-selector";
 
 // const theme-selector = createTheme();
@@ -18,7 +16,6 @@ import ThemeSelector from "../../dum/theme-selector/theme-selector";
 export default function LoginForm() {
   // const history = useHistory()
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
 
   const [username, setUsername] = useState("john");
   const [password, setPassword] = useState("changeme");
@@ -28,7 +25,7 @@ export default function LoginForm() {
   const { login } = useActions();
 
   // eslint-disable-next-line no-undef
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsDisabled(true);
 
@@ -49,16 +46,14 @@ export default function LoginForm() {
       const accessToken = res.data?.login?.accessToken;
 
       if (accessToken) {
+        setIsDisabled(false);
         login(accessToken);
       }
     } catch (e: unknown) {
-      if (e instanceof ApolloError) {
-        setMessage(e.message);
-      }
-      setMessage("");
       setIsDisabled(false);
+      console.error(e);
     }
-  };
+  }
 
   return (
     <Grid
@@ -151,8 +146,6 @@ export default function LoginForm() {
             </Button>
           </Box>
         </Box>
-
-        <ApolloSnackbar message={message} />
       </Grid>
     </Grid>
   );

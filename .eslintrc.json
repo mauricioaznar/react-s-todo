@@ -15,7 +15,7 @@
     "react/display-name": 1,
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "no-console": 1,
+    "no-console": ["warn", { "allow": [ "error" ] }],
     "no-unexpected-multiline": "warn"
   },
   "env": {

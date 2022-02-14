@@ -14,11 +14,9 @@ import PetsIcon from "@mui/icons-material/Pets";
 import Typography from "@mui/material/Typography";
 import { Form, Formik } from "formik";
 import * as yup from "yup";
-import { ApolloError } from "@apollo/client";
 import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
 import Button from "@mui/material/Button";
-import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
-import CustomMarkdownEditor from "./components/CustomMarkdownEditor";
+import CustomMarkdownEditor from "./components/custom-markdown-editor";
 
 interface NoteFormLocationProps {
   note?: NoteNode;
@@ -26,7 +24,6 @@ interface NoteFormLocationProps {
 
 export default function NoteForm() {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
 
   const history = useHistory();
 
@@ -105,12 +102,9 @@ export default function NoteForm() {
 
                 history.push("/notes");
               } catch (e) {
-                if (e instanceof ApolloError) {
-                  setMessage(e.message);
-                }
+                console.error(e);
               }
 
-              setMessage("");
               setIsDisabled(false);
             }}
           >
@@ -134,7 +128,6 @@ export default function NoteForm() {
           </Formik>
         </Box>
       </Box>
-      <ApolloSnackbar message={message} />
     </Container>
   );
 }

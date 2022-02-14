@@ -3,13 +3,12 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { store } from "../global-state/redux";
 import { logout } from "../global-state/redux/action-creators";
-import ApolloErrorSeparator from "../constants/apollo-error-separator";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import apiUrl from "../constants/api-url";
 // @ts-ignore
 import { createUploadLink } from "apollo-upload-client";
-import { pushMessage } from "../global-state/redux/action-creators/global-messages";
+import { pushErrorMessage } from "../global-state/redux/action-creators/global-messages";
 
 // const defaultOptions = {
 //     watchQuery: {
@@ -45,18 +44,12 @@ const errorLink = onError(
           err.extensions?.code.toLowerCase() === "unauthenticated" ||
           err.message.toLowerCase() === "unauthorized"
         ) {
-          store.dispatch(
-            pushMessage({
-              message:
-                store.getState().auth.accessToken !== null
-                  ? "Session expired"
-                  : "Unauthorized",
-              variant: "error",
-            }) as any,
-          );
-
+          const message =
+            store.getState().auth.accessToken !== null
+              ? "Session expired"
+              : "Unauthorized";
+          store.dispatch(pushErrorMessage(message) as any);
           store.dispatch(logout() as any);
-
           const oldHeaders = operation.getContext().headers;
           operation.setContext({
             headers: {
@@ -68,7 +61,11 @@ const errorLink = onError(
           return forward(operation);
         } else {
           if (Array.isArray(err.message)) {
-            err.message = err.message.join(ApolloErrorSeparator);
+            err.message.forEach((message) => {
+              store.dispatch(pushErrorMessage(message) as any);
+            });
+          } else {
+            store.dispatch(pushErrorMessage(err.message) as any);
           }
         }
       }

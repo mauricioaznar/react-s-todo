@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { Form, Formik } from "formik";
-import { ApolloError, useApolloClient } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import * as yup from "yup";
 
 // mui
@@ -21,10 +21,9 @@ import {
   useUpdateUserMutation,
   useUploadFileMutation,
 } from "../../../services/schema";
-import ApolloSnackbar from "../../smart/apollo-snackbar/apollo-snackbar";
 import { useHistory, useLocation } from "react-router-dom";
 import { nameof } from "../../../helpers/nameof";
-import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
+import { useTypedSelector } from "../../../hooks/redux-hooks/use-typed-selector";
 import FormikTextField from "../../dum/inputs/formik/formik-text-field";
 import FormikFile from "../../dum/inputs/formik/formik-file";
 import FormikCheckbox from "../../dum/inputs/formik/formik-checkbox";
@@ -38,7 +37,6 @@ export default function UserForm() {
   const { currentUser } = useTypedSelector((state) => state.auth);
 
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
 
   const client = useApolloClient();
 
@@ -180,12 +178,9 @@ export default function UserForm() {
 
                     history.push("/users");
                   } catch (e: unknown) {
-                    if (e instanceof ApolloError) {
-                      setMessage(e.message);
-                    }
+                    console.error(e);
                   }
 
-                  setMessage("");
                   setIsDisabled(false);
                 }}
               >
@@ -213,7 +208,6 @@ export default function UserForm() {
               </Formik>
             </Box>
           </Box>
-          <ApolloSnackbar message={message} />
         </Container>
       </Grid>
     </Grid>

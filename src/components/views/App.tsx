@@ -37,10 +37,10 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { useActions } from "../../hooks/redux-hooks/useActions";
+import { useActions } from "../../hooks/redux-hooks/use-actions";
 import { Query, useTodoSubscription } from "../../services/schema";
 import { nameof } from "../../helpers/nameof";
-import { useThemeContext } from "../../hooks/context-hooks/useThemeContext";
+import { useThemeContext } from "../../hooks/context-hooks/use-theme-context";
 import { routeGroups, routes } from "../../services/routes";
 
 const drawerWidth: number = 240;

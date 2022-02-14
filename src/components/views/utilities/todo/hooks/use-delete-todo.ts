@@ -1,5 +1,4 @@
 import { TodoNode } from "../../../../../types/todo";
-import { ApolloError } from "@apollo/client";
 import { useState } from "react";
 import {
   namedOperations,
@@ -8,7 +7,6 @@ import {
 
 export const useDeleteTodo = () => {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
   const [deleteTodoMutation] = useDeleteTodoMutation({
     refetchQueries: [namedOperations.Query.GetTodos],
   });
@@ -22,17 +20,14 @@ export const useDeleteTodo = () => {
         },
       });
     } catch (e) {
-      if (e instanceof ApolloError) {
-        setMessage(e.message);
-      }
+      console.error(e);
     }
-    setMessage("");
+
     setIsDisabled(false);
   }
 
   return {
     handleDeleteClick,
-    message,
     isDisabled,
   };
 };

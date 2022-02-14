@@ -13,20 +13,17 @@ import {
 } from "../../../../services/schema";
 import { Box, Fab, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import PageLoader from "../../../dum/loaders/PageLoader";
+import PageLoader from "../../../dum/loaders/page-loader";
 import { useHistory } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { NoteNode } from "../../../../types/note";
-import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
-import { ApolloError } from "@apollo/client";
 
 export default function NoteList() {
   const history = useHistory();
 
   const { data, loading } = useGetNotesQuery();
 
-  const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
 
   function handleCreateClick() {
@@ -52,11 +49,9 @@ export default function NoteList() {
         },
       });
     } catch (e) {
-      if (e instanceof ApolloError) {
-        setMessage(e.message);
-      }
+      console.error(e);
     }
-    setMessage("");
+
     setDisabled(false);
   };
 
@@ -134,7 +129,6 @@ export default function NoteList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <ApolloSnackbar message={message} />
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useThemeContext } from "../../../hooks/context-hooks/useThemeContext";
+import { useThemeContext } from "../../../hooks/context-hooks/use-theme-context";
 import {
   Box,
   Chip,

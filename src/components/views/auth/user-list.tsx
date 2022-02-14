@@ -15,7 +15,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
+import { useTypedSelector } from "../../../hooks/redux-hooks/use-typed-selector";
 
 export default function UserList() {
   const history = useHistory();

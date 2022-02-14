@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useThemeContext } from "../../../hooks/context-hooks/useThemeContext";
+import { useThemeContext } from "../../../hooks/context-hooks/use-theme-context";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function Home() {

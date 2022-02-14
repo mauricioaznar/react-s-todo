@@ -10,13 +10,10 @@ import {
   Query,
   useUploadCatPhotosMutation,
 } from "../../../../../services/schema";
-import ApolloSnackbar from "../../../../smart/apollo-snackbar/apollo-snackbar";
-import { ApolloError } from "@apollo/client";
 import { Form, Formik } from "formik";
 import FormikFile from "../../../../dum/inputs/formik/formik-file";
 import * as yup from "yup";
 import { nameof } from "../../../../../helpers/nameof";
-import { useState } from "react";
 
 interface CatPhotosDialogProps {
   handleClose: () => void;
@@ -30,9 +27,8 @@ interface CatPhotosDialogProps {
 
 export default function CatPhotosDialog(props: CatPhotosDialogProps) {
   const { handleClose, open, id } = props;
-  const [message, setMessage] = useState("");
 
-  const [uploadCatPhotos, { error }] = useUploadCatPhotosMutation({
+  const [uploadCatPhotos] = useUploadCatPhotosMutation({
     update(cache) {
       cache.evict({
         id: "ROOT_QUERY",
@@ -64,9 +60,7 @@ export default function CatPhotosDialog(props: CatPhotosDialogProps) {
             }
             handleClose();
           } catch (e: unknown) {
-            if (e instanceof ApolloError) {
-              setMessage(e.message);
-            }
+            console.error(e);
           }
         }}
       >
@@ -83,8 +77,6 @@ export default function CatPhotosDialog(props: CatPhotosDialogProps) {
           </DialogActions>
         </Form>
       </Formik>
-
-      <ApolloSnackbar message={error?.message || message || ""} />
     </Dialog>
   );
 }

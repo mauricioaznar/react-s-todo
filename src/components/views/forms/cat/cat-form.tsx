@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState } from "react";
-import { ApolloError } from "@apollo/client";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   GetCatsQuery,
@@ -20,7 +19,6 @@ import * as yup from "yup";
 import FormikTextField from "../../../dum/inputs/formik/formik-text-field";
 import FormikFile from "../../../dum/inputs/formik/formik-file";
 import Button from "@mui/material/Button";
-import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface UseCatFormLocationProps {
@@ -29,7 +27,6 @@ interface UseCatFormLocationProps {
 
 export function CatForm() {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [message, setMessage] = useState("");
 
   const history = useHistory();
   const location = useLocation<UseCatFormLocationProps>();
@@ -144,12 +141,9 @@ export function CatForm() {
 
                     history.push("/cats");
                   } catch (e: unknown) {
-                    if (e instanceof ApolloError) {
-                      setMessage(e.message);
-                    }
+                    console.error(e)
                   }
-
-                  setMessage("");
+                  
                   setIsDisabled(false);
                 }}
               >
@@ -202,7 +196,6 @@ export function CatForm() {
               </Formik>
             </Box>
           </Box>
-          <ApolloSnackbar message={message} />
         </Container>
       </Grid>
     </Grid>

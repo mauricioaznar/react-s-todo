@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSnackbar } from "notistack";
-import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
+import { useTypedSelector } from "../../../hooks/redux-hooks/use-typed-selector";
 
 const GlobalMessagesSnackbar = () => {
   const { globalMessages } = useTypedSelector((state) => state.globalMessages);

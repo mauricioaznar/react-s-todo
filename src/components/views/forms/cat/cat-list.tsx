@@ -25,7 +25,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import CatPhotosDialog from "./components/CatPhotosDialog";
+import CatPhotosDialog from "./components/cat-photos-dialog";
 
 export default function CatList() {
   const history = useHistory();

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useTypedSelector } from "../../../hooks/redux-hooks/useTypedSelector";
+import { useTypedSelector } from "../../../hooks/redux-hooks/use-typed-selector";
 import LoginForm from "../../views/auth/login-form";
 import { useCurrentUserLazyQuery } from "../../../services/schema";
-import { useActions } from "../../../hooks/redux-hooks/useActions";
-import BigLoader from "../../dum/loaders/BigLoader";
+import { useActions } from "../../../hooks/redux-hooks/use-actions";
+import BigLoader from "../../dum/loaders/big-loader";
 
 interface AuthorizationWrapperProps {
   children: React.ReactElement<any, any> | null;

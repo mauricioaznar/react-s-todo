@@ -8,7 +8,7 @@ interface AuthState {
 }
 
 const initialState = {
-  accessToken: null,
+  accessToken: window.localStorage.getItem("token") || null,
   currentUser: null,
 };
 

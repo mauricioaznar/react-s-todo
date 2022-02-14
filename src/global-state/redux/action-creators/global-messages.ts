@@ -11,3 +11,15 @@ export const pushMessage = (globalMessage: GlobalMessage) => {
     });
   };
 };
+
+export const pushErrorMessage = (message: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionType.PUSH_MESSAGE,
+      payload: {
+        message,
+        variant: "error",
+      },
+    });
+  };
+};

@@ -45,8 +45,7 @@ import {
   FilterTodoColumn,
   useGetTodosQuery,
 } from "../../../../services/schema";
-import ApolloSnackbar from "../../../smart/apollo-snackbar/apollo-snackbar";
-import { useTypedSelector } from "../../../../hooks/redux-hooks/useTypedSelector";
+import { useTypedSelector } from "../../../../hooks/redux-hooks/use-typed-selector";
 import {
   formatDate,
   YEAR_MONTH_FORMAT,
@@ -54,14 +53,14 @@ import {
 } from "../../../../helpers/format-date";
 import { TodoEdges, TodoNode } from "../../../../types/todo";
 import LocalStorage from "../../../../helpers/local-storage";
-import { useGraphqlPagination } from "../../../../hooks/server-hooks/useGraphqlPagination";
+import { useGraphqlPagination } from "../../../../hooks/server-hooks/use-graphql-pagination";
 import { EnhancedContainerProps } from "../../../dum/enhanced-table/types";
 import EnhancedTableHead from "../../../dum/enhanced-table/enhanced-table-head";
 import ClearableDatePicker from "../../../dum/clearable-date-picker/clearable-date-picker";
-import { useMenu } from "../../../../hooks/material-ui-hooks/useMenu";
-import { useDeleteTodo } from "./hooks/useDeleteTodo";
-import { useEditTodoClick } from "./hooks/useEditTodoClick";
-import PageLoader from "../../../dum/loaders/PageLoader";
+import { useMenu } from "../../../../hooks/material-ui-hooks/use-menu";
+import { useDeleteTodo } from "./hooks/use-delete-todo";
+import { useEditTodoClick } from "./hooks/use-edit-todo-click";
+import PageLoader from "../../../dum/loaders/page-loader";
 
 // constants
 const TODO_AFTER = "todo_after";
@@ -101,7 +100,7 @@ export default function TodoList({ archived = false }: TodoListProps) {
       limit: 10,
     });
 
-  const { loading, data, error } = useGetTodosQuery({
+  const { loading, data } = useGetTodosQuery({
     variables: {
       archived: archived,
       completed: archived ? null : completed,
@@ -285,7 +284,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
         </Grid>
       </Grid>
 
-      <ApolloSnackbar message={error ? error.message : ""} />
       <Fab
         sx={{
           margin: 0,
@@ -348,7 +346,7 @@ function TodoCard({ todo }: { todo: TodoNode }) {
 
   const { handleEditTodoClick } = useEditTodoClick();
 
-  const { message, isDisabled, handleDeleteClick } = useDeleteTodo();
+  const { isDisabled, handleDeleteClick } = useDeleteTodo();
 
   return (
     <Card sx={{ minWidth: 275 }}>
@@ -413,7 +411,6 @@ function TodoCard({ todo }: { todo: TodoNode }) {
           )}
         </Box>
       </CardActions>
-      <ApolloSnackbar message={message} />
     </Card>
   );
 }
@@ -473,7 +470,7 @@ function TodoCells({ todo }: { todo: TodoNode }) {
 
   const { handleEditTodoClick } = useEditTodoClick();
 
-  const { message, isDisabled, handleDeleteClick } = useDeleteTodo();
+  const { isDisabled, handleDeleteClick } = useDeleteTodo();
 
   return (
     <React.Fragment>
@@ -526,7 +523,6 @@ function TodoCells({ todo }: { todo: TodoNode }) {
           ) : null}
         </Box>
       </TableCell>
-      <ApolloSnackbar message={message} />
     </React.Fragment>
   );
 }

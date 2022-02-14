@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { ApolloError } from "@apollo/client";
 import { Form, Formik } from "formik";
 
 // mui
@@ -141,9 +140,7 @@ export default function TodoForm() {
 
                 history.push("/todos");
               } catch (e) {
-                if (e instanceof ApolloError) {
-                  // console.error(e)
-                }
+                console.error(e);
               }
 
               setIsDisabled(false);
