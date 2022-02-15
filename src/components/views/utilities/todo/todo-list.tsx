@@ -3,22 +3,13 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 // mui
-import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
   Fab,
   IconButton,
   ListItem,
@@ -27,13 +18,6 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
@@ -45,22 +29,17 @@ import {
   FilterTodoColumn,
   useGetTodosQuery,
 } from "../../../../services/schema";
-import { useTypedSelector } from "../../../../hooks/redux-hooks/use-typed-selector";
 import {
-  formatDate,
   YEAR_MONTH_FORMAT,
   YEAR_MONTH_MASK,
 } from "../../../../helpers/format-date";
-import { TodoEdges, TodoNode } from "../../../../types/todo";
 import LocalStorage from "../../../../helpers/local-storage";
 import { useGraphqlPagination } from "../../../../hooks/server-hooks/use-graphql-pagination";
-import { EnhancedContainerProps } from "../../../dum/enhanced-table/types";
-import EnhancedTableHead from "../../../dum/enhanced-table/enhanced-table-head";
 import ClearableDatePicker from "../../../dum/clearable-date-picker/clearable-date-picker";
 import { useMenu } from "../../../../hooks/material-ui-hooks/use-menu";
-import { useDeleteTodo } from "./hooks/use-delete-todo";
-import { useEditTodoClick } from "./hooks/use-edit-todo-click";
 import PageLoader from "../../../dum/loaders/page-loader";
+import { EnhancedTodoCards } from "./components/todo-cards";
+import { EnhancedTodoTable } from "./components/todo-table";
 
 // constants
 const TODO_AFTER = "todo_after";
@@ -299,227 +278,5 @@ export default function TodoList({ archived = false }: TodoListProps) {
         <AddIcon />
       </Fab>
     </Container>
-  );
-}
-
-export interface EnhancedTodoContainerProps<T>
-  extends EnhancedContainerProps<T> {
-  edges: TodoEdges | undefined | null;
-}
-
-function EnhancedTodoCards(
-  props: EnhancedTodoContainerProps<FilterTodoColumn>,
-) {
-  const { edges } = props;
-
-  return (
-    <Grid container>
-      {edges?.map((item) => {
-        const todoNode = item.node;
-        return (
-          todoNode && (
-            <Grid
-              key={todoNode?._id}
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              sx={{
-                px: { sm: 2, md: 4 },
-                py: { xs: 2, sm: 2, md: 0 },
-              }}
-            >
-              <TodoCard todo={todoNode} />
-            </Grid>
-          )
-        );
-      })}
-    </Grid>
-  );
-}
-
-function TodoCard({ todo }: { todo: TodoNode }) {
-  const { currentUser } = useTypedSelector((state) => state.auth);
-
-  const { handleEditTodoClick } = useEditTodoClick();
-
-  const { isDisabled, handleDeleteClick } = useDeleteTodo();
-
-  return (
-    <Card sx={{ minWidth: 275 }}>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          {todo.description}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          <span style={{ fontStyle: "normal", fontWeight: "bold" }}>
-            {" "}
-            due:{" "}
-          </span>
-          {formatDate(todo.due)}
-        </Typography>
-        <Typography variant="body2">
-          <span style={{ fontStyle: "normal", fontWeight: "bold" }}>
-            {" "}
-            user:{" "}
-          </span>{" "}
-          {todo.user?.username}
-        </Typography>
-        <ul>
-          {todo?.items.map((item) => (
-            <li
-              style={{
-                textDecoration: item.completed ? "line-through" : undefined,
-              }}
-              key={item.description}
-            >
-              {item.description}
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardActions style={{ display: "flex", alignItems: "center" }}>
-        {currentUser?._id === todo.user?._id ? (
-          <Button
-            size={"small"}
-            onClick={() => {
-              handleEditTodoClick(todo);
-            }}
-          >
-            Edit
-          </Button>
-        ) : null}
-        {currentUser?._id === todo.user?._id ? (
-          <Button
-            disabled={isDisabled}
-            size={"small"}
-            onClick={async () => {
-              await handleDeleteClick(todo);
-            }}
-          >
-            Delete
-          </Button>
-        ) : null}
-        <Box style={{ flexGrow: 1, display: "flex", justifyContent: "end" }}>
-          {todo.locked ? (
-            <LockRoundedIcon fontSize={"medium"} />
-          ) : (
-            <LockOpenRoundedIcon fontSize={"medium"} />
-          )}
-        </Box>
-      </CardActions>
-    </Card>
-  );
-}
-
-function EnhancedTodoTable(
-  props: EnhancedTodoContainerProps<FilterTodoColumn>,
-) {
-  const { onRequestSort, order, orderBy, edges } = props;
-
-  return (
-    <TableContainer
-      component={Paper}
-      sx={{ overflowY: "hidden", overflowX: "hidden" }}
-    >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell width={"10%"}>&nbsp;</TableCell>
-            <EnhancedTableHead
-              onRequestSort={onRequestSort}
-              order={order}
-              title={FilterTodoColumn.Description}
-              orderBy={orderBy}
-              width={"30%"}
-            />
-            <EnhancedTableHead
-              onRequestSort={onRequestSort}
-              order={order}
-              title={FilterTodoColumn.Due}
-              orderBy={orderBy}
-              width={"20%"}
-            />
-            <TableCell width={"10%"}>Completed</TableCell>
-            <TableCell width={"20%"}>User</TableCell>
-            <TableCell width={"10%"}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {edges?.map((item) => {
-            const todoNode = item.node;
-            return (
-              todoNode && (
-                <TableRow key={todoNode?._id}>
-                  <TodoCells todo={todoNode} />
-                </TableRow>
-              )
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-function TodoCells({ todo }: { todo: TodoNode }) {
-  const { currentUser } = useTypedSelector((state) => state.auth);
-
-  const { handleEditTodoClick } = useEditTodoClick();
-
-  const { isDisabled, handleDeleteClick } = useDeleteTodo();
-
-  return (
-    <React.Fragment>
-      <TableCell align={"center"}>
-        <Box
-          sx={{
-            "& > :not(style)": {
-              m: 2,
-            },
-          }}
-        >
-          {todo.locked ? (
-            <LockRoundedIcon fontSize={"medium"} />
-          ) : (
-            <LockOpenRoundedIcon fontSize={"medium"} />
-          )}
-        </Box>
-      </TableCell>
-      <TableCell>{todo.description}</TableCell>
-      <TableCell>{formatDate(todo.due)}</TableCell>
-      <TableCell>{todo.completed_percentage}</TableCell>
-      <TableCell>{todo.user?.username}</TableCell>
-      <TableCell>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "nowrap",
-          }}
-        >
-          {currentUser?._id === todo.user?._id ? (
-            <IconButton
-              size={"small"}
-              onClick={() => {
-                handleEditTodoClick(todo);
-              }}
-            >
-              <CreateIcon fontSize={"small"} />
-            </IconButton>
-          ) : null}
-          {currentUser?._id === todo.user?._id ? (
-            <IconButton
-              disabled={isDisabled}
-              size={"small"}
-              onClick={async () => {
-                await handleDeleteClick(todo);
-              }}
-            >
-              <DeleteIcon fontSize={"small"} />
-            </IconButton>
-          ) : null}
-        </Box>
-      </TableCell>
-    </React.Fragment>
   );
 }
