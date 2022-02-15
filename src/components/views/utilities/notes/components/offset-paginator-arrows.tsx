@@ -10,7 +10,7 @@ interface OffsetPaginatorArrowsProps {
 
 export function OffsetPaginatorArrows(props: OffsetPaginatorArrowsProps) {
   const { setPage, count, perPage, page } = props;
-  console.log("count", count, "perPage", perPage, "page", page);
+  // console.log("count", count, "perPage", perPage, "page", page);
 
   const pageCount = Math.ceil(count / perPage);
 
