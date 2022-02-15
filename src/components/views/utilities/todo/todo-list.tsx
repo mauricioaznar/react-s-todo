@@ -88,7 +88,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
   const [due, setDue] = useState<string | null>(
     LocalStorage.getMomentDate(TODO_DUE, YEAR_MONTH_FORMAT),
   );
-  const [firstRender, setFirstRender] = useState(true);
 
   const { handleClick, handleClose, open, anchorEl } = useMenu();
 
@@ -110,9 +109,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
       before: before,
       order: order,
       orderBy: orderBy,
-    },
-    onCompleted: () => {
-      setFirstRender(false);
     },
   });
 
@@ -157,9 +153,13 @@ export default function TodoList({ archived = false }: TodoListProps) {
               <IconButton
                 disabled={data?.todos?.pageData?.offset === 0}
                 onClick={() => {
-                  const newCursor =
-                    edges && edges.length > 0 ? edges[0].cursor : null;
-                  setBefore(newCursor);
+                  if (edges && edges.length > 0) {
+                    setBefore(edges[0].cursor);
+                  } else if (edges && edges.length === 0 && offset > 0) {
+                    setBefore(after);
+                  } else {
+                    setBefore(null);
+                  }
                 }}
               >
                 <ArrowBackIosIcon fontSize={"medium"} />
@@ -270,7 +270,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
               onRequestSort={handleOrderBy}
               order={order}
               orderBy={orderBy}
-              firstRender={firstRender}
             />
           ) : (
             <EnhancedTodoTable
@@ -278,7 +277,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
               onRequestSort={handleOrderBy}
               order={order}
               orderBy={orderBy}
-              firstRender={firstRender}
             />
           )}
         </Grid>
@@ -306,7 +304,6 @@ export default function TodoList({ archived = false }: TodoListProps) {
 
 export interface EnhancedTodoContainerProps<T>
   extends EnhancedContainerProps<T> {
-  firstRender: boolean;
   edges: TodoEdges | undefined | null;
 }
 
