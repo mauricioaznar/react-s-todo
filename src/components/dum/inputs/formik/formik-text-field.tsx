@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import { TextField, TextFieldProps } from "@mui/material";
 import { useField } from "formik";
 import { FormikDefaultProps } from "./common/formik-default-props";
 
@@ -7,24 +7,32 @@ interface FormikTextFieldProps extends FormikDefaultProps {
   type?: "text" | "password";
 }
 
-export const FormikTextField = ({
+export function FormikTextField({
   name,
   label,
   type = "text",
-}: FormikTextFieldProps) => {
-  const [formikProps, { error, touched }] = useField(name);
+  ...rest
+}: FormikTextFieldProps & TextFieldProps) {
+  const [formikInputProps, formikMetaProps, formikHelperProps] = useField(name);
 
   return (
     <TextField
+      {...rest}
+      {...formikInputProps}
       fullWidth
-      type={type}
-      margin="normal"
+      margin={"normal"}
       label={label}
-      error={touched && Boolean(error)}
-      helperText={touched && error}
-      {...formikProps}
+      type={type}
+      error={Boolean(formikMetaProps.error && formikMetaProps.touched)}
+      helperText={formikMetaProps.touched ? formikMetaProps.error : ""}
+      name={formikInputProps.name}
+      value={formikInputProps.value}
+      onInput={(e) => {
+        formikHelperProps.setTouched(true);
+        formikInputProps.onChange(e);
+      }}
     />
   );
-};
+}
 
 export default FormikTextField;

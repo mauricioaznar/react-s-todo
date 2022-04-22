@@ -76,33 +76,3 @@ subscription Todo {
         description
     }
 }
-
-query GetNotes {
-    notes {
-        id
-        title
-        markdownContent
-        author {
-            username
-            _id
-        }
-    }
-}
-
-mutation CreateNote($noteInput: NoteInput!) {
-    createNote(noteInput: $noteInput) {
-        title
-    }
-}
-
-mutation UpdateNote($id: Float!, $noteInput: NoteInput!) {
-    updateNote(id: $id, noteInput: $noteInput) {
-        title
-    }
-}
-
-mutation DeleteNote($id: Float!) {
-    deleteNote(id: $id) {
-        title
-    }
-}

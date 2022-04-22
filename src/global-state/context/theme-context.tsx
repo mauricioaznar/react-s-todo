@@ -1,12 +1,11 @@
 import * as React from "react";
-import { useHistory } from "react-router-dom";
 import { themes } from "../../services/themes";
 import WebFont from "webfontloader";
 import { grey } from "@mui/material/colors";
 import {
   createTheme,
-  ThemeProvider as MuiThemeProvider,
   Theme as MuiTheme,
+  ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Theme } from "../../types/theme";
@@ -32,8 +31,6 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = (props: ThemeProviderProps) => {
-  const history = useHistory();
-
   const [currentTheme, setCurrentTheme] = React.useState<Theme>(() => {
     const themeName = window.localStorage.getItem(THEME_LOCAL_STORAGE_CONSTANT);
     if (themeName) {
@@ -47,7 +44,6 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
   const { toggleTheme, selectTheme } = React.useMemo(
     () => ({
       toggleTheme: () => {
-        history.push("/");
         setCurrentTheme((prevTheme) => {
           const foundIndex = themes.findIndex((t) => t.name === prevTheme.name);
           const index = foundIndex === themes.length - 1 ? 0 : foundIndex + 1;
@@ -60,7 +56,6 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
         });
       },
       selectTheme: (av: Theme) => {
-        history.push("/");
         window.localStorage.setItem(THEME_LOCAL_STORAGE_CONSTANT, av.name);
         setCurrentTheme(av);
       },

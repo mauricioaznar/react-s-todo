@@ -1,14 +1,17 @@
 import { TodoNode } from "../../../../../types/todo";
 import { useState } from "react";
-import {
-  namedOperations,
-  useDeleteTodoMutation,
-} from "../../../../../services/schema";
+import { Query, useDeleteTodoMutation } from "../../../../../services/schema";
+import { nameof } from "../../../../../helpers/nameof";
 
 export const useDeleteTodo = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [deleteTodoMutation] = useDeleteTodoMutation({
-    refetchQueries: [namedOperations.Query.GetTodos],
+    update(cache) {
+      cache.evict({
+        id: "ROOT_QUERY",
+        fieldName: nameof<Query>("todos"),
+      });
+    },
   });
 
   async function handleDeleteClick(todo: TodoNode) {
