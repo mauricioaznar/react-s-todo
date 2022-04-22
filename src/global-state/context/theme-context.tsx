@@ -77,6 +77,7 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
     if (currentTheme.tertiaryFont) {
       families.push(currentTheme.tertiaryFont);
     }
+
     WebFont.load({
       google: {
         families: families,
